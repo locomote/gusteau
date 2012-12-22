@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'optitron'
+
+$LOAD_PATH << File.expand_path("#{File.dirname(__FILE__)}/..")
+require 'lib/gusteau'
+
+class Gusteau::CLI < Optitron::CLI
+  class_opt 'node', 'Path to node file', {
+    :in       => Dir.glob("./nodes/**/*.yml"),
+    :required => true
+  }
+
+  desc 'Fully provision a node'
+  def provision
+    Gusteau::Node.new(params['node']).provision
+  end
+
+  desc 'Run recipe(s)'
+  def run(*recipes)
+    Gusteau::Node.new(params['node']).run(recipes)
+  end
+end
+
+Gusteau::CLI.dispatch

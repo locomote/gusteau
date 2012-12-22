@@ -1,0 +1,16 @@
+json:
+  apps:
+    enabled:
+      - profile
+      - travel_management_platform
+
+roles:
+  - redhat
+
+recipes:
+  - rvm
+  - rails::apps
+
+server:
+  host: server.example.com
+  platform: redhat
