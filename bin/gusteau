@@ -7,19 +7,32 @@ $LOAD_PATH << File.expand_path("#{File.dirname(__FILE__)}/..")
 require 'lib/gusteau'
 
 class Gusteau::CLI < Optitron::CLI
-  class_opt 'node', 'Path to node file', {
-    :in       => Dir.glob("./nodes/**/*.yml"),
+  class << self
+    def nodes_list
+      Dir.glob("./nodes/**/*.yml").map { |f| File.basename(f, '.*') }
+    end
+  end
+
+  class_opt 'node', 'Node name', {
+    :in       => nodes_list,
     :required => true
   }
 
   desc 'Fully provision a node'
   def provision
-    Gusteau::Node.new(params['node']).provision
+    node(params['node']).provision
   end
 
   desc 'Run recipe(s)'
-  def run(*recipes)
-    Gusteau::Node.new(params['node']).run(recipes)
+  def run(*recipe)
+    node(params['node']).run(recipe)
+  end
+
+  private
+
+  def node(node_name)
+    node_path = Dir.glob("./nodes/**/#{node_name}.yml")[0]
+    Gusteau::Node.new(node_path)
   end
 end
 
