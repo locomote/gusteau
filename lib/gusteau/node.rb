@@ -19,7 +19,7 @@ module Gusteau
 
     def provision
       @server.chef.bootstrap
-      @server.chef.run dna
+      @server.chef.run dna([])
     end
 
     def run(recipes)
@@ -43,8 +43,10 @@ module Gusteau
 
     def run_list(recipes)
       if recipes.empty?
-        @config['roles'].map   { |r| "role[#{r}]"   } if @config['roles'] + \
-        @config['recipes'].map { |r| "recipe[#{r}]" } if @config['recipes']
+        list = []
+        list += @config['roles'].map   { |r| "role[#{r}]"   } if @config['roles']
+        list += @config['recipes'].map { |r| "recipe[#{r}]" } if @config['recipes']
+        list
       else
         recipes.map { |r| "recipe[#{r}]" }
       end
