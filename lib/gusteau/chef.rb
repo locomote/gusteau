@@ -5,18 +5,18 @@ module Gusteau
       @platform = platform
     end
 
-    def bootstrap
-      bootstrap_script = File.read("bootstrap/#{@platform}.sh")
-      rescue
-        raise "Server platform not specified or unknown"
-      else
-        @server.run [bootstrap_script, 'mkdir -p /{etc,tmp}/chef']
-        @server.upload %w{bootstrap/solo.rb}, '/etc/chef'
-    end
-
-    def run(dna)
-      @server.upload %W(#{dna[:path]} ./cookbooks ./site-cookbooks ./roles ./data_bags), '/etc/chef'
-      @server.run    'chef-solo -c /etc/chef/bootstrap/solo.rb -j /etc/chef/tmp/dna.json'
+    def run(bootstrap, dna)
+      @server.run "rm -rf /{etc,tmp}/chef && mkdir /{etc,tmp}/chef"
+      @server.upload %W(
+        #{dna[:path]}
+        ./bootstrap
+        ./cookbooks
+        ./site-cookbooks
+        ./roles
+        ./data_bags
+      ), '/etc/chef'
+      @server.run "sh /etc/chef/bootstrap/#{@platform}.sh" if bootstrap
+      @server.run "chef-solo -c /etc/chef/bootstrap/solo.rb -j /etc/chef/tmp/dna.json"
     end
   end
 end

@@ -12,28 +12,25 @@ module Gusteau
       @config = YAML::load_file path
       @dna_path = '/tmp/dna.json'
 
-      @server = Server.new(@config['server'],
-        :is_vagrant => @config.fetch('json', {}).fetch('environment', {})['vagrant']
-      )
+      @server = Server.new(@config['server'])
     end
 
-    def provision
-      @server.chef.bootstrap
-      @server.chef.run dna([])
+    def provision(bootstrap = false)
+      @server.chef.run bootstrap, dna(true)
     end
 
-    def run(recipes)
-      @server.chef.run dna(recipes)
+    def run(bootstrap = false, recipes)
+      @server.chef.run bootstrap, dna(false, recipes)
     end
 
     private
 
-    def dna(recipes)
+    def dna(include_all, recipes = [])
       node_dna = {
         :path => @dna_path,
         :hash => {
           :instance_role => @name,
-          :run_list      => run_list(recipes)
+          :run_list      => run_list(include_all, recipes)
         }.merge(@config['json'])
       }
 
@@ -41,8 +38,8 @@ module Gusteau
       node_dna
     end
 
-    def run_list(recipes)
-      if recipes.empty?
+    def run_list(include_all, recipes)
+      if include_all
         list = []
         list += @config['roles'].map   { |r| "role[#{r}]"   } if @config['roles']
         list += @config['recipes'].map { |r| "recipe[#{r}]" } if @config['recipes']

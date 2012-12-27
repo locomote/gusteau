@@ -21,4 +21,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'inform'
   gem.add_dependency 'net-ssh', '~> 2.2.2'
   gem.add_dependency 'archive-tar-minitar', '~> 0.5.2'
+
+  gem.add_development_dependency 'minitest'
 end

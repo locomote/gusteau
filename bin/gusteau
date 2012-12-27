@@ -18,14 +18,16 @@ class Gusteau::CLI < Optitron::CLI
     :required => true
   }
 
+  class_opt 'bootstrap', 'If needed, install chef-solo'
+
   desc 'Fully provision a node'
   def provision
-    node(params['node']).provision
+    node(params['node']).provision(params['bootstrap'])
   end
 
   desc 'Run recipe(s)'
   def run(*recipe)
-    node(params['node']).run(recipe)
+    node(params['node']).run(params['bootstrap'], recipe)
   end
 
   private

@@ -8,8 +8,9 @@ describe Gusteau::Node do
   describe "#dna" do
     let(:node) { Gusteau::Node.new('spec/nodes/example.yml') }
 
-    let(:dna)     { node.send(:dna, recipes) }
-    let(:recipes) { [] }
+    let(:dna)         { node.send(:dna, include_all, recipes) }
+    let(:include_all) { true }
+    let(:recipes)     { [] }
 
     let(:path) { '/tmp/testdna.json' }
     let(:json) { JSON::parse(File.read dna[:path]) }
@@ -25,7 +26,8 @@ describe Gusteau::Node do
     end
 
     context "recipes specified" do
-      let(:recipes)  { ['rvm', 'rails::apps'] }
+      let(:include_all) { false }
+      let(:recipes)     { ['rvm', 'rails::apps'] }
 
       it "should only include the specified item into run_list" do
         json['run_list'].must_equal ["recipe[rvm]", "recipe[rails::apps]"]

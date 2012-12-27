@@ -11,7 +11,7 @@ module Gusteau
     def initialize(config, opts={})
       @host = config['host']
       @port = (config['port'] || '22').to_i
-      @password = 'vagrant' if opts[:is_vagrant]
+      @password = 'vagrant' if config['vagrant']
       @chef = Gusteau::Chef.new(self, config['platform'])
     end
 
