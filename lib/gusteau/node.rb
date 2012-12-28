@@ -1,6 +1,9 @@
 require 'yaml'
 require 'json'
 
+require 'gusteau/server'
+require 'gusteau/chef'
+
 module Gusteau
   class Node
     attr_reader :server
