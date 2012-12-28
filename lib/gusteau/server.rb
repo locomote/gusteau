@@ -1,5 +1,5 @@
-require_relative './log'
-require_relative './ssh'
+require 'gusteau/log'
+require 'gusteau/ssh'
 
 module Gusteau
   class Server

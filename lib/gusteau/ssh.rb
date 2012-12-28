@@ -1,6 +1,6 @@
 require 'net/ssh'
-require_relative './tgz_stream'
-require_relative './log'
+require 'gusteau/tgz_stream'
+require 'gusteau/log'
 
 module Gusteau
   module SSH

@@ -1,6 +1,7 @@
-desc "Run specs"
-task :spec do
-  Dir.glob('spec/lib/gusteau/*.rb').each {|f| puts f; require_relative f }
+require 'rake/testtask'
+
+Rake::TestTask.new do |t|
+  t.pattern = "spec/**/*_spec.rb"
 end
 
-task :default => :spec
+task :default => :test
