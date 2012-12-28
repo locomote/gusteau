@@ -24,9 +24,9 @@ module Gusteau
 
     def run(*cmds)
       cmds.each do |cmd|
-        log("%{host}> #{cmd}", host: host) do
+        log("%{host}> #{cmd}", :host => host) do
           unless send_command(cmd)
-            log_error("%{host}> #{cmd}", host: host)
+            log_error("%{host}> #{cmd}", :host => host)
             raise
           end
         end

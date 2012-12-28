@@ -21,14 +21,14 @@ module Gusteau
     end
 
     def log(msg, opts={})
-      info "%{prompt}#{msg}", opts.merge(prompt: prompt)
+      info "%{prompt}#{msg}", opts.merge(:prompt => prompt)
       if block_given?
         indent
         start_time = Time.now
         yield
-        .tap {
+        self.tap {
           unindent
-          Inform.info "%{prompt}DONE (in #{'%0.2f' % (Time.now - start_time)}s)", prompt: prompt
+          Inform.info "%{prompt}DONE (in #{'%0.2f' % (Time.now - start_time)}s)", :prompt => prompt
         }
       else
         puts "\n"
@@ -36,7 +36,7 @@ module Gusteau
     end
 
     def log_error(msg, opts={})
-      Inform.error "%{prompt}#{msg}", opts.merge(prompt: prompt)
+      Inform.error "%{prompt}#{msg}", opts.merge(:prompt => prompt)
     end
 
     def info(str, opts={})
