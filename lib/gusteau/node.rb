@@ -23,7 +23,7 @@ module Gusteau
     end
 
     def run(bootstrap = false, *recipes)
-      @server.chef.run bootstrap, dna(false, recipes)
+      @server.chef.run bootstrap, dna(false, recipes.flatten)
     end
 
     private
