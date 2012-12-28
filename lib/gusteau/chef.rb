@@ -28,7 +28,7 @@ module Gusteau
       ), dest_dir
 
       # move bootstrap directory to the top level
-      @server.run "cd #{dest_dir} && mv `find . -type d -name bootstrap -print0` ."
+      @server.run "cd #{dest_dir} && mv `find . -type d -name bootstrap` #{dest_dir}/"
     end
   end
 end
