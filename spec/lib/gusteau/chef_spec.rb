@@ -1,18 +1,33 @@
 require './spec/spec_helper.rb'
 
 describe Gusteau::Chef do
-  let(:platform) { 'centos' }
-  let(:server)   { MiniTest::Mock.new }
-  let(:chef)     { Gusteau::Chef.new(server, platform) }
+  let(:platform)  { 'centos' }
+  let(:server)    { Gusteau::Server.new('host' => 'example.com', 'platform' => platform) }
+  let(:chef)      { Gusteau::Chef.new(server, platform) }
 
   describe "#run" do
-    it "should upload dna, cookbooks, roles and data_bags" do
-      server.expect(:upload, nil, [%W(/tmp/node.json ./bootstrap ./cookbooks ./site-cookbooks ./roles ./data_bags), "/etc/chef"])
-      server.expect(:run, nil, ["rm -rf /{etc,tmp}/chef && mkdir /{etc,tmp}/chef"])
-      server.expect(:run, nil, [String])
+    def expects_run_chef_solo
+      server.expects(:run).with { |p1| p1 =~ /chef-solo/ }
+    end
 
-      chef.run(false, { :path => '/tmp/node.json' })
-      server.verify
+    before do
+      server.expects(:upload).with { |p1| p1.include? './cookbooks' }
+      server.expects(:run).times(2)
+    end
+
+    context "bootstrap option is not specified" do
+      it "should run chef solo" do
+        expects_run_chef_solo
+        chef.run(false, { :path => '/tmp/node.json' })
+      end
+    end
+
+    context "bootstrap option is specified" do
+      it "should run the bootstrap script and chef solo" do
+        server.expects(:run).with('sh /etc/chef/bootstrap/centos.sh')
+        expects_run_chef_solo
+        chef.run(true, { :path => '/tmp/node.json' })
+      end
     end
   end
 end
