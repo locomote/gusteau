@@ -16,7 +16,7 @@ module Gusteau
     private
 
     def upload_bureau(dna_path, dest_dir)
-      @server.run "rm -rf #{dest_dir} && mkdir #{dest_dir}"
+      @server.run "rm -rf #{dest_dir} && mkdir #{dest_dir} && mkdir -p /tmp/chef"
 
       @server.upload %W(
         #{dna_path}
