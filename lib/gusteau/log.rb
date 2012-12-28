@@ -25,11 +25,10 @@ module Gusteau
       if block_given?
         indent
         start_time = Time.now
-        yield
-        self.tap {
+        yield.tap do
           unindent
           Inform.info "%{prompt}DONE (in #{'%0.2f' % (Time.now - start_time)}s)", :prompt => prompt
-        }
+        end
       else
         puts "\n"
       end
