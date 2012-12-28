@@ -23,4 +23,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'archive-tar-minitar', '~> 0.5.2'
 
   gem.add_development_dependency 'minitest'
+  gem.add_development_dependency 'mocha'
 end
