@@ -7,36 +7,33 @@ $LOAD_PATH << File.expand_path("../..", __FILE__)
 require 'lib/gusteau'
 
 class Gusteau::CLI < Optitron::CLI
-  class << self
-    def nodes_list
-      Dir.glob("./nodes/**/*.yml").map { |f| File.basename(f, '.*') }
-    end
-  end
-
-  class_opt 'node', 'Node name', {
-    :in       => nodes_list,
-    :required => true
-  }
 
   class_opt 'bootstrap', 'If needed, install chef-solo'
   class_opt 'why-run',   'Enable dry run mode', :short_name => 'W'
 
   desc 'Fully provision a node'
-  def provision
-    node(params['node']).provision(params)
+  def provision(node_name)
+    node(node_name).provision(params)
   end
 
   desc 'Run recipe(s)'
-  def run(*recipe)
-    node(params['node']).run(params, recipe)
+  def run(node_name, *recipe)
+    node(node_name).run(params, recipe)
   end
 
   private
 
   def node(node_name)
-    node_path = Dir.glob("./nodes/**/#{node_name}.yml")[0]
+    unless node_path = Dir.glob("./nodes/**/#{node_name}.yml")[0]
+      abort "Node '#{node_name}' is unknown. Known nodes are #{nodes_list.join(', ')}."
+    end
     Gusteau::Node.new(node_path)
   end
+
+  def nodes_list
+    Dir.glob("./nodes/**/*.yml").map { |f| File.basename(f, '.*') }
+  end
+
 end
 
 Gusteau::CLI.dispatch
