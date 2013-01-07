@@ -6,11 +6,14 @@ module Gusteau
       @dest_dir = dest_dir
     end
 
-    def run(bootstrap, dna)
+    def run(opts, dna)
       upload_bureau dna[:path], @dest_dir
 
-      @server.run "sh /etc/chef/bootstrap/#{@platform}.sh" if bootstrap
-      @server.run "chef-solo -c #{@dest_dir}/bootstrap/solo.rb -j #{@dest_dir + dna[:path]}"
+      @server.run "sh /etc/chef/bootstrap/#{@platform}.sh" if opts['bootstrap']
+
+      cmd  = "chef-solo -c #{@dest_dir}/bootstrap/solo.rb -j #{@dest_dir + dna[:path]}"
+      cmd += ' -W' if opts['why-run']
+      @server.run cmd
     end
 
     private
@@ -20,7 +23,7 @@ module Gusteau
 
       @server.upload %W(
         #{dna_path}
-        #{File.expand_path("#{File.dirname(__FILE__)}/../../bootstrap")}
+        #{File.expand_path("../../../bootstrap", __FILE__)}
         ./cookbooks
         ./site-cookbooks
         ./roles

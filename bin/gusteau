@@ -3,7 +3,7 @@
 require 'rubygems'
 require 'optitron'
 
-$LOAD_PATH << File.expand_path("#{File.dirname(__FILE__)}/..")
+$LOAD_PATH << File.expand_path("../..", __FILE__)
 require 'lib/gusteau'
 
 class Gusteau::CLI < Optitron::CLI
@@ -19,15 +19,16 @@ class Gusteau::CLI < Optitron::CLI
   }
 
   class_opt 'bootstrap', 'If needed, install chef-solo'
+  class_opt 'why-run',   'Enable dry run mode', :short_name => 'W'
 
   desc 'Fully provision a node'
   def provision
-    node(params['node']).provision(params['bootstrap'])
+    node(params['node']).provision(params)
   end
 
   desc 'Run recipe(s)'
   def run(*recipe)
-    node(params['node']).run(params['bootstrap'], recipe)
+    node(params['node']).run(params, recipe)
   end
 
   private

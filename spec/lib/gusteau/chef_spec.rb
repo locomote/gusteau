@@ -6,6 +6,9 @@ describe Gusteau::Chef do
   let(:chef)      { Gusteau::Chef.new(server, platform) }
 
   describe "#run" do
+    let(:bootstrap) { false }
+    let(:opts)      { { 'bootstrap' => bootstrap, 'why-run' => false } }
+
     def expects_run_chef_solo
       server.expects(:run).with { |p1| p1 =~ /chef-solo/ }
     end
@@ -18,15 +21,17 @@ describe Gusteau::Chef do
     context "bootstrap option is not specified" do
       it "should run chef solo" do
         expects_run_chef_solo
-        chef.run(false, { :path => '/tmp/node.json' })
+        chef.run(opts, { :path => '/tmp/node.json' })
       end
     end
 
     context "bootstrap option is specified" do
+      let(:bootstrap) { true }
+
       it "should run the bootstrap script and chef solo" do
         server.expects(:run).with('sh /etc/chef/bootstrap/centos.sh')
         expects_run_chef_solo
-        chef.run(true, { :path => '/tmp/node.json' })
+        chef.run(opts, { :path => '/tmp/node.json' })
       end
     end
   end

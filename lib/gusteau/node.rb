@@ -18,12 +18,12 @@ module Gusteau
       @server = Server.new(@config['server'])
     end
 
-    def provision(bootstrap = false)
-      @server.chef.run bootstrap, dna(true)
+    def provision(opts = {})
+      @server.chef.run opts, dna(true)
     end
 
-    def run(bootstrap = false, *recipes)
-      @server.chef.run bootstrap, dna(false, recipes.flatten)
+    def run(opts = {}, *recipes)
+      @server.chef.run opts, dna(false, recipes.flatten)
     end
 
     private
