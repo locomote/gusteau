@@ -11,8 +11,10 @@ module Gusteau
 
       @server.run "sh /etc/chef/bootstrap/#{@platform}.sh" if opts['bootstrap']
 
-      cmd  = "chef-solo -c #{@dest_dir}/bootstrap/solo.rb -j #{@dest_dir + dna[:path]}"
-      cmd += ' -W' if opts['why-run']
+      cmd  = "chef-solo -c #{@dest_dir}/bootstrap/solo.rb -j #{@dest_dir + dna[:path]} --color"
+      cmd += " -F #{opts['format']}"    if opts['format']
+      cmd += " -l #{opts['log_level']}" if opts['log_level']
+      cmd += " -W"                      if opts['why-run']
       @server.run cmd
     end
 
