@@ -1,0 +1,5 @@
+#!/bin/bash
+source ./script/set_environment
+
+bundle install
+bundle exec rake
