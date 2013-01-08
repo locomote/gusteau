@@ -6,12 +6,13 @@ module Gusteau
     include Gusteau::Log
     include Gusteau::SSH
 
-    attr_reader :host, :port, :password, :chef
+    attr_reader :host, :port, :user, :password, :chef
 
     def initialize(config, opts={})
-      @host = config['host']
-      @port = (config['port'] || '22').to_i
-      @password = 'vagrant' if config['vagrant']
+      @host     = config['host']
+      @port     = (config['port'] || '22').to_i
+      @user     = config['user'] || 'root'
+      @password = config['password']
       @chef = Gusteau::Chef.new(self, config['platform'])
     end
 
@@ -24,9 +25,9 @@ module Gusteau
 
     def run(*cmds)
       cmds.each do |cmd|
-        log("%{host}> #{cmd}", :host => host) do
+        log("%{host}> #{prepared_cmd cmd}", :host => host) do
           unless send_command(cmd)
-            log_error("%{host}> #{cmd}", :host => host)
+            log_error("%{host}> #{prepared_cmd cmd}", :host => host)
             raise
           end
         end
