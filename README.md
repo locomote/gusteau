@@ -30,7 +30,7 @@ json:
     default_ruby: 1.9.3-p362
   users:
    - linguini
-  
+
 roles:
   - platform
   - rails
@@ -67,3 +67,4 @@ Notes
 
 * `--bootstrap` only works with Ubuntu, CentOS and RHEL. Feel free to contribute a [bootstrap script](https://github.com/locomote/gusteau/tree/master/bootstrap) for your platform!
 * We encourage you to use [librarian-chef](https://github.com/applicationsonline/librarian) - a great way to bundle third-party cookbooks.
+
