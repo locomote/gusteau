@@ -14,7 +14,7 @@ describe Gusteau::Chef do
     end
 
     before do
-      server.expects(:upload).with { |p1, p2| p1.include? './cookbooks' }
+      server.expects(:upload)
       server.expects(:run).times(2)
     end
 
