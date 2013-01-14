@@ -23,14 +23,16 @@ module Gusteau
     def upload_bureau(dna_path, dest_dir)
       @server.run "rm -rf #{dest_dir} && mkdir #{dest_dir} && mkdir -p /tmp/chef"
 
-      @server.upload %W(
+      files_list = %W(
         #{dna_path}
         #{File.expand_path("../../../bootstrap", __FILE__)}
         ./cookbooks
         ./site-cookbooks
         ./roles
         ./data_bags
-      ), dest_dir
+      ).select { |file| File.exists? file }
+
+      @server.upload(files_list, dest_dir)
 
       # move bootstrap directory to the top level
       @server.run "cd #{dest_dir} && mv `find . -type d -name bootstrap` #{dest_dir}/"
