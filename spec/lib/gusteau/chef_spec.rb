@@ -3,23 +3,24 @@ require './spec/spec_helper.rb'
 describe Gusteau::Chef do
   let(:platform)  { 'centos' }
   let(:server)    { Gusteau::Server.new('host' => 'example.com', 'platform' => platform) }
-  let(:chef)      { Gusteau::Chef.new(server, platform) }
+  let(:dest_dir)  { :a_dest_dir }
+  let(:chef)      { Gusteau::Chef.new(server, platform, dest_dir) }
 
   describe "#run" do
     let(:bootstrap) { false }
     let(:opts)      { { 'bootstrap' => bootstrap, 'why-run' => false } }
 
+    def expects_sync_files
+      server.expects(:sync_files).with { |p1, p2| p2 == dest_dir }
+    end
+
     def expects_run_chef_solo
       server.expects(:run).with { |p1| p1 =~ /chef-solo/ }
     end
 
-    before do
-      server.expects(:upload)
-      server.expects(:run).times(2)
-    end
-
     context "bootstrap option is not specified" do
       it "should run chef solo" do
+        expects_sync_files
         expects_run_chef_solo
         chef.run(opts, { :path => '/tmp/node.json' })
       end
@@ -30,6 +31,7 @@ describe Gusteau::Chef do
 
       it "should run the bootstrap script and chef solo" do
         server.expects(:run).with('sh /etc/chef/bootstrap/centos.sh')
+        expects_sync_files
         expects_run_chef_solo
         chef.run(opts, { :path => '/tmp/node.json' })
       end
