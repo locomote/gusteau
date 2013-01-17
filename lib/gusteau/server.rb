@@ -1,12 +1,10 @@
 require 'gusteau/log'
 require 'gusteau/ssh'
-require 'gusteau/rsync'
 
 module Gusteau
   class Server
     include Gusteau::Log
     include Gusteau::SSH
-    include Gusteau::Rsync
 
     attr_reader :host, :port, :user, :password, :chef
 
@@ -18,9 +16,9 @@ module Gusteau
       @chef = Gusteau::Chef.new(self, config['platform'])
     end
 
-    def upload(files_and_dirs, dest_dir)
+    def upload(files_and_dirs, dest_dir, opts={})
       log "#uploading #{files_and_dirs.join(' ')} to #{@host}:#{dest_dir}" do
-        files = Find.find(*files_and_dirs).to_a
+        files = Find.find(*files_and_dirs).select { |f| f unless opts[:exclude] && f.include?(opts[:exclude]) }
         send_files(files, dest_dir)
       end
     end
