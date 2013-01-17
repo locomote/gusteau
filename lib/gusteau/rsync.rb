@@ -3,7 +3,7 @@
 module Gusteau
   module Rsync
     def default_rsync_opts
-      "avz"
+      "az"
     end
 
     def sync_files(src_files, dest_dir, opts={})
