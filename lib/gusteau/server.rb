@@ -1,12 +1,10 @@
 require 'gusteau/log'
 require 'gusteau/ssh'
-require 'gusteau/rsync'
 
 module Gusteau
   class Server
     include Gusteau::Log
     include Gusteau::SSH
-    include Gusteau::Rsync
 
     attr_reader :host, :port, :user, :password, :chef
 
