@@ -2,8 +2,12 @@
 
 module Gusteau
   module Rsync
+    def default_rsync_opts
+      "avz"
+    end
+
     def sync_files(src_files, dest_dir, opts={})
-      rsync_cmd = "rsync -#{opts[:rsync_opts] || "avzP"} #{src_files.join(' ')} #{user}@#{host}:#{dest_dir}"
+      rsync_cmd = "rsync -#{opts[:rsync_opts] || default_rsync_opts} #{src_files.join(' ')} #{user}@#{host}:#{dest_dir}"
       log "#syncing local chef source files to remote dir ..." do
         @password ? system_using_password(rsync_cmd , @password) : system(rsync_cmd)
       end
