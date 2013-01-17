@@ -1,10 +1,10 @@
 require 'net/ssh'
-require 'gusteau/tgz_stream'
+require 'gusteau/compressed_tar_stream'
 require 'gusteau/log'
 
 module Gusteau
   module SSH
-    include Gusteau::TgzStream
+    include Gusteau::CompressedTarStream
 
     def ssh
       @ssh ||= begin
@@ -36,7 +36,7 @@ module Gusteau
     def send_files(files, dest_dir)
       ssh.open_channel { |ch|
         ch.exec(prepared_cmd "tar zxf - -C #{dest_dir}")
-        ch.send_data(tgz_stream(files))
+        ch.send_data(compressed_tar_stream(files))
         ch.eof!
       }.wait
     end
