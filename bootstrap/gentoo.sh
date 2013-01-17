@@ -12,4 +12,10 @@ else
   revdep-rebuild
 
   gem install chef ruby-shadow --no-ri --no-rdoc
+
+  # Make non-interactive SSH sessions see environment variables
+  if [[ ! `which chef-solo` ]]; then
+    echo 'source /etc/profile' >> ~/.bashrc
+    source ~/.bashrc
+  fi
 fi
