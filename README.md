@@ -65,6 +65,6 @@ gusteau node-name run redis::server ntp unicorn
 Notes
 -----
 
-* `--bootstrap` only works with Ubuntu, CentOS and RHEL. Feel free to contribute a [bootstrap script](https://github.com/locomote/gusteau/tree/master/bootstrap) for your platform!
+* `--bootstrap` only works with Ubuntu, CentOS, RHEL and Gentoo Linux flavors. Feel free to contribute a [bootstrap script](https://github.com/locomote/gusteau/tree/master/bootstrap) for your platform!
 * We encourage you to use [librarian-chef](https://github.com/applicationsonline/librarian) - a great way to bundle third-party cookbooks.
 
