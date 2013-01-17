@@ -24,10 +24,10 @@ module Gusteau
       %W(
         #{dna_path}
         #{File.expand_path("../../../bootstrap", __FILE__)}
-        ./cookbooks
-        ./site-cookbooks
-        ./roles
-        ./data_bags
+        cookbooks
+        site-cookbooks
+        roles
+        data_bags
       ).select { |file| File.exists? file }
     end
   end
