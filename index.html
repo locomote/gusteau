@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=640" />
+
+    <link rel="stylesheet" href="stylesheets/core.css" media="screen"/>
+    <link rel="stylesheet" href="stylesheets/mobile.css" media="handheld, only screen and (max-device-width:640px)"/>
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
+
+    <script type="text/javascript" src="javascripts/modernizr.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="javascripts/headsmart.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('#main_content').headsmart()
+      })
+    </script>
+    <title>Gusteau by locomote</title>
+  </head>
+
+  <body>
+    <a id="forkme_banner" href="https://github.com/locomote/gusteau">View on GitHub</a>
+    <div class="shell">
+
+      <header>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <h1>Gusteau</h1>
+            <h2>a fine Chef Solo wrapper</h2>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+      </header>
+
+      <section id="downloads">
+        <span class="inner">
+          <a href="https://github.com/locomote/gusteau/zipball/master" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/locomote/gusteau/tarball/master" class="tgz"><em>download</em> .TGZ</a>
+        </span>
+      </section>
+
+
+      <span class="banner-fix"></span>
+
+
+      <section id="main_content">
+        <p><em>"Anyone can cook."</em></p>
+
+<p><a href="http://magnum.travis-ci.com/locomote/gusteau"><img src="https://magnum.travis-ci.com/locomote/gusteau.png?token=sLrGziB4HXtaF5mwnaxi" alt="Build Status"></a></p>
+
+<h2>Introduction</h2>
+
+<p>Gusteau is here to make servers provisioning easy and enjoyable.
+It's a Chef Solo wrapper that manages configuration and lets you provision servers or just run arbitrary recipes on them.</p>
+
+<h2>Gettings started</h2>
+
+<p>The first thing to do is to generate a project:</p>
+
+<pre><code>gusteau generate project-name
+</code></pre>
+
+<p>Next, see <code>nodes/example.yml</code> for an example server configuration:</p>
+
+<div class="highlight"><pre><span class="l-Scalar-Plain">json</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">mysql</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">server_root_password</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ASahiweqwqe2</span>
+  <span class="l-Scalar-Plain">rvm</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">default_ruby</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">1.9.3-p362</span>
+  <span class="l-Scalar-Plain">users</span><span class="p-Indicator">:</span>
+   <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">linguini</span>
+
+<span class="l-Scalar-Plain">roles</span><span class="p-Indicator">:</span>
+  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">platform</span>
+  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">rails</span>
+
+<span class="l-Scalar-Plain">recipes</span><span class="p-Indicator">:</span>
+  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">mysql::server</span>
+  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">iptables</span>
+
+<span class="l-Scalar-Plain">server</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">33.33.33.20</span>
+  <span class="l-Scalar-Plain">platform</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ubuntu</span>
+  <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">vagrant</span>
+</pre></div>
+
+<h2>Provisioning a server</h2>
+
+<p>The following command will run all roles and recipes from node's YML file.</p>
+
+<pre><code>gusteau node-name provision
+</code></pre>
+
+<h2>Running recipes</h2>
+
+<p>You may choose to run a few recipes instead of full provisioning.</p>
+
+<pre><code>gusteau node-name run redis::server ntp unicorn
+</code></pre>
+
+<h2>Notes</h2>
+
+<ul>
+<li>
+<code>--bootstrap</code> only works with Ubuntu, CentOS, RHEL and Gentoo Linux flavors. Feel free to contribute a <a href="https://github.com/locomote/gusteau/tree/master/bootstrap">bootstrap script</a> for your platform!</li>
+<li>We encourage you to use <a href="https://github.com/applicationsonline/librarian">librarian-chef</a> - a great way to bundle third-party cookbooks.</li>
+</ul>
+      </section>
+
+      <footer>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <p>this project by <a href="https://github.com/locomote">locomote</a> can be found on <a href="https://github.com/locomote/gusteau">GitHub</a></p>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+        <p>Generated with <a href="http://pages.github.com">GitHub Pages</a> using Merlot</p>
+        <span class="octocat"></span>
+      </footer>
+
+    </div>
+
+    
+  </body>
+</html>
