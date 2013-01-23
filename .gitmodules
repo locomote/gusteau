@@ -1,3 +1,0 @@
-[submodule "jenkins"]
-	path = jenkins
-	url = git@github.com:locomote/jenkins-script.git
