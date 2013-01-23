@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["vasily@locomote.com", "chris@locomote.com"]
   gem.description   = %q{A fine Chef Solo wrapper}
   gem.summary       = %q{Making servers provisioning enjoyable since 2013.}
-  gem.homepage      = "http://github.com/locomote/gusteau"
+  gem.homepage      = "http://gusteau.gs"
 
   gem.files         = `git ls-files | grep -vE '(jenkins|.gitmodules|.ruby-version)'`.split("\n")
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
