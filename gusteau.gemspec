@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = Gusteau::VERSION
   gem.authors       = ["Vasily Mikhaylichenko", "Chris"]
   gem.email         = ["vasily@locomote.com", "chris@locomote.com"]
-  gem.description   = %q{À la carte server provisioning}
-  gem.summary       = %q{A flexible and fast Chef solo deployment tool}
+  gem.description   = %q{A fine Chef Solo wrapper}
+  gem.summary       = %q{Making servers provisioning enjoyable since 2013.}
   gem.homepage      = "http://github.com/locomote/gusteau"
 
   gem.files         = `git ls-files`.split($/)

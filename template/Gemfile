@@ -1,0 +1,7 @@
+# vi:ft=ruby:
+
+source 'http://rubygems.org'
+
+gem 'librarian'
+gem 'gusteau'
+gem 'vagrant', '~> 1.0.5'

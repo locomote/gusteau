@@ -1,0 +1,19 @@
+json:
+  net:
+    IP: 33.33.33.10
+  users:
+    - <%= @login %>
+  cowsay:
+    greeting: "Good job, <%= @login %>!"
+
+roles:
+  - platform
+
+recipes:
+  - cowsay
+
+server:
+  host: 33.33.33.10
+  user: vagrant
+  password: vagrant
+  platform: ubuntu

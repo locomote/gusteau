@@ -8,19 +8,19 @@ Gusteau
 Introduction
 ------------
 
-Gusteau is here to make servers provisioning easy and enjoyable.
-It's a Chef Solo wrapper that manages configuration and lets you provision servers or just run arbitrary recipes on them.
+Gusteau is here to make servers provisioning simple and enjoyable. It provides an efficient interface to Chef Solo as well as some nice features:
+
+* Uses YAML for readable server configuration definitions
+* Uses a single SSH connection to stream compressed files and commands
+* Allows you to use normal Chef flags:
+  * `-W` or `--why-run` (dry run mode)
+  * `-l` for setting a log level and `-F` for setting an output formatter
+* Is able to bootstrap CentOS, RHEL, Ubuntu and Gentoo systems with chef-solo.
 
 Gettings started
 ----------------
 
-The first thing to do is to generate a project:
-
-```
-gusteau generate project-name
-```
-
-Next, see `nodes/example.yml` for an example server configuration:
+A typical Gusteau node configuration looks like this:
 
 ```YAML
 json:
@@ -45,14 +45,26 @@ server:
   password: vagrant
 ```
 
+Gusteau only needs a node definition to run, but you'll need a few cookbooks to actually cook something :)
+The following command generates an example configuration to get you started:
+
+```
+gusteau generate project-name
+```
+
+Next, `cd project-name` and see `nodes/example.yml`.
+
+
 Provisioning a server
 ----------
 
-The following command will run all roles and recipes from node's YML file.
+The following command will run all roles and recipes from node's YAML file.
 
 ```
 gusteau node-name provision
 ```
+
+Use the `--bootstrap` or `-b` flag to bootstrap chef-solo (for the first time run).
 
 Running recipes
 -----------
@@ -62,9 +74,18 @@ You may choose to run a few recipes instead of full provisioning.
 gusteau node-name run redis::server ntp unicorn
 ```
 
+Using with Vagrant
+------------------
+At the moment Gusteau doesn't come with Vagrant integration. However, using it with Vagrant is easy, just make sure that you provide the correct IP address of the VM in node's YAML file.
+
+```
+vagrant up
+gusteau node-name provision
+```
+
 Notes
 -----
 
-* `--bootstrap` only works with Ubuntu, CentOS, RHEL and Gentoo Linux flavors. Feel free to contribute a [bootstrap script](https://github.com/locomote/gusteau/tree/master/bootstrap) for your platform!
-* We encourage you to use [librarian-chef](https://github.com/applicationsonline/librarian) - a great way to bundle third-party cookbooks.
+* Feel free to contribute a [bootstrap script](https://github.com/locomote/gusteau/tree/master/bootstrap) for your platform.
+* Gusteau uploads  both `./cookbooks` and `./site-cookbooks` so that you can use [librarian-chef](https://github.com/applicationsonline/librarian) to include third party cookbooks.
 
