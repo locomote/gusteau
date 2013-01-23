@@ -2,7 +2,8 @@ Gusteau
 =======
 
 *"Anyone can cook."*
-[![Build Status](https://www.travis-ci.org/locomote/gusteau.png?branch=master)](https://www.travis-ci.org/locomote/gusteau)/locomote/gusteau)
+
+[![Build Status](https://www.travis-ci.org/locomote/gusteau.png?branch=master)](https://www.travis-ci.org/locomote/gusteau)
 
 Introduction
 ------------
