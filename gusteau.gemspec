@@ -12,7 +12,7 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{Making servers provisioning enjoyable since 2013.}
   gem.homepage      = "http://github.com/locomote/gusteau"
 
-  gem.files         = `git ls-files`.split($/)
+  gem.files         = `git ls-files | grep -vE '(jenkins|.gitmodules|.ruby-version)'`.split("\n")
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
