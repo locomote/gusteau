@@ -20,6 +20,12 @@ Gusteau is here to make servers provisioning simple and enjoyable. It provides a
 Gettings started
 ----------------
 
+Gusteau is a Ruby gem:
+
+```
+gem install gusteau
+```
+
 A typical Gusteau node configuration looks like this:
 
 ```YAML
