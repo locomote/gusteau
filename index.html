@@ -48,21 +48,26 @@
       <section id="main_content">
         <p><em>"Anyone can cook."</em></p>
 
-<p><a href="http://magnum.travis-ci.com/locomote/gusteau"><img src="https://magnum.travis-ci.com/locomote/gusteau.png?token=sLrGziB4HXtaF5mwnaxi" alt="Build Status"></a></p>
-
 <h2>Introduction</h2>
 
-<p>Gusteau is here to make servers provisioning easy and enjoyable.
-It's a Chef Solo wrapper that manages configuration and lets you provision servers or just run arbitrary recipes on them.</p>
+<p>Gusteau is here to make servers provisioning simple and enjoyable. It provides an efficient interface to Chef Solo as well as some nice features:</p>
 
-<h2>Gettings started</h2>
+<ul>
+<li>Uses YAML for readable server configuration definitions</li>
+<li>Uses a single SSH connection to stream compressed files and commands</li>
+<li>Allows you to use normal Chef flags:
 
-<p>The first thing to do is to generate a project:</p>
+<ul>
+<li>
+<code>-W</code> or <code>--why-run</code> (dry run mode)</li>
+<li>
+<code>-l</code> for setting a log level and <code>-F</code> for setting an output formatter</li>
+</ul>
+</li>
+<li>Is able to bootstrap CentOS, RHEL, Ubuntu and Gentoo systems with chef-solo.</li>
+</ul><h2>Gettings started</h2>
 
-<pre><code>gusteau generate project-name
-</code></pre>
-
-<p>Next, see <code>nodes/example.yml</code> for an example server configuration:</p>
+<p>A typical Gusteau node configuration looks like this:</p>
 
 <div class="highlight"><pre><span class="l-Scalar-Plain">json</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">mysql</span><span class="p-Indicator">:</span>
@@ -86,12 +91,22 @@ It's a Chef Solo wrapper that manages configuration and lets you provision serve
   <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">vagrant</span>
 </pre></div>
 
+<p>Gusteau only needs a node definition to run, but you'll need a few cookbooks to actually cook something :)
+The following command generates an example configuration to get you started:</p>
+
+<pre><code>gusteau generate project-name
+</code></pre>
+
+<p>Next, <code>cd project-name</code> and see <code>nodes/example.yml</code>.</p>
+
 <h2>Provisioning a server</h2>
 
-<p>The following command will run all roles and recipes from node's YML file.</p>
+<p>The following command will run all roles and recipes from node's YAML file.</p>
 
 <pre><code>gusteau node-name provision
 </code></pre>
+
+<p>Use the <code>--bootstrap</code> or <code>-b</code> flag to bootstrap chef-solo (for the first time run).</p>
 
 <h2>Running recipes</h2>
 
@@ -100,12 +115,19 @@ It's a Chef Solo wrapper that manages configuration and lets you provision serve
 <pre><code>gusteau node-name run redis::server ntp unicorn
 </code></pre>
 
+<h2>Using with Vagrant</h2>
+
+<p>At the moment Gusteau doesn't come with Vagrant integration. However, using it with Vagrant is easy, just make sure that you provide the correct IP address of the VM in node's YAML file.</p>
+
+<pre><code>vagrant up
+gusteau node-name provision
+</code></pre>
+
 <h2>Notes</h2>
 
 <ul>
-<li>
-<code>--bootstrap</code> only works with Ubuntu, CentOS, RHEL and Gentoo Linux flavors. Feel free to contribute a <a href="https://github.com/locomote/gusteau/tree/master/bootstrap">bootstrap script</a> for your platform!</li>
-<li>We encourage you to use <a href="https://github.com/applicationsonline/librarian">librarian-chef</a> - a great way to bundle third-party cookbooks.</li>
+<li>Feel free to contribute a <a href="https://github.com/locomote/gusteau/tree/master/bootstrap">bootstrap script</a> for your platform.</li>
+<li>Gusteau uploads  both <code>./cookbooks</code> and <code>./site-cookbooks</code> so that you can use <a href="https://github.com/applicationsonline/librarian">librarian-chef</a> to include third party cookbooks.</li>
 </ul>
       </section>
 
