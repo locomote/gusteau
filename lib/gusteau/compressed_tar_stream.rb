@@ -14,8 +14,9 @@ module Gusteau
           print '.'
           Archive::Tar::Minitar.pack_file(f, tar)
         end
-        tar.close.string.force_encoding('ASCII-8BIT')
-        .tap { |data| puts " (compressed down to #{data.size} bytes)" }
+        tar.close.string.force_encoding('ASCII-8BIT').tap { |data|
+          puts " (compressed down to #{data.size} bytes)"
+        }
       end
     end
   end
