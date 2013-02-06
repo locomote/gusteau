@@ -81,6 +81,14 @@ You may choose to run a few recipes instead of full provisioning.
 gusteau node-name run redis::server ntp unicorn
 ```
 
+SSH
+---
+Gusteau provides a useful shortcut that you may use to ssh into a node. If you haven't got passwordless authentication set up, Gusteau will use `user` and `password` values from the node configuration.
+
+```
+gusteau ssh node-name
+```
+
 Using with Vagrant
 ------------------
 At the moment Gusteau doesn't come with Vagrant integration. However, using it with Vagrant is easy, just make sure that you provide the correct IP address of the VM in node's YAML file.

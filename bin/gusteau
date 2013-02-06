@@ -23,6 +23,11 @@ class Gusteau::CLI < Optitron::CLI
     node(node_name).run(params, recipe)
   end
 
+  desc 'SSH into a node'
+  def ssh(node_name)
+    node(node_name).ssh
+  end
+
   desc 'Generate an example project (a bureau)'
   def generate(bureau_name)
     Gusteau::Bureau.new(bureau_name)

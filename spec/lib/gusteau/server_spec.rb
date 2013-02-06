@@ -4,7 +4,7 @@ describe Gusteau::Server do
   let(:config) do
     {
       'host'     => 'demo.com',
-      'port'     => '2222',
+      'port'     => 2222,
       'platform' => 'ubuntu'
     }
   end
@@ -31,7 +31,7 @@ describe Gusteau::Server do
       let(:config) do
       {
         'host'     => 'demo.com',
-        'port'     => '2222',
+        'port'     => 2222,
         'user'     => 'oneiric',
         'platform' => 'ubuntu',
       }
@@ -64,6 +64,13 @@ describe Gusteau::Server do
     context "user is not root" do
       before { server.stubs(:user).returns('vaskas') }
       it     { subject.must_equal "sudo -- sh -c 'cd /etc/chef && touch test'" }
+    end
+  end
+
+  describe "#ssh" do
+    it "should call gusteau_ssh_expect with connection arguments" do
+      Kernel.expects(:system).with { |arg| arg =~ /gusteau_ssh_expect root@demo.com 2222/ }
+      server.ssh
     end
   end
 end

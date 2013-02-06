@@ -26,6 +26,10 @@ module Gusteau
       @server.chef.run opts, dna(false, recipes.flatten)
     end
 
+    def ssh
+      @server.ssh
+    end
+
     private
 
     def dna(include_all, recipes = [])

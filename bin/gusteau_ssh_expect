@@ -1,0 +1,13 @@
+#!/usr/bin/expect -f
+
+set ssh_string [lrange $argv 0 0]
+set port       [lrange $argv 1 1]
+set password   [lrange $argv 2 2]
+
+spawn ssh $ssh_string -p $port
+if { $password != "" } {
+  match_max 100000
+  expect "*?assword:*"
+  send -- "$password\r"
+}
+interact

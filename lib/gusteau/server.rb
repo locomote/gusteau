@@ -10,7 +10,7 @@ module Gusteau
 
     def initialize(config, opts={})
       @host     = config['host']
-      @port     = (config['port'] || '22').to_i
+      @port     = config['port'] || 22
       @user     = config['user'] || 'root'
       @password = config['password']
       @chef = Gusteau::Chef.new(self, config['platform'])
@@ -33,6 +33,11 @@ module Gusteau
         end
       end
       true
+    end
+
+    def ssh
+      ssh_expect = File.expand_path("../../../bin/gusteau_ssh_expect", __FILE__)
+      Kernel.system "#{ssh_expect} #{@user}@#{@host} #{@port} #{@password}"
     end
   end
 end

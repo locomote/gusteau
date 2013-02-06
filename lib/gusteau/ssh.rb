@@ -6,8 +6,8 @@ module Gusteau
   module SSH
     include Gusteau::CompressedTarStream
 
-    def ssh
-      @ssh ||= begin
+    def conn
+      @conn ||= begin
         opts = { :port => port }
         opts.update(:password => password) if @password
         log "#setting up ssh connection #{@user}@#{host}, #{opts.inspect})" do
@@ -18,7 +18,7 @@ module Gusteau
 
     def send_command(cmd)
       exit_code = -1
-      ssh.open_channel do |ch|
+      conn.open_channel do |ch|
         ch.exec(prepared_cmd cmd) do |_, success|
           if success
             ch.on_data { |_,data| puts data }
@@ -29,12 +29,12 @@ module Gusteau
           end
         end
       end
-      ssh.loop
+      conn.loop
       exit_code == 0
     end
 
     def send_files(files, dest_dir)
-      ssh.open_channel { |ch|
+      conn.open_channel { |ch|
         ch.exec(prepared_cmd "tar zxf - -C #{dest_dir}")
         ch.send_data(compressed_tar_stream(files))
         ch.eof!
