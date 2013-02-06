@@ -120,6 +120,13 @@ The following command generates an example configuration to get you started:</p>
 <pre><code>gusteau node-name run redis::server ntp unicorn
 </code></pre>
 
+<h2>SSH</h2>
+
+<p>Gusteau provides a useful shortcut that you may use to ssh into a node. If you haven't got passwordless authentication set up, Gusteau will use <code>user</code> and <code>password</code> values from the node configuration.</p>
+
+<pre><code>gusteau ssh node-name
+</code></pre>
+
 <h2>Using with Vagrant</h2>
 
 <p>At the moment Gusteau doesn't come with Vagrant integration. However, using it with Vagrant is easy, just make sure that you provide the correct IP address of the VM in node's YAML file.</p>
@@ -150,6 +157,16 @@ gusteau node-name provision
 
     </div>
 
-    
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-28635242-2");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
   </body>
 </html>
