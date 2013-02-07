@@ -1,5 +1,11 @@
 #!/usr/bin/expect -f
 
+trap {
+ set rows [stty rows]
+ set cols [stty columns]
+ stty rows $rows columns $cols < $spawn_out(slave,name)
+} WINCH
+
 set ssh_string [lrange $argv 0 0]
 set port       [lrange $argv 1 1]
 set password   [lrange $argv 2 2]
