@@ -4,7 +4,7 @@ require 'gusteau/server'
 module Gusteau
   class SSHConfig
     def initialize(root_dir = ".")
-      @config = Dir.glob("#{root_dir}/nodes/**/*.yml").map do |n|
+      @config = Dir.glob("#{root_dir}/nodes/**/*.yml").sort.map do |n|
         name   = File.basename(n, '.*')
         config = YAML::load_file(n)['server']
 
