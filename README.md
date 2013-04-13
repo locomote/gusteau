@@ -90,7 +90,7 @@ gusteau ssh node-name
 ```
 Please note that `expect` utility must be installed for `gusteau ssh` to work.
 
-If you prefer calling ssh directly, you will find the `gusteau ssh\_config` subcommand useful:
+If you prefer calling ssh directly, you will find the `gusteau ssh_config` subcommand useful:
 
 ```
 gusteau ssh_config >> ~/.ssh/config
