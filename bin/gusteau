@@ -28,6 +28,11 @@ class Gusteau::CLI < Optitron::CLI
     node(node_name).ssh
   end
 
+  desc 'Generate an SSH config'
+  def ssh_config
+    puts Gusteau::SSHConfig.new
+  end
+
   desc 'Generate an example project (a bureau)'
   def generate(bureau_name)
     Gusteau::Bureau.new(bureau_name)

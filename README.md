@@ -88,6 +88,13 @@ Gusteau provides a useful shortcut that you may use to ssh into a node. If you h
 ```
 gusteau ssh node-name
 ```
+Please note that `expect` utility must be installed for `gusteau ssh` to work.
+
+If you prefer calling ssh directly, you will find the `gusteau ssh\_config` subcommand useful:
+
+```
+gusteau ssh_config >> ~/.ssh/config
+```
 
 Using with Vagrant
 ------------------
