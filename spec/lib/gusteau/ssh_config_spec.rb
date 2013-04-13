@@ -7,15 +7,15 @@ describe Gusteau::SSHConfig do
     <<-eos
 # BEGIN GUSTEAU NODES
 
-Host example-two
-  HostName staging.exampletwo.com
-  Port 2222
-  User devops
-
-Host example
-  HostName server.example.com
+Host production
+  HostName www.example.com
   Port 22
   User root
+
+Host staging
+  HostName staging.example.com
+  Port 2222
+  User devops
 
 # END GUSTEAU NODES
     eos

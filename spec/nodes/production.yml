@@ -13,5 +13,5 @@ recipes:
   - rails::apps
 
 server:
-  host: server.example.com
+  host: www.example.com
   platform: redhat

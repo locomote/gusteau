@@ -6,7 +6,7 @@ describe Gusteau::Node do
   end
 
   describe "#dna" do
-    let(:node) { Gusteau::Node.new('spec/nodes/example.yml') }
+    let(:node) { Gusteau::Node.new('spec/nodes/production.yml') }
 
     let(:dna)         { node.send(:dna, include_all, recipes) }
     let(:include_all) { true }

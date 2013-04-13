@@ -6,7 +6,7 @@ recipes:
   - mysql::serverr
 
 server:
-  host: staging.exampletwo.com
+  host: staging.example.com
   port: 2222
   user: devops
   platform: redhat
