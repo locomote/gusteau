@@ -19,6 +19,10 @@ describe Gusteau::Node do
       File.exists?(dna[:path]).must_equal true
     end
 
+    it "should support ERB" do
+      json['environment'].must_equal "production"
+    end
+
     context "recipes not specified" do
       it "should contain a full run_list" do
         json['run_list'].must_equal ["role[redhat]", "recipe[rvm]", "recipe[ntp]", "recipe[rails::apps]"]

@@ -1,11 +1,12 @@
+require 'gusteau/erb'
 require 'etc'
-require 'erb'
-require 'yaml'
 require 'json'
 require 'fileutils'
 
 module Gusteau
   class Bureau
+    include Gusteau::ERB
+
     def initialize(name)
       template_path = File.expand_path('../../../template', __FILE__)
 
@@ -17,7 +18,7 @@ module Gusteau
       FileUtils.cp_r(template_path, name)
 
       File.open(File.join(name, 'nodes', 'example.yml'), 'w+') do |f|
-        read_erb(File.join(template_path, 'nodes', 'example.yml.erb')).tap do |node|
+        read_erb_yaml(File.join(template_path, 'nodes', 'example.yml.erb')).tap do |node|
           f.write node
           f.close
         end
@@ -42,16 +43,6 @@ module Gusteau
         puts   'Installing cookbooks'
         system 'librarian-chef install'
       end
-    end
-
-    private
-
-    def read_erb(path)
-      ERB.new(File.read(path)).result binding
-    end
-
-    def read_erb_json(path)
-      JSON::parse(read_erb path)
     end
   end
 end

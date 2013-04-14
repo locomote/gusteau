@@ -1,18 +1,19 @@
-require 'yaml'
-require 'json'
-
 require 'gusteau/server'
 require 'gusteau/chef'
+require 'gusteau/erb'
 
 module Gusteau
   class Node
+    include Gusteau::ERB
+
     attr_reader :server
 
     def initialize(path)
       raise "Node YAML file #{path} not found" unless path && File.exists?(path)
 
       @name   = File.basename(path).gsub('.yml','')
-      @config = YAML::load_file path
+      @config = read_erb_yaml(path)
+
       @dna_path = '/tmp/dna.json'
 
       @server = Server.new(@config['server'])

@@ -1,4 +1,5 @@
 json:
+  environment: <%= "pro" + "duction" %>
   apps:
     enabled:
       - profile
