@@ -11,7 +11,7 @@ else
   emerge -uDN ruby:1.9
   revdep-rebuild
 
-  gem install chef ruby-shadow --no-ri --no-rdoc
+  gem install chef ruby-shadow --no-ri --no-rdoc --version "=11.4.0"
 
   # Make non-interactive SSH sessions see environment variables
   if [[ ! `which chef-solo` ]]; then
