@@ -19,7 +19,7 @@ module Gusteau
 
       File.open(File.join(name, 'nodes', 'example.yml'), 'w+') do |f|
         read_erb_yaml(File.join(template_path, 'nodes', 'example.yml.erb')).tap do |node|
-          f.write node
+          f.write node.to_yaml
           f.close
         end
 
