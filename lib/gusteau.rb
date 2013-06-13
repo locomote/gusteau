@@ -4,4 +4,5 @@ module Gusteau
   require 'gusteau/node'
   require 'gusteau/bureau'
   require 'gusteau/ssh_config'
+  require 'gusteau/vagrant'
 end

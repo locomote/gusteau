@@ -1,0 +1,17 @@
+json:
+  mysql:
+    server_root_password: guesswhat
+
+recipes:
+  - zsh
+  - mysql::server
+
+server:
+  host: 192.168.100.21
+  port: 2222
+  user: developer
+  platform: centos
+
+vagrant:
+  IP: 192.168.100.21
+  cpus: 4

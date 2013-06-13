@@ -98,12 +98,35 @@ gusteau ssh_config >> ~/.ssh/config
 
 Using with Vagrant
 ------------------
-At the moment Gusteau doesn't come with Vagrant integration. However, using it with Vagrant is easy, just make sure that you provide the correct IP address of the VM in node's YAML file.
+Gusteau comes with partial Vagrant integration. It enables you to move node-specific Vagrant configuration away from the Vagrantfile into node yml files, e.g.
+
+```YAML
+...
+vagrant:
+  IP: 192.168.100.20
+  cpus: 1
+  memory: 512
+  box_url: 'https://opscode-vm.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box'
+```
+
+This way you can tidy up your Vagrantfile:
+
+```ruby
+Vagrant.require_plugin 'gusteau'
+
+Vagrant.configure('2') do |config|
+  defaults = { :box_url => 'http://www.something.com/different.box' } # optional
+  Gusteau::Vagrant.define_nodes config, defaults
+end
+```
+
+Please note that this feature only works with Vagrant ~> 1.2 and needs gusteau to be installed as a Vagrant plugin:
 
 ```
-vagrant up
-gusteau node-name provision
+vagrant plugin install gusteau
 ```
+
+Gusteau doesn't automatically provision your Vagrant nodes.
 
 Notes
 -----
