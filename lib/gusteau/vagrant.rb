@@ -40,8 +40,7 @@ module Gusteau
           vb.customize ['modifyvm', :id,
             '--memory', config[:memory],
             '--name',   config[:label],
-            '--cpus',   config[:cpus],
-            '--natdnsproxy1', 'on'
+            '--cpus',   config[:cpus]
           ]
         end
         instance.vm.network :private_network, :ip => config[:ip]
