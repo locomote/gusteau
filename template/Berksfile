@@ -1,0 +1,7 @@
+# vi:ft=ruby:
+
+site :opscode
+
+cookbook 'apt'
+cookbook 'build-essential'
+cookbook 'user'

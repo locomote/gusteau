@@ -41,7 +41,7 @@ module Gusteau
         system 'bundle'
 
         puts   'Installing cookbooks'
-        system 'librarian-chef install'
+        system 'bundle exec berks install --path ./cookbooks'
       end
     end
   end

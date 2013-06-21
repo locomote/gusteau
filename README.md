@@ -56,7 +56,7 @@ Gusteau only needs a node definition to run, but you'll need a few cookbooks to 
 The following command generates an example configuration to get you started:
 
 ```
-gusteau generate project-name
+gusteau init project-name
 ```
 
 Next, `cd project-name` and see `nodes/example.yml`.
