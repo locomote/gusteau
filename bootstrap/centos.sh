@@ -1,1 +1,1 @@
-redhat.sh
+./omnibus.sh

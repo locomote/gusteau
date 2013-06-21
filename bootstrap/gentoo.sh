@@ -1,17 +1,16 @@
 #!/bin/sh
 
 if type -p chef-solo > /dev/null; then
-  echo "Using chef-solo at `which chef-solo`"
+  echo "Using chef-solo $(chef-solo --v | awk '{print $2}') at $(which chef-solo)"
 else
-  emerge --sync
+  emerge layman
+  echo "source /var/lib/layman/make.conf" >> /etc/portage/make.conf
 
-  echo 'RUBY_TARGETS="ruby19"' >> /etc/make.conf
+  layman -o https://raw.github.com/lxmx/gentoo-overlay/master/overlay.xml -f -a lxmx
+  layman -S
 
-  CONFIG_PROTECT_MASK="/etc/portage/" emerge --autounmask-write ruby:1.9
-  emerge -uDN ruby:1.9
-  revdep-rebuild
-
-  gem install chef ruby-shadow --no-ri --no-rdoc --version "=11.4.0"
+  echo "app-admin/chef-omnibus ~amd64" >> /etc/portage/package.keywords
+  emerge app-admin/chef-omnibus
 
   # Make non-interactive SSH sessions see environment variables
   if [[ ! `which chef-solo` ]]; then
