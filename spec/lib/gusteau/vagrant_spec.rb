@@ -7,67 +7,66 @@ describe Gusteau::Vagrant do
       :cpus    => 64
     }
   end
-  let(:label) { 'hyper' }
+  let(:prefix) { 'hyper' }
+  let(:options) do
+    {
+      :defaults => defaults,
+      :prefix => prefix
+    }
+  end
 
-  describe "#vagrant_config" do
-    subject { Gusteau::Vagrant.vagrant_config(config_path, defaults, label) }
+  describe "#vm_config" do
+    let(:config_path) { './spec/nodes/staging.yml' }
+    let(:node) { ::Gusteau::Node.new(config_path) }
 
-    context "non-vagrant node" do
-      let(:config_path) { './spec/nodes/staging.yml' }
+    subject { Gusteau::Vagrant.vm_config(node, options) }
 
-      it "should return nil" do
-        subject.must_equal nil
-      end
+    let(:config_path) { './spec/nodes/development.yml' }
+
+    let(:expected_label)  { 'hyper-development' }
+    let(:expected_memory) { 1024 }
+
+    let(:expected_config) do
+      {
+        :name    => 'development',
+        :label   => expected_label,
+        :box_url => 'https://opscode.s3.amazonaws.com/centos-6.4.box',
+        :ip      => '192.168.100.21',
+        :cpus    => 4,
+        :memory  => expected_memory
+      }
     end
 
-    context "vagrant node" do
-      let(:config_path) { './spec/nodes/development.yml' }
+    def config_expectation
+      subject.must_equal(expected_config)
+    end
 
-      let(:expected_label)  { 'hyper-development' }
-      let(:expected_memory) { 1024 }
+    specify { config_expectation }
 
-      let(:expected_config) do
-        {
-          :name    => 'development',
-          :label   => expected_label,
-          :box_url => 'https://opscode.s3.amazonaws.com/centos-6.4.box',
-          :ip      => '192.168.100.21',
-          :cpus    => 4,
-          :memory  => expected_memory
-        }
-      end
-
-      def config_expectation
-        subject.must_equal(expected_config)
-      end
+    context "prefix not specified" do
+      let(:prefix) { nil }
+      let(:expected_label) { 'development' }
 
       specify { config_expectation }
+    end
 
-      context "label not specified" do
-        let(:label) { nil }
-        let(:expected_label) { 'development' }
-
-        specify { config_expectation }
+    context "different memory options" do
+      let(:defaults) do
+        {
+          :memory => 4096,
+          :box_url => 'https://opscode.s3.amazonaws.com/centos-6.4.box'
+        }
       end
+      let(:expected_memory) { 4096 }
 
-      context "different memory defaults" do
-        let(:defaults) do
-          {
-            :memory => 4096,
-            :box_url => 'https://opscode.s3.amazonaws.com/centos-6.4.box',
-          }
-        end
-        let(:expected_memory) { 4096 }
+      specify { config_expectation }
+    end
 
-        specify { config_expectation }
-      end
+    context "box_url not specified" do
+      let(:defaults) { {} }
 
-      context "box_url not specified" do
-        let(:defaults) { {} }
-
-        it "should raise an exception" do
-          proc { subject }.must_raise RuntimeError
-        end
+      it "should raise an exception" do
+        proc { subject }.must_raise RuntimeError
       end
     end
   end

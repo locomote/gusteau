@@ -6,7 +6,7 @@ module Gusteau
   class Node
     include Gusteau::ERB
 
-    attr_reader :server
+    attr_reader :name, :config, :server
 
     def initialize(path)
       raise "Node YAML file #{path} not found" unless path && File.exists?(path)
@@ -14,9 +14,8 @@ module Gusteau
       @name   = File.basename(path).gsub('.yml','')
       @config = read_erb_yaml(path)
 
+      @server = Server.new(@config['server']) if @config['server']
       @dna_path = '/tmp/dna.json'
-
-      @server = Server.new(@config['server'])
     end
 
     def provision(opts = {})
