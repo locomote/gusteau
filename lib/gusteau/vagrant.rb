@@ -1,5 +1,7 @@
 require 'hashie'
 
+class Hash; include Hashie::Extensions::SymbolizeKeys; end
+
 module Gusteau
   module Vagrant
     extend self
@@ -9,11 +11,11 @@ module Gusteau
       options.defaults = Hashie::Mash.new
 
       yield options if block_given?
-      define_nodes(config, options.to_hash)
+      define_nodes(config, options.to_hash.symbolize_keys)
     end
 
     def define_nodes(config, options)
-      Dir.glob("./nodes/**/*.yml").sort.each do |path|
+      Dir.glob("#{options[:dir] || './nodes'}/**/*.yml").sort.each do |path|
         node = ::Gusteau::Node.new(path)
         if node.config['vagrant']
           define_vm config, node, options

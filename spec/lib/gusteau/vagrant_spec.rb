@@ -1,31 +1,62 @@
 require './spec/spec_helper.rb'
 
 describe Gusteau::Vagrant do
-  let(:defaults) do
-    {
-      :box_url => 'https://opscode.s3.amazonaws.com/centos-6.4.box',
-      :cpus    => 64
-    }
-  end
-  let(:prefix) { 'hyper' }
-  let(:options) do
-    {
-      :defaults => defaults,
-      :prefix => prefix
-    }
+
+  describe "#detect" do
+    let(:config)   { mock() }
+    let(:vm)       { mock() }
+    let(:instance) { mock() }
+    let(:subvm)    { stub_everything('subvm') }
+
+    before do
+      def vm.define(name)
+        yield instance
+      end
+
+      config.expects(:vm).at_least_once.returns(vm)
+      vm.expects(:instance).at_least_once.returns(instance)
+      instance.expects(:vm).at_least_once.returns(subvm)
+    end
+
+    it "should define vm instances with correct settings" do
+      subvm.expects('box='.to_sym).with('development')
+      subvm.expects('box_url='.to_sym).with("http://a.com/b.box")
+      subvm.expects(:network).with(:private_network, { :ip => '192.168.100.21' })
+      subvm.expects(:provision).never
+
+      Gusteau::Vagrant.detect(config) do |setup|
+        setup.dir = './spec/nodes'
+        setup.defaults.box_url = "http://a.com/b.box"
+      end
+    end
+
+    it "should define provisioner" do
+      subvm.expects(:provision).with('chef_solo')
+
+      Gusteau::Vagrant.detect(config) do |setup|
+        setup.dir = './spec/nodes'
+        setup.defaults.box_url = "http://a.com/b.box"
+        setup.provision = true
+      end
+    end
   end
 
   describe "#vm_config" do
-    let(:config_path) { './spec/nodes/staging.yml' }
-    let(:node) { ::Gusteau::Node.new(config_path) }
-
     subject { Gusteau::Vagrant.vm_config(node, options) }
 
-    let(:config_path) { './spec/nodes/development.yml' }
+    let(:defaults) do
+      {
+        :box_url => 'https://opscode.s3.amazonaws.com/centos-6.4.box',
+        :cpus    => 64,
+        :memory  => 4096,
+      }
+    end
+    let(:prefix)  { 'hyper' }
+    let(:options) { { :defaults => defaults, :prefix => prefix } }
 
-    let(:expected_label)  { 'hyper-development' }
-    let(:expected_memory) { 1024 }
+    let(:node) { ::Gusteau::Node.new('./spec/nodes/development.yml') }
 
+    let(:expected_label) { 'hyper-development' }
     let(:expected_config) do
       {
         :name    => 'development',
@@ -33,33 +64,21 @@ describe Gusteau::Vagrant do
         :box_url => 'https://opscode.s3.amazonaws.com/centos-6.4.box',
         :ip      => '192.168.100.21',
         :cpus    => 4,
-        :memory  => expected_memory
+        :memory  => 4096
       }
     end
 
-    def config_expectation
+    it "should merge in defaults" do
       subject.must_equal(expected_config)
     end
-
-    specify { config_expectation }
 
     context "prefix not specified" do
       let(:prefix) { nil }
       let(:expected_label) { 'development' }
 
-      specify { config_expectation }
-    end
-
-    context "different memory options" do
-      let(:defaults) do
-        {
-          :memory => 4096,
-          :box_url => 'https://opscode.s3.amazonaws.com/centos-6.4.box'
-        }
+      it "should omit the prefix" do
+        subject.must_equal(expected_config)
       end
-      let(:expected_memory) { 4096 }
-
-      specify { config_expectation }
     end
 
     context "box_url not specified" do
