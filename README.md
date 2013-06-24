@@ -98,7 +98,7 @@ gusteau ssh_config >> ~/.ssh/config
 
 Using with Vagrant
 ------------------
-Gusteau can save you from writing some Vagrantfile boilerplate code. It also enables you to move node-specific Vagrant configuration away from the Vagrantfile into node yml files, e.g.
+Gusteau can save you from writing some Vagrantfile boilerplate code. It also enables you to move node-specific Vagrant configuration away from the Vagrantfile into node yml files.
 
 ```YAML
 ...
@@ -109,21 +109,21 @@ vagrant:
   box_url: 'https://opscode-vm.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box'
 ```
 
-This way you can tidy up your Vagrantfile, e.g.:
+The following bit will configure Vagrant for all Gusteau nodes which have `vagrant` section defined.
 
 ```ruby
 Vagrant.configure('2') do |config|
   Gusteau::Vagrant.detect(config) do |setup|
     setup.prefix = 'loco'
     setup.defaults.box_url = 'http://example.com/vm/opscode_centos-6.4.box'
-    setup.provision = true
+    setup.provision = false
   end
 end
 ```
 
 * The `prefix` option lets you prepend your VirtualBox VMs names, e.g. `loco-nodename`.
 * The `defaults` one lets you provide default values for `cpus`, `memory`, `box_url`.
-* If you'd like to enable Vagrant's own `chef_solo` provisioner, set `provision` to `true`. Doing that will configure the provisioner with settings from node yaml files. In this scenario you will no longer have to use the `gusteau` command with your Vagrant VMs since commands like `vagrant provision` or `vagrant ssh` will just work.
+* If you'd like to use Vagrant's own automatic `chef_solo` provisioner, set `provision` to `true`. In this scenario, `gusteau provision` will be just calling `vagrant provision`.
 
 Please note that the add-on only works with Vagrant ~> 1.2 and needs gusteau to be installed as a Vagrant plugin:
 

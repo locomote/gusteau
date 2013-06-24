@@ -35,6 +35,8 @@ module Gusteau
       config   = node.config['vagrant']
       label    = options[:prefix] ? "#{options[:prefix]}-#{node.name}" : node.name
 
+      config = {} if config == true
+
       box_url = config.fetch 'box_url' do
         unless defaults[:box_url]
           raise "Box url can't be determined for #{node.name}"
