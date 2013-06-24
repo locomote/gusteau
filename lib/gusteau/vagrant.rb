@@ -1,10 +1,12 @@
 require 'hashie'
+require 'gusteau/log'
 
 class Hash; include Hashie::Extensions::SymbolizeKeys; end
 
 module Gusteau
   module Vagrant
     extend self
+    extend Gusteau::Log
 
     def detect(config)
       options = Hashie::Mash.new
@@ -14,7 +16,12 @@ module Gusteau
       define_nodes(config, options.to_hash.symbolize_keys)
     end
 
-    def define_nodes(config, options)
+    def define_nodes(config, options, prefix = nil)
+      if prefix
+        options[:prefix] = prefix
+        info "The 'prefix' param is deprecated. Please refer to the new Gusteau::Vagrant syntax."
+      end
+
       Dir.glob("#{options[:dir] || './nodes'}/**/*.yml").sort.each do |path|
         node = ::Gusteau::Node.new(path)
         if node.config['vagrant']
@@ -80,5 +87,23 @@ module Gusteau
       end
     end
 
+    def ssh(nodename)
+      vagrant_cmd("ssh #{nodename}")
+    end
+
+    def provision(nodename)
+      vagrant_cmd("provision #{nodename}")
+    end
+
+    def vagrant_cmd(cmd)
+      info "Running 'vagrant #{cmd}'"
+      Kernel.system("vagrant #{cmd}")
+      Kernel.exit $?.exitstatus
+    end
+
+    def run(nodename)
+      Kernel.abort "'run' is not supported for vagrant-only nodes. Please configure 'server' for #{nodename} node"
+    end
   end
 end
+
