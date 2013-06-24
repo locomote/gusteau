@@ -6,7 +6,7 @@ module Gusteau
   class Node
     include Gusteau::ERB
 
-    attr_reader :server
+    attr_reader :name, :config, :server
 
     def initialize(path)
       raise "Node YAML file #{path} not found" unless path && File.exists?(path)
@@ -14,21 +14,26 @@ module Gusteau
       @name   = File.basename(path).gsub('.yml','')
       @config = read_erb_yaml(path)
 
+      @server = Server.new(@config['server']) if @config['server']
       @dna_path = '/tmp/dna.json'
-
-      @server = Server.new(@config['server'])
     end
 
     def provision(opts = {})
-      @server.chef.run opts, dna(true)
+      wrap_vagrant :provision do
+        server.chef.run opts, dna(true)
+      end
     end
 
     def run(opts = {}, *recipes)
-      @server.chef.run opts, dna(false, recipes.flatten)
+      wrap_vagrant :run do
+        server.chef.run opts, dna(false, recipes.flatten)
+      end
     end
 
     def ssh
-      @server.ssh
+      wrap_vagrant :ssh do
+        server.ssh
+      end
     end
 
     private
@@ -54,6 +59,16 @@ module Gusteau
         list
       else
         recipes.map { |r| "recipe[#{r}]" }
+      end
+    end
+
+    def wrap_vagrant(method)
+      if server
+        yield
+      elsif @config['vagrant']
+        Vagrant.send(method, @name)
+      else
+        Kernel.abort "Neither 'server' nor 'vagrant' defined for #{@name}. Please provide one."
       end
     end
   end

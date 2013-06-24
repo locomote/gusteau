@@ -38,4 +38,65 @@ describe Gusteau::Node do
       end
     end
   end
+
+  describe "#vagrant_wrap" do
+    let(:node) { Gusteau::Node.new('spec/nodes/development.yml') }
+
+    describe "#ssh" do
+      context "server is defined" do
+        it "should call server.ssh" do
+          node.server.expects(:ssh)
+          node.ssh
+        end
+      end
+
+      context "vagrant is defined, server is not" do
+        before do
+          node.stubs(:server).returns(nil)
+        end
+
+        it "should call 'vagrant ssh'" do
+          Kernel.expects(:system).with("vagrant ssh development")
+          Kernel.expects(:exit)
+          node.ssh
+        end
+      end
+
+      context "neither server nor vagrant are defined" do
+        before do
+          node.stubs(:server).returns(nil)
+          node.config['vagrant'] = nil
+        end
+
+        it "should exit with an error" do
+          Kernel.expects(:abort)
+          node.ssh
+        end
+      end
+    end
+
+    describe "#run" do
+      context "server is defined" do
+        it "should call server.chef.run" do
+          chef = mock()
+          node.server.expects(:chef).returns(chef)
+          chef.expects(:run)
+
+          node.run('test')
+        end
+      end
+
+      context "vagrant is defined, server is not" do
+        before do
+          node.stubs(:server).returns(nil)
+        end
+
+        it "should exit with an error" do
+          Kernel.expects(:abort).with("'run' is not supported for vagrant-only nodes. Please configure 'server' for development node")
+          node.run('test')
+        end
+      end
+
+    end
+  end
 end

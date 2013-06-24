@@ -2,24 +2,6 @@ require 'inform'
 
 module Gusteau
   module Log
-    private
-
-    def timestamp
-      Time.now.strftime('%Y-%m-%dT%H:%M:%S')
-    end
-
-    def indent
-      @level = (@level || 0) + 1
-    end
-
-    def unindent
-      @level = (@level || 0) - 1
-    end
-
-    def prompt
-      "[#{timestamp}] GUSTEAU: #{'  ' * (@level || 0)}"
-    end
-
     def log(msg, opts={})
       info "%{prompt}#{msg}", opts.merge(:prompt => prompt)
       if block_given?
@@ -40,6 +22,24 @@ module Gusteau
 
     def info(str, opts={})
       Inform.info str, opts
+    end
+
+    private
+
+    def timestamp
+      Time.now.strftime('%Y-%m-%dT%H:%M:%S')
+    end
+
+    def indent
+      @level = (@level || 0) + 1
+    end
+
+    def unindent
+      @level = (@level || 0) - 1
+    end
+
+    def prompt
+      "[#{timestamp}] GUSTEAU: #{'  ' * (@level || 0)}"
     end
   end
 end

@@ -9,7 +9,7 @@ Gusteau
 Introduction
 ------------
 
-Gusteau is here to make servers provisioning simple and enjoyable. It provides an efficient interface to Chef Solo as well as some nice features:
+Gusteau is here to make servers provisioning simple and enjoyable. It's a good choice if you are running a small infrastructure or a VPS and want to use Chef. It provides an efficient interface to Chef Solo as well as some nice features:
 
 * Uses YAML for readable server configuration definitions
 * Uses a single SSH connection to stream compressed files and commands
@@ -29,7 +29,7 @@ gem install gusteau
 
 A typical Gusteau node configuration looks like this:
 
-```YAML
+```
 json:
   mysql:
     server_root_password: ASahiweqwqe2
@@ -39,8 +39,7 @@ json:
    - linguini
 
 roles:
-  - platform
-  - rails
+  - base
 
 recipes:
   - mysql::server
@@ -49,7 +48,7 @@ recipes:
 server:
   host: 33.33.33.20
   platform: ubuntu
-  password: vagrant
+  password: omgsecret
 ```
 
 Gusteau only needs a node definition to run, but you'll need a few cookbooks to actually cook something :)
@@ -68,7 +67,7 @@ Provisioning a server
 The following command will run all roles and recipes from node's YAML file.
 
 ```
-gusteau node-name provision
+gusteau example provision
 ```
 
 Use the `--bootstrap` or `-b` flag to bootstrap chef-solo (for the first time run).
@@ -78,7 +77,7 @@ Running recipes
 You may choose to run a few recipes instead of full provisioning.
 
 ```
-gusteau node-name run redis::server ntp unicorn
+gusteau example run redis::server ntp unicorn
 ```
 
 SSH
@@ -86,8 +85,9 @@ SSH
 Gusteau provides a useful shortcut that you may use to ssh into a node. If you haven't got passwordless authentication set up, Gusteau will use `user` and `password` values from the node configuration.
 
 ```
-gusteau ssh node-name
+gusteau ssh example
 ```
+
 Please note that `expect` utility must be installed for `gusteau ssh` to work.
 
 If you prefer calling ssh directly, you will find the `gusteau ssh_config` subcommand useful:
@@ -98,9 +98,9 @@ gusteau ssh_config >> ~/.ssh/config
 
 Using with Vagrant
 ------------------
-Gusteau comes with partial Vagrant integration. It enables you to move node-specific Vagrant configuration away from the Vagrantfile into node yml files, e.g.
+Gusteau can save you from writing some Vagrantfile boilerplate code. It also enables you to move node-specific Vagrant configuration away from the Vagrantfile into node yml files.
 
-```YAML
+```
 ...
 vagrant:
   IP: 192.168.100.20
@@ -109,24 +109,27 @@ vagrant:
   box_url: 'https://opscode-vm.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box'
 ```
 
-This way you can tidy up your Vagrantfile:
+The following bit will configure Vagrant for all Gusteau nodes which have `vagrant` section defined.
 
-```ruby
-Vagrant.require_plugin 'gusteau'
-
+```
 Vagrant.configure('2') do |config|
-  defaults = { :box_url => 'http://www.something.com/different.box' } # optional
-  Gusteau::Vagrant.define_nodes config, defaults
+  Gusteau::Vagrant.detect(config) do |setup|
+    setup.prefix = 'loco'
+    setup.defaults.box_url = 'http://example.com/vm/opscode_centos-6.4.box'
+    setup.provision = false
+  end
 end
 ```
 
-Please note that this feature only works with Vagrant ~> 1.2 and needs gusteau to be installed as a Vagrant plugin:
+* The `prefix` option lets you prepend your VirtualBox VMs names, e.g. `loco-nodename`.
+* The `defaults` one lets you provide default values for `cpus`, `memory`, `box_url`.
+* If you'd like to use Vagrant's own automatic `chef_solo` provisioner, set `provision` to `true`. In this scenario, `gusteau provision` will be just calling `vagrant provision`.
+
+Please note that the add-on only works with Vagrant ~> 1.2 and needs gusteau to be installed as a Vagrant plugin:
 
 ```
 vagrant plugin install gusteau
 ```
-
-Gusteau doesn't automatically provision your Vagrant nodes.
 
 Notes
 -----
