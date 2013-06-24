@@ -29,7 +29,7 @@ gem install gusteau
 
 A typical Gusteau node configuration looks like this:
 
-```YAML
+```
 json:
   mysql:
     server_root_password: ASahiweqwqe2
@@ -67,7 +67,7 @@ Provisioning a server
 The following command will run all roles and recipes from node's YAML file.
 
 ```
-gusteau *nodename* provision
+gusteau example provision
 ```
 
 Use the `--bootstrap` or `-b` flag to bootstrap chef-solo (for the first time run).
@@ -77,7 +77,7 @@ Running recipes
 You may choose to run a few recipes instead of full provisioning.
 
 ```
-gusteau *nodename* run redis::server ntp unicorn
+gusteau example run redis::server ntp unicorn
 ```
 
 SSH
@@ -85,7 +85,7 @@ SSH
 Gusteau provides a useful shortcut that you may use to ssh into a node. If you haven't got passwordless authentication set up, Gusteau will use `user` and `password` values from the node configuration.
 
 ```
-gusteau ssh *nodename*
+gusteau ssh example
 ```
 
 Please note that `expect` utility must be installed for `gusteau ssh` to work.
@@ -100,7 +100,7 @@ Using with Vagrant
 ------------------
 Gusteau can save you from writing some Vagrantfile boilerplate code. It also enables you to move node-specific Vagrant configuration away from the Vagrantfile into node yml files.
 
-```YAML
+```
 ...
 vagrant:
   IP: 192.168.100.20
@@ -111,7 +111,7 @@ vagrant:
 
 The following bit will configure Vagrant for all Gusteau nodes which have `vagrant` section defined.
 
-```ruby
+```
 Vagrant.configure('2') do |config|
   Gusteau::Vagrant.detect(config) do |setup|
     setup.prefix = 'loco'
