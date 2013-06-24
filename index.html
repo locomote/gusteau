@@ -54,7 +54,7 @@
 <h2>
 <a name="introduction" class="anchor" href="#introduction"><span class="octicon octicon-link"></span></a>Introduction</h2>
 
-<p>Gusteau is here to make servers provisioning simple and enjoyable. It provides an efficient interface to Chef Solo as well as some nice features:</p>
+<p>Gusteau is here to make servers provisioning simple and enjoyable. It's a good choice if you are running a small infrastructure or a VPS and want to use Chef. It provides an efficient interface to Chef Solo as well as some nice features:</p>
 
 <ul>
 <li>Uses YAML for readable server configuration definitions</li>
@@ -79,27 +79,26 @@
 
 <p>A typical Gusteau node configuration looks like this:</p>
 
-<div class="highlight"><pre><span class="l-Scalar-Plain">json</span><span class="p-Indicator">:</span>
-  <span class="l-Scalar-Plain">mysql</span><span class="p-Indicator">:</span>
-    <span class="l-Scalar-Plain">server_root_password</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ASahiweqwqe2</span>
-  <span class="l-Scalar-Plain">rvm</span><span class="p-Indicator">:</span>
-    <span class="l-Scalar-Plain">default_ruby</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">1.9.3-p362</span>
-  <span class="l-Scalar-Plain">users</span><span class="p-Indicator">:</span>
-   <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">linguini</span>
+<pre><code>json:
+  mysql:
+    server_root_password: ASahiweqwqe2
+  rvm:
+    default_ruby: 1.9.3-p362
+  users:
+   - linguini
 
-<span class="l-Scalar-Plain">roles</span><span class="p-Indicator">:</span>
-  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">platform</span>
-  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">rails</span>
+roles:
+  - base
 
-<span class="l-Scalar-Plain">recipes</span><span class="p-Indicator">:</span>
-  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">mysql::server</span>
-  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">iptables</span>
+recipes:
+  - mysql::server
+  - iptables
 
-<span class="l-Scalar-Plain">server</span><span class="p-Indicator">:</span>
-  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">33.33.33.20</span>
-  <span class="l-Scalar-Plain">platform</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ubuntu</span>
-  <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">vagrant</span>
-</pre></div>
+server:
+  host: 33.33.33.20
+  platform: ubuntu
+  password: omgsecret
+</code></pre>
 
 <p>Gusteau only needs a node definition to run, but you'll need a few cookbooks to actually cook something :)
 The following command generates an example configuration to get you started:</p>
@@ -114,7 +113,7 @@ The following command generates an example configuration to get you started:</p>
 
 <p>The following command will run all roles and recipes from node's YAML file.</p>
 
-<pre><code>gusteau node-name provision
+<pre><code>gusteau example provision
 </code></pre>
 
 <p>Use the <code>--bootstrap</code> or <code>-b</code> flag to bootstrap chef-solo (for the first time run).</p>
@@ -124,7 +123,7 @@ The following command generates an example configuration to get you started:</p>
 
 <p>You may choose to run a few recipes instead of full provisioning.</p>
 
-<pre><code>gusteau node-name run redis::server ntp unicorn
+<pre><code>gusteau example run redis::server ntp unicorn
 </code></pre>
 
 <h2>
@@ -132,7 +131,7 @@ The following command generates an example configuration to get you started:</p>
 
 <p>Gusteau provides a useful shortcut that you may use to ssh into a node. If you haven't got passwordless authentication set up, Gusteau will use <code>user</code> and <code>password</code> values from the node configuration.</p>
 
-<pre><code>gusteau ssh node-name
+<pre><code>gusteau ssh example
 </code></pre>
 
 <p>Please note that <code>expect</code> utility must be installed for <code>gusteau ssh</code> to work.</p>
@@ -145,32 +144,35 @@ The following command generates an example configuration to get you started:</p>
 <h2>
 <a name="using-with-vagrant" class="anchor" href="#using-with-vagrant"><span class="octicon octicon-link"></span></a>Using with Vagrant</h2>
 
-<p>Gusteau comes with partial Vagrant integration. It enables you to move node-specific Vagrant configuration away from the Vagrantfile into node yml files, e.g.</p>
+<p>Gusteau can save you from writing some Vagrantfile boilerplate code. It also enables you to move node-specific Vagrant configuration away from the Vagrantfile into node yml files.</p>
 
-<div class="highlight"><pre><span class="nn">...</span>
-<span class="l-Scalar-Plain">vagrant</span><span class="p-Indicator">:</span>
-  <span class="l-Scalar-Plain">IP</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">192.168.100.20</span>
-  <span class="l-Scalar-Plain">cpus</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">1</span>
-  <span class="l-Scalar-Plain">memory</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">512</span>
-  <span class="l-Scalar-Plain">box_url</span><span class="p-Indicator">:</span> <span class="s">'https://opscode-vm.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box'</span>
-</pre></div>
+<pre><code>...
+vagrant:
+  IP: 192.168.100.20
+  cpus: 1
+  memory: 512
+  box_url: 'https://opscode-vm.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box'
+</code></pre>
 
-<p>This way you can tidy up your Vagrantfile:</p>
+<p>The following bit will configure Vagrant for all Gusteau nodes which have <code>vagrant</code> section defined.</p>
 
-<div class="highlight"><pre><span class="no">Vagrant</span><span class="o">.</span><span class="n">require_plugin</span> <span class="s1">'gusteau'</span>
+<pre><code>Vagrant.configure('2') do |config|
+  Gusteau::Vagrant.detect(config) do |setup|
+    setup.prefix = 'loco'
+    setup.defaults.box_url = 'http://example.com/vm/opscode_centos-6.4.box'
+    setup.provision = false
+  end
+end
+</code></pre>
 
-<span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s1">'2'</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
-  <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">:box_url</span> <span class="o">=&gt;</span> <span class="s1">'http://www.something.com/different.box'</span> <span class="p">}</span> <span class="c1"># optional</span>
-  <span class="ss">Gusteau</span><span class="p">:</span><span class="ss">:Vagrant</span><span class="o">.</span><span class="n">define_nodes</span> <span class="n">config</span><span class="p">,</span> <span class="n">defaults</span>
-<span class="k">end</span>
-</pre></div>
-
-<p>Please note that this feature only works with Vagrant ~&gt; 1.2 and needs gusteau to be installed as a Vagrant plugin:</p>
+<ul>
+<li>The <code>prefix</code> option lets you prepend your VirtualBox VMs names, e.g. <code>loco-nodename</code>.</li>
+<li>The <code>defaults</code> one lets you provide default values for <code>cpus</code>, <code>memory</code>, <code>box_url</code>.</li>
+<li>If you'd like to use Vagrant's own automatic <code>chef_solo</code> provisioner, set <code>provision</code> to <code>true</code>. In this scenario, <code>gusteau provision</code> will be just calling <code>vagrant provision</code>.</li>
+</ul><p>Please note that the add-on only works with Vagrant ~&gt; 1.2 and needs gusteau to be installed as a Vagrant plugin:</p>
 
 <pre><code>vagrant plugin install gusteau
 </code></pre>
-
-<p>Gusteau doesn't automatically provision your Vagrant nodes.</p>
 
 <h2>
 <a name="notes" class="anchor" href="#notes"><span class="octicon octicon-link"></span></a>Notes</h2>
