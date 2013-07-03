@@ -17,13 +17,13 @@ module Gusteau
 
       FileUtils.cp_r(template_path, name)
 
-      File.open(File.join(name, 'nodes', 'example.yml'), 'w+') do |f|
-        read_erb_yaml(File.join(template_path, 'nodes', 'example.yml.erb')).tap do |node|
+      File.open(File.join(name, '.gusteau.yml'), 'w+') do |f|
+        read_erb_yaml(File.join(template_path, '.gusteau.yml.erb')).tap do |node|
           f.write node.to_yaml
           f.close
         end
 
-        FileUtils.rm(File.join(name, 'nodes', 'example.yml.erb'))
+        FileUtils.rm(File.join(name, '.gusteau.yml.erb'))
       end
 
       File.open(File.join(name, 'data_bags', 'users', "#{@login}.json"), 'w+') do |f|
@@ -37,11 +37,7 @@ module Gusteau
 
       puts "Created bureau '#{name}'"
       Dir.chdir(name) do
-        puts   'Installing gem dependencies'
-        system 'bundle'
-
-        puts   'Installing cookbooks'
-        system 'bundle exec berks install --path ./cookbooks'
+        system 'bash ./chop.sh ; rm ./chop.sh'
       end
     end
   end

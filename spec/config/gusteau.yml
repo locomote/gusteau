@@ -1,0 +1,60 @@
+default_node: &default_node
+  platform: centos
+  user: billy
+
+environments:
+  development:
+    attributes:
+      mysql:
+        server_root_password: guesswhat
+    run_list:
+      - recipe[zsh]
+      - recipe[mysql::server]
+    nodes:
+      playground:
+        host: 192.168.100.21
+        vagrant:
+          IP: 192.168.100.21
+          cpus: 2
+
+  staging:
+    attributes:
+      users:
+        - alex
+        - mitya
+    run_list:
+      - recipe[basic-system]
+      - recipe[java]
+    nodes:
+      www:
+        <<: *default_node
+        host: staging.myapp.com
+        user: root
+        attributes:
+          java:
+            jdk_version: 7
+        run_list: recipe[jenkins]
+
+  production:
+    attributes:
+      users:
+        - alex
+        - simon
+    run_list:
+      - recipe[git]
+      - recipe[nginx]
+    nodes:
+      db:
+        <<: *default_node
+        host: db.myapp.com
+        attributes:
+          mysql:
+            server_root_password: prodsecret
+        run_list: recipe[mysql::client]
+      www:
+        <<: *default_node
+        host: www.myapp.com
+        attributes:
+          nginx:
+            workers: 4
+        run_list: recipe[varnish], recipe[nginx]

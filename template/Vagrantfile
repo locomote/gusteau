@@ -1,8 +1,14 @@
 # vi:ft=ruby:
 
-Vagrant::Config.run do |config|
-  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
-  config.vm.box     = "precise64"
+%W(
+  vagrant-omnibus
+  gusteau
+).each { |p| Vagrant.require_plugin(p) }
 
-  config.vm.network :hostonly, "33.33.33.10"
+Vagrant.configure('2') do |config|
+  config.omnibus.chef_version = '11.4.4'
+
+  Gusteau::Vagrant.detect(config) do |setup|
+    setup.defaults.box_url = 'https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-13.04_provisionerless.box'
+  end
 end

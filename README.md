@@ -9,7 +9,7 @@ Gusteau
 Introduction
 ------------
 
-Gusteau is here to make servers provisioning simple and enjoyable. It's a good choice if you are running a small infrastructure or a VPS and want to use Chef. It provides an efficient interface to Chef Solo as well as some nice features:
+Gusteau is an easy to use configuration manager for Chef Solo and Vagrant. It provides an efficient interface to Chef Solo as well as some nice features:
 
 * Uses YAML for readable server configuration definitions
 * Uses a single SSH connection to stream compressed files and commands
@@ -30,25 +30,25 @@ gem install gusteau
 A typical Gusteau node configuration looks like this:
 
 ```
-json:
-  mysql:
-    server_root_password: ASahiweqwqe2
-  rvm:
-    default_ruby: 1.9.3-p362
-  users:
-   - linguini
+environments:
+  development:
+    attributes:
+      mysql:
+        server_root_password: ASahiweqwqe2
+      rvm:
+        default_ruby: 1.9.3-p362
+      users:
+       - linguini
 
-roles:
-  - base
+    run_list:
+      - role[base]
+      - recipe[mysql::server]
+      - recipe[iptables]
 
-recipes:
-  - mysql::server
-  - iptables
-
-server:
-  host: 33.33.33.20
-  platform: ubuntu
-  password: omgsecret
+    nodes:
+      playground:
+        host: 33.33.33.20
+        password: omgsecret
 ```
 
 Gusteau only needs a node definition to run, but you'll need a few cookbooks to actually cook something :)
@@ -58,26 +58,26 @@ The following command generates an example configuration to get you started:
 gusteau init project-name
 ```
 
-Next, `cd project-name` and see `nodes/example.yml`.
+Next, `cd project-name` and see `.gusteau.yml`.
 
 
-Provisioning a server
+Converging a server
 ----------
 
 The following command will run all roles and recipes from node's YAML file.
 
 ```
-gusteau example provision
+gusteau converge development-playground
 ```
 
 Use the `--bootstrap` or `-b` flag to bootstrap chef-solo (for the first time run).
 
-Running recipes
+Applying a run_list
 -----------
-You may choose to run a few recipes instead of full provisioning.
+You may choose to run a custom run_list instead of the full convergence.
 
 ```
-gusteau example run redis::server ntp unicorn
+gusteau apply development-playground "role[base],recipe[oh-my-zsh]"
 ```
 
 SSH
@@ -85,7 +85,7 @@ SSH
 Gusteau provides a useful shortcut that you may use to ssh into a node. If you haven't got passwordless authentication set up, Gusteau will use `user` and `password` values from the node configuration.
 
 ```
-gusteau ssh example
+gusteau ssh development-playground
 ```
 
 Please note that `expect` utility must be installed for `gusteau ssh` to work.
@@ -123,7 +123,7 @@ end
 
 * The `prefix` option lets you prepend your VirtualBox VMs names, e.g. `loco-nodename`.
 * The `defaults` one lets you provide default values for `cpus`, `memory`, `box_url`.
-* If you'd like to use Vagrant's own automatic `chef_solo` provisioner, set `provision` to `true`. In this scenario, `gusteau provision` will be just calling `vagrant provision`.
+* If you'd like to use Vagrant's own automatic `chef_solo` provisioner, set `provision` to `true`.
 
 Please note that the add-on only works with Vagrant ~> 1.2 and needs gusteau to be installed as a Vagrant plugin:
 
@@ -135,5 +135,5 @@ Notes
 -----
 
 * Feel free to contribute a [bootstrap script](https://github.com/locomote/gusteau/tree/master/bootstrap) for your platform.
-* Gusteau uploads  both `./cookbooks` and `./site-cookbooks` so that you can use [librarian-chef](https://github.com/applicationsonline/librarian) to include third party cookbooks.
+* Gusteau uploads `./cookbooks` and `./site-cookbooks` from the current working directory.
 

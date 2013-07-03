@@ -3,15 +3,12 @@ require 'gusteau/server'
 
 module Gusteau
   class SSHConfig
-    def initialize(root_dir = ".")
+    def initialize(nodes)
       @config = []
 
-      Dir.glob("#{root_dir}/nodes/**/*.yml").sort.each do |n|
-        name   = File.basename(n, '.*')
-        config = YAML::load_file(n)
-
-        if server = config['server']
-          @config << section(name, Gusteau::Server.new(server))
+      nodes.each_pair do |name, node|
+        if server = node.server
+          @config << section(name, server)
         end
       end
     end

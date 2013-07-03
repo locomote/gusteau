@@ -1,0 +1,29 @@
+default_node: &default_node
+  platform: centos
+  user: billy
+
+environments:
+  production:
+    attributes:
+      users:
+        - alex
+        - simon
+      mysql:
+        server_port: 3307
+    run_list:
+      - recipe[git]
+      - recipe[postgresql::server]
+    nodes:
+      db:
+        <<: *default_node
+        host: db.myapp.com
+        attributes:
+          mysql:
+            server_root_password: prodsecret
+      www:
+        <<: *default_node
+        host: www.myapp.com
+        attributes:
+          nginx:
+            workers: 4
+        run_list: [ 'recipe[varnish]', 'recipe[nginx]' ]

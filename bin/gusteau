@@ -13,14 +13,14 @@ class Gusteau::CLI < Optitron::CLI
   class_opt 'log_level', 'Set the log level',    :in => %w{debug info warn error fatal}
   class_opt 'why-run',   'Enable whyrun mode',   :short_name => 'W'
 
-  desc 'Fully provision a node'
-  def provision(node_name)
-    node(node_name).provision(params)
+  desc 'Fully converge a node'
+  def converge(node_name)
+    node(node_name).converge(params)
   end
 
-  desc 'Run recipe(s)'
-  def run(node_name, *recipe)
-    node(node_name).run(params, recipe)
+  desc 'Apply a run_list'
+  def apply(node_name, run_list)
+    node(node_name).apply(params, run_list.split(","))
   end
 
   desc 'SSH into a node'
@@ -30,7 +30,7 @@ class Gusteau::CLI < Optitron::CLI
 
   desc 'Generate an SSH config'
   def ssh_config
-    puts Gusteau::SSHConfig.new
+    puts Gusteau::SSHConfig.new(nodes)
   end
 
   desc 'Generate an example project (a bureau)'
@@ -41,14 +41,15 @@ class Gusteau::CLI < Optitron::CLI
   private
 
   def node(node_name)
-    unless node_path = Dir.glob("./nodes/**/#{node_name}.yml")[0]
-      abort "Node '#{node_name}' is unknown. Known nodes are #{nodes_list.join(', ')}."
+    unless node = nodes[node_name]
+      abort "Node '#{node_name}' is unknown. Known nodes are #{nodes.keys.join(', ')}."
+    else
+      node
     end
-    Gusteau::Node.new(node_path)
   end
 
-  def nodes_list
-    Dir.glob("./nodes/**/*.yml").map { |f| File.basename(f, '.*') }
+  def nodes
+    @nodes ||= Gusteau::Config.nodes(".gusteau.yml")
   end
 
 end
