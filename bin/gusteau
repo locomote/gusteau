@@ -35,7 +35,7 @@ class Gusteau::CLI < Optitron::CLI
 
   desc 'Generate an example project (a bureau)'
   def init(bureau_name)
-    Gusteau::Bureau.new(bureau_name)
+    Gusteau::Bureau.new(bureau_name).generate!
   end
 
   private
