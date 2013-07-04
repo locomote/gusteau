@@ -1,5 +1,5 @@
 require 'hashie'
-require 'gusteau/log'
+require 'gusteau'
 
 class Hash; include Hashie::Extensions::SymbolizeKeys; end
 
@@ -17,14 +17,8 @@ module Gusteau
     end
 
     def define_nodes(config, options, prefix = nil)
-      if prefix
-        options[:prefix] = prefix
-        info "The 'prefix' param is deprecated. Please refer to the new Gusteau::Vagrant syntax."
-      end
-
-      Dir.glob("#{options[:dir] || './nodes'}/**/*.yml").sort.each do |path|
-        node = ::Gusteau::Node.new(path)
-        if node.config['vagrant']
+      Gusteau::Config.nodes(options[:config_path] || ".gusteau.yml").each_pair do |name, node|
+        if node.config['server']['vagrant']
           define_vm config, node, options
         end
       end
@@ -32,7 +26,7 @@ module Gusteau
 
     def vm_config(node, options)
       defaults = options[:defaults] || {}
-      config   = node.config['vagrant']
+      config   = node.config['server']['vagrant']
       label    = options[:prefix] ? "#{options[:prefix]}-#{node.name}" : node.name
 
       config = {} if config == true
@@ -82,29 +76,10 @@ module Gusteau
       instance.vm.provision 'chef_solo' do |chef|
         chef.data_bags_path = 'data_bags'
         chef.cookbooks_path = ['cookbooks', 'site-cookbooks']
-        chef.json = node.config['json'] || {}
-
-        (node.config['recipes'] || []).each { |r| chef.add_recipe(r) }
-        (node.config['roles']   || []).each { |r| chef.add_role(r)   }
+        chef.roles_path     = 'roles'
+        chef.json     = node.config['attributes'] || {}
+        chef.run_list = node.config['run_list'] || []
       end
-    end
-
-    def ssh(nodename)
-      vagrant_cmd("ssh #{nodename}")
-    end
-
-    def provision(nodename)
-      vagrant_cmd("provision #{nodename}")
-    end
-
-    def vagrant_cmd(cmd)
-      info "Running 'vagrant #{cmd}'"
-      Kernel.system("vagrant #{cmd}")
-      Kernel.exit $?.exitstatus
-    end
-
-    def run(nodename)
-      Kernel.abort "'run' is not supported for vagrant-only nodes. Please configure 'server' for #{nodename} node"
     end
   end
 end

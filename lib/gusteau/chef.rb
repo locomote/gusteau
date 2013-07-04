@@ -1,8 +1,8 @@
 module Gusteau
   class Chef
-    def initialize(server, platform, dest_dir = '/etc/chef')
+    def initialize(server, platform = nil, dest_dir = '/etc/chef')
       @server   = server
-      @platform = platform
+      @platform = platform || 'omnibus'
       @dest_dir = dest_dir
     end
 
