@@ -4,12 +4,9 @@ describe Gusteau::CompressedTarStream do
 
   let(:compressor_class) do
     class Example
+      include Gusteau::Log
       include Gusteau::CompressedTarStream
       attr_accessor :host, :port, :user, :password
-
-      def log(txt)
-        yield
-      end
     end
     Example
   end

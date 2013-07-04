@@ -5,10 +5,6 @@ describe Gusteau::SSH do
     class Example
       include Gusteau::SSH
       attr_accessor :host, :port, :user, :password
-
-      def log(txt)
-        yield
-      end
     end
     Example
   end
