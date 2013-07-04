@@ -4,6 +4,7 @@ Gusteau
 *"Anyone can cook."*
 
 [![Build Status](https://www.travis-ci.org/locomote/gusteau.png?branch=master)](https://www.travis-ci.org/locomote/gusteau)
+[![Coverage Status](https://coveralls.io/repos/locomote/gusteau/badge.png)](https://coveralls.io/r/locomote/gusteau)
 [![Dependency Status](https://gemnasium.com/locomote/gusteau.png)](https://gemnasium.com/locomote/gusteau)
 
 Introduction
@@ -24,7 +25,7 @@ Gettings started
 Gusteau is a Ruby gem:
 
 ```
-gem install gusteau
+gem install gusteau --pre
 ```
 
 A typical Gusteau configuration looks like this:

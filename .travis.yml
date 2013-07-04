@@ -5,3 +5,5 @@ rvm:
   - rbx
   - jruby
   - 2.0.0
+env:
+  - COVERAGE=coveralls
