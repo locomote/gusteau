@@ -1,0 +1,7 @@
+{
+  "id"      : "remi",
+  "home"    : "/home/remi",
+  "shell"   : "/bin/bash",
+  "groups"  : ["remi", "wheel"],
+  "ssh_keys": ["ABC123"]
+}

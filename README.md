@@ -27,7 +27,7 @@ Gusteau is a Ruby gem:
 gem install gusteau
 ```
 
-A typical Gusteau node configuration looks like this:
+A typical Gusteau configuration looks like this:
 
 ```
 environments:
@@ -51,7 +51,7 @@ environments:
         password: omgsecret
 ```
 
-Gusteau only needs a node definition to run, but you'll need a few cookbooks to actually cook something :)
+Gusteau only needs a single node definition to run, but you'll need a few cookbooks to actually cook something :)
 The following command generates an example configuration to get you started:
 
 ```
@@ -72,7 +72,7 @@ gusteau converge development-playground
 
 Use the `--bootstrap` or `-b` flag to bootstrap chef-solo (for the first time run).
 
-Applying a run_list
+Applying individual recipes
 -----------
 You may choose to run a custom run_list instead of the full convergence.
 

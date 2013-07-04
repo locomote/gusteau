@@ -5,3 +5,5 @@ site :opscode
 cookbook 'apt'
 cookbook 'build-essential'
 cookbook 'user'
+
+cookbook 'cowsay', :path => './site-cookbooks/cowsay'

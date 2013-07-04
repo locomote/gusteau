@@ -5,6 +5,8 @@
   gusteau
 ).each { |p| Vagrant.require_plugin(p) }
 
+require 'gusteau'
+
 Vagrant.configure('2') do |config|
   config.omnibus.chef_version = '11.4.4'
 

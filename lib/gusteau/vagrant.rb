@@ -76,6 +76,7 @@ module Gusteau
       instance.vm.provision 'chef_solo' do |chef|
         chef.data_bags_path = 'data_bags'
         chef.cookbooks_path = ['cookbooks', 'site-cookbooks']
+        chef.roles_path     = 'roles'
         chef.json     = node.config['attributes'] || {}
         chef.run_list = node.config['run_list'] || []
       end
