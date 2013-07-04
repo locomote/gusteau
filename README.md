@@ -31,7 +31,7 @@ Gettings started
 Gusteau is a Ruby gem:
 
 ```
-gem install gusteau
+gem install gusteau --pre
 ```
 
 The following command generates an example Chef-repo:
