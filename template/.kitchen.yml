@@ -16,5 +16,5 @@ suites:
     cowsay:
       greeting: "Hello test-kitchen"
   run_list:
-  - role[platform]
+  - recipe[platform]
   - recipe[cowsay]

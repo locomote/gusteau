@@ -7,7 +7,7 @@ environments:
         greeting: "Good job, <%= @login %>!"
 
     run_list:
-      - role[platform]
+      - recipe[platform]
       - recipe[cowsay]
 
     nodes:

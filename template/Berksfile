@@ -2,8 +2,6 @@
 
 site :opscode
 
-cookbook 'apt'
-cookbook 'build-essential'
-cookbook 'user'
-
-cookbook 'cowsay', :path => './site-cookbooks/cowsay'
+%w{ cowsay platform }.each do |c|
+  cookbook c, :path => "./site-cookbooks/#{c}"
+end
