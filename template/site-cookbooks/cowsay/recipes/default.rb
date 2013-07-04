@@ -1,6 +1,4 @@
-package 'cowsay' do
-  action :install
-end
+package 'cowsay'
 
 ruby_block 'Greet the user' do
   block do

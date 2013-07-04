@@ -1,0 +1,21 @@
+environments:
+  example:
+    attributes:
+      users:
+        - <%= @login %>
+      cowsay:
+        greeting: "Good job, <%= @login %>!"
+
+    run_list:
+      - recipe[platform]
+      - recipe[cowsay]
+
+    nodes:
+      box:
+        host: 33.33.33.10
+        user: vagrant
+        password: vagrant
+        vagrant:
+          IP: 33.33.33.10
+          cpu: 1
+          memory: 256

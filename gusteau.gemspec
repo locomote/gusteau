@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.version       = Gusteau::VERSION
   gem.authors       = ["Vasily Mikhaylichenko", "Chris"]
   gem.email         = ["vasily@locomote.com", "chris@locomote.com"]
-  gem.description   = %q{A fine Chef Solo wrapper}
+  gem.description   = %q{Chef Solo wrapper and configuration manager}
   gem.summary       = %q{Making servers provisioning enjoyable since 2013.}
   gem.homepage      = "http://gusteau.gs"
 
@@ -21,9 +21,12 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'inform'
   gem.add_dependency 'json'
   gem.add_dependency 'hashie'
+  gem.add_dependency 'hash-deep-merge'
   gem.add_dependency 'net-ssh', '>= 2.2.2'
   gem.add_dependency 'archive-tar-minitar', '>= 0.5.2'
 
   gem.add_development_dependency 'minitest'
   gem.add_development_dependency 'mocha'
+  gem.add_development_dependency 'simplecov'
+  gem.add_development_dependency 'coveralls'
 end

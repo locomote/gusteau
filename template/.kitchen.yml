@@ -1,0 +1,20 @@
+---
+driver_plugin: vagrant
+
+platforms:
+- name: ubuntu-13.04
+  driver_config:
+    box: opscode-ubuntu-13.04
+    box_url: https://opscode-vm.s3.amazonaws.com/vagrant/opscode_ubuntu-13.04_provisionerless.box
+    require_chef_omnibus: true
+
+suites:
+- name: default
+  attributes:
+    users:
+    - remi
+    cowsay:
+      greeting: "Hello test-kitchen"
+  run_list:
+  - recipe[platform]
+  - recipe[cowsay]
