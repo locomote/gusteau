@@ -10,14 +10,20 @@ Gusteau
 Introduction
 ------------
 
-Gusteau is an easy to use configuration manager for Chef Solo and Vagrant. It provides an efficient interface to Chef Solo as well as some nice features:
+Gusteau is an easy to use configuration manager for Chef Solo and Vagrant.
+It aims to:
+	
+1. Provide Chef Solo users with a more efficient workflow
+2. Encourage new users to try and to switch to Chef by avoiding the complexity of Chef Server.
 
-* Uses YAML for readable server configuration definitions
-* Uses a single SSH connection to stream compressed files and commands
-* Allows you to use normal Chef flags:
+Some of the features include:
+
+* YAML for readable infrastructure configuration
+* Usage of a single SSH connection to stream compressed files and commands
+* Support for normal Chef CLI flags:
   * `-W` or `--why-run` (dry run mode)
-  * `-l` for setting a log level and `-F` for setting an output formatter
-* Is able to bootstrap CentOS, RHEL, Ubuntu and Gentoo systems with chef-solo.
+  * `-l` for setting a log level and   `-F` for setting an output formatter
+* Bootstrapping target systems with Chef-Omnibus or custom scripts.
 
 Gettings started
 ----------------
@@ -25,10 +31,18 @@ Gettings started
 Gusteau is a Ruby gem:
 
 ```
-gem install gusteau --pre
+gem install gusteau
 ```
 
-A typical Gusteau configuration looks like this:
+The following command generates an example Chef-repo:
+
+```
+gusteau init project-name
+```
+
+Make sure you read through `project-name/README.md` first.
+
+A typical `.gusteau.yml` looks like this:
 
 ```
 environments:
@@ -52,26 +66,17 @@ environments:
         password: omgsecret
 ```
 
-Gusteau only needs a single node definition to run, but you'll need a few cookbooks to actually cook something :)
-The following command generates an example configuration to get you started:
-
-```
-gusteau init project-name
-```
-
-Next, `cd project-name` and see `.gusteau.yml`.
-
 
 Converging a server
 ----------
 
-The following command will run all roles and recipes from node's YAML file.
+The following command will run the whole run_list on the node.
 
 ```
 gusteau converge development-playground
 ```
 
-Use the `--bootstrap` or `-b` flag to bootstrap chef-solo (for the first time run).
+Use the `--bootstrap` or `-b` flag to bootstrap chef-solo (e.g. during the first run).
 
 Applying individual recipes
 -----------
@@ -99,18 +104,20 @@ gusteau ssh_config >> ~/.ssh/config
 
 Using with Vagrant
 ------------------
-Gusteau can save you from writing some Vagrantfile boilerplate code. It also enables you to move node-specific Vagrant configuration away from the Vagrantfile into node yml files.
+Gusteau can save you from writing some Vagrantfile boilerplate code. It also enables you to move node-specific Vagrant configuration away from the Vagrantfile into node definitions.
 
 ```
 ...
-vagrant:
-  IP: 192.168.100.20
-  cpus: 1
-  memory: 512
-  box_url: 'https://opscode-vm.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box'
+nodes:
+  www:
+    vagrant:
+      IP: 192.168.100.20
+      cpus: 1
+      memory: 512
+      box_url: 'https://opscode-vm.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box'
 ```
 
-The following bit will configure Vagrant for all Gusteau nodes which have `vagrant` section defined.
+The following snippet configures Vagrant for all Gusteau nodes which have `vagrant` sections defined.
 
 ```
 Vagrant.configure('2') do |config|
@@ -124,7 +131,7 @@ end
 
 * The `prefix` option lets you prepend your VirtualBox VMs names, e.g. `loco-nodename`.
 * The `defaults` one lets you provide default values for `cpus`, `memory`, `box_url`.
-* If you'd like to use Vagrant's own automatic `chef_solo` provisioner, set `provision` to `true`.
+* If you'd like to use Vagrant's own automatic `chef_solo` provisioner, set `provision` to `true`. *Not recommended* unless you really know what you are doing.
 
 Please note that the add-on only works with Vagrant ~> 1.2 and needs gusteau to be installed as a Vagrant plugin:
 
@@ -136,5 +143,5 @@ Notes
 -----
 
 * Feel free to contribute a [bootstrap script](https://github.com/locomote/gusteau/tree/master/bootstrap) for your platform.
-* Gusteau uploads `./cookbooks` and `./site-cookbooks` from the current working directory.
+
 
