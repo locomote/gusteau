@@ -18,7 +18,7 @@ describe Gusteau::CompressedTarStream do
 
     before do
       FileUtils.mkdir_p(tp)
-      system("touch #{tp}/{a,b,c}.rb")
+      %w{ a b c }.each { |l| FileUtils.touch("#{tp}/#{l}.rb") }
     end
 
     after { FileUtils.rm_rf(tp) }

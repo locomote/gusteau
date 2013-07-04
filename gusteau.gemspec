@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.version       = Gusteau::VERSION
   gem.authors       = ["Vasily Mikhaylichenko", "Chris"]
   gem.email         = ["vasily@locomote.com", "chris@locomote.com"]
-  gem.description   = %q{A fine Chef Solo wrapper}
+  gem.description   = %q{Chef Solo wrapper and configuration manager}
   gem.summary       = %q{Making servers provisioning enjoyable since 2013.}
   gem.homepage      = "http://gusteau.gs"
 
@@ -29,5 +29,4 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'mocha'
   gem.add_development_dependency 'simplecov'
   gem.add_development_dependency 'coveralls'
-  gem.add_development_dependency 'cane'
 end

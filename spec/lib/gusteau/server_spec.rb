@@ -57,8 +57,8 @@ describe Gusteau::Server do
   describe "#upload" do
     let(:pr) { "/tmp/gusteau-test" }
 
-    before { system("mkdir -p #{pr}/{cookbooks,.git}") }
-    after  { system("rm -rf #{pr}") }
+    before { ["#{pr}/cookbooks", "#{pr}/.git"].each { |d| FileUtils.mkdir_p(d) } }
+    after  { FileUtils.rm_rf(pr) }
 
     it "skips the excluded files" do
       server.expects(:send_files).with(["#{pr}/cookbooks"], "/etc/chef")
