@@ -22,7 +22,7 @@ module Gusteau
       yaml_template '.gusteau.yml'
       text_template 'README.md'
       json_template "data_bags/users/#{@login}.json", "data_bags/users/user.json.erb"
-      Dir.chdir(name) { system "bash ./init.sh ; rm ./init.sh" } if(init)
+      Dir.chdir(@name) { exec "bash ./init.sh #{@name} ; rm ./init.sh" } if(init)
     end
 
     private
