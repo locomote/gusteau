@@ -20,7 +20,7 @@ class Gusteau::CLI < Optitron::CLI
 
   desc 'Apply a run_list'
   def apply(node_name, run_list)
-    node(node_name).apply(params, run_list.split(","))
+    node(node_name).apply(run_list.split(","), params)
   end
 
   desc 'SSH into a node'

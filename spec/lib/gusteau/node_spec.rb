@@ -44,7 +44,7 @@ describe Gusteau::Node do
         }
       }
       node.server.chef.expects(:run).with({}, dna)
-      node.apply({}, [ "recipe[nagios]", "role[base]" ])
+      node.apply([ "recipe[nagios]", "role[base]" ], {})
     end
   end
 

@@ -17,7 +17,7 @@ module Gusteau
       server.chef.run opts, dna
     end
 
-    def apply(opts = {}, run_list)
+    def apply(run_list, opts = {})
       server.chef.run opts, dna(run_list)
     end
 
