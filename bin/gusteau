@@ -38,6 +38,11 @@ class Gusteau::CLI < Optitron::CLI
     Gusteau::Bureau.new(bureau_name).generate!
   end
 
+  desc 'Lists all known nodes'
+  def list
+    puts "Known nodes are:\n - #{nodes.keys.join("\n - ")}"
+  end
+
   private
 
   def node(node_name)
