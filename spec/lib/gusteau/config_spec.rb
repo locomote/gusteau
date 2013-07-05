@@ -13,7 +13,7 @@ describe Gusteau::Config do
     let(:nodes) { Gusteau::Config.nodes("./spec/config/remi.yml") }
 
     it "should name nodes as per environment-node" do
-      nodes.keys.must_equal ["production-db", "production-www"]
+      nodes.keys.sort.must_equal ["production-db", "production-www"]
     end
 
     it "should override run_list if defined for a node" do
