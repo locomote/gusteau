@@ -18,7 +18,10 @@ module Gusteau
 
     def upload(files_and_dirs, dest_dir, opts={})
       log "#uploading #{files_and_dirs.join(' ')} to #{@host}:#{dest_dir}" do
-        files = Find.find(*files_and_dirs).select { |f| f unless opts[:exclude] && f.include?(opts[:exclude]) }
+        files = []
+        Find.find(*files_and_dirs) do |f|
+          files << f unless(opts[:exclude] && f.include?(opts[:exclude]))
+        end
         send_files(files, dest_dir)
       end
     end

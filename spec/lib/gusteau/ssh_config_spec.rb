@@ -13,11 +13,6 @@ Host development-playground
   Port 22
   User root
 
-Host staging-www
-  HostName staging.myapp.com
-  Port 22
-  User root
-
 Host production-db
   HostName db.myapp.com
   Port 22
@@ -27,6 +22,11 @@ Host production-www
   HostName www.myapp.com
   Port 22
   User billy
+
+Host staging-www
+  HostName staging.myapp.com
+  Port 22
+  User root
 
 # END GUSTEAU NODES
     eos

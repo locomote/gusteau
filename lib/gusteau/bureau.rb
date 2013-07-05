@@ -14,7 +14,7 @@ module Gusteau
       @login   = Etc.getlogin
       @ssh_key = File.read(File.expand_path '~/.ssh/id_rsa.pub').chomp rescue 'Your SSH key'
 
-      abort "Directory #{name} already exists" if Dir.exists?(name)
+      abort "Directory #{name} already exists" if File.exists?(name)
     end
 
     def generate!(init = true)
