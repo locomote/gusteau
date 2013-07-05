@@ -2,7 +2,7 @@ require './spec/spec_helper'
 
 describe Gusteau::Log do
 
-  let(:fixed_time)   { Time.new(2013,7,25, 14,40,23, "+00:00") }
+  let(:fixed_time)   { Time.parse("2013-07-25 14:40:23 UTC") }
 
   let(:logger_class) { class Example; include Gusteau::Log; end }
   let(:logger)       { logger_class.new }

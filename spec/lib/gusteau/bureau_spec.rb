@@ -19,14 +19,14 @@ describe Gusteau::Bureau do
   describe "#generate!" do
     before { subject.generate!(false) }
     it "should create a basic structure" do
-      assert Dir.exists?(bureau_path)
+      assert File.exists?(bureau_path)
 
       %w{ Berksfile Vagrantfile .kitchen.yml }.each do |f|
         assert File.exists?("#{bureau_path}/#{f}")
       end
 
       %w{ data_bags site-cookbooks test }.each do |d|
-        assert Dir.exists?("#{bureau_path}/#{d}")
+        assert File.exists?("#{bureau_path}/#{d}")
       end
     end
 

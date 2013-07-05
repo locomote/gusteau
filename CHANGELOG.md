@@ -1,3 +1,6 @@
+## 1.0.2.dev / 2013-07-06
+* Fix Ruby 1.8.7 and Rubinius compatibility
+
 ## 1.0.1.dev / 2013-07-05
 * Fix the project generator bug
 * Make project generator output look nicer
