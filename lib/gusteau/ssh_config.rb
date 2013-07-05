@@ -6,7 +6,7 @@ module Gusteau
     def initialize(nodes)
       @config = []
 
-      nodes.each_pair do |name, node|
+      nodes.sort.each do |name, node|
         if server = node.server
           @config << section(name, server)
         end
