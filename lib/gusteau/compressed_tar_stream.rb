@@ -15,7 +15,7 @@ module Gusteau
           Archive::Tar::Minitar.pack_file(f, tar)
         end
         tar.close.string.tap { |data|
-	  data.force_encoding('binary') if data.respond_to?(:force_encoding)
+          data.force_encoding('binary') if data.respond_to?(:force_encoding)
           puts " (compressed down to #{data.size} bytes)"
         }
       end

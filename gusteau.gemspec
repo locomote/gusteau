@@ -25,6 +25,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'net-ssh', '>= 2.2.2'
   gem.add_dependency 'archive-tar-minitar', '>= 0.5.2'
 
+  gem.add_development_dependency 'bundler'
   gem.add_development_dependency 'minitest'
   gem.add_development_dependency 'mocha'
   gem.add_development_dependency 'simplecov'

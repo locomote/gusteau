@@ -21,7 +21,7 @@ module Gusteau
         files = []
         Find.find(*files_and_dirs) do |f|
           files << f unless(opts[:exclude] && f.include?(opts[:exclude]))
-	end
+        end
         send_files(files, dest_dir)
       end
     end
