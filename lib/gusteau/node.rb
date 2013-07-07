@@ -3,6 +3,8 @@ require 'gusteau/chef'
 
 module Gusteau
   class Node
+    include Gusteau::Log
+
     attr_reader :name, :config, :server
 
     def initialize(name, config)
@@ -14,11 +16,15 @@ module Gusteau
     end
 
     def converge(opts = {})
-      server.chef.run opts, dna
+      with_hooks do
+        server.chef.run dna, opts
+      end
     end
 
     def apply(run_list, opts = {})
-      server.chef.run opts, dna(run_list)
+      with_hooks do
+        server.chef.run dna(run_list), opts
+      end
     end
 
     def ssh
@@ -26,6 +32,22 @@ module Gusteau
     end
 
     private
+
+    def with_hooks(&block)
+      hook 'before'
+      yield
+      hook 'after'
+    end
+
+    def hook(hook_type)
+      (@config[hook_type] || []).each do |cmd|
+        Kernel.system cmd
+        unless $?.exitstatus == 0
+          log_error "Error executing a #{hook_type} hook: '#{cmd}'"
+          exit 1
+        end
+      end
+    end
 
     def dna(run_list = nil)
       node_dna = {

@@ -2,7 +2,12 @@ default_node: &default_node
   platform: centos
   user: billy
 
+before:
+  - bundle exec berks install
+
 environments:
+  staging: { before: [ echo "Hello World!" ], nodes:  { vm: { host: '192.168.1.15'} } }
+
   production:
     attributes:
       users:

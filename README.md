@@ -12,7 +12,7 @@ Introduction
 
 Gusteau is an easy to use configuration manager for Chef Solo and Vagrant.
 It aims to:
-	
+
 1. Provide Chef Solo users with a more efficient workflow
 2. Encourage new users to try and to switch to Chef by avoiding the complexity of Chef Server.
 
@@ -45,6 +45,9 @@ Make sure you read through `project-name/README.md` first.
 A typical `.gusteau.yml` looks like this:
 
 ```
+before:
+  - bundle exec berks install --path ./cookbooks
+
 environments:
   development:
     attributes:

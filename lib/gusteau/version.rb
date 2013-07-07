@@ -1,3 +1,3 @@
 module Gusteau
-  VERSION = "1.0.2.dev"
+  VERSION = "1.0.3.dev"
 end

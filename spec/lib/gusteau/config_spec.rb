@@ -13,7 +13,7 @@ describe Gusteau::Config do
     let(:nodes) { Gusteau::Config.nodes("./spec/config/remi.yml") }
 
     it "should name nodes as per environment-node" do
-      nodes.keys.sort.must_equal ["production-db", "production-www"]
+      nodes.keys.sort.must_equal ["production-db", "production-www", "staging-vm"]
     end
 
     it "should override run_list if defined for a node" do
@@ -26,6 +26,11 @@ describe Gusteau::Config do
         'users' => ['alex', 'simon'],
         'mysql' => {'server_port' => 3307, 'server_root_password' => 'prodsecret' }
       })
+    end
+
+    it "should override the global before hook with an environment one" do
+      nodes['production-www'].config['before'].must_equal(['bundle exec berks install'])
+      nodes['staging-vm'].config['before'].must_equal(['echo "Hello World!"'])
     end
   end
 end

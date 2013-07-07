@@ -7,9 +7,6 @@ ok()    { echo -e "\033[00;32m$1\033[0m"; }
 info "Installing gem dependencies..."
 bundle
 
-info "Downloading cookbooks..."
-bundle exec berks install --path ./cookbooks
-
 if [ ! $(vagrant -v | cut -f3 -d ' ' | cut -f2 -d '.') = "2" ]; then
   error "Sorry, 'gusteau init' only works with Vagrant 1.2.x"
   exit 1

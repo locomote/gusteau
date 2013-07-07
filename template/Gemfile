@@ -6,6 +6,6 @@ gem 'berkshelf'
 gem 'gusteau'
 
 group :integration do
-  gem 'test-kitchen', github: 'opscode/test-kitchen'
+  gem 'test-kitchen', '~> 1.0.0.alpha.7'
   gem 'kitchen-vagrant', '~> 0.10.0'
 end

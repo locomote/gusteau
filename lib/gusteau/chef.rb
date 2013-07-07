@@ -6,7 +6,7 @@ module Gusteau
       @dest_dir = dest_dir
     end
 
-    def run(opts, dna)
+    def run(dna, opts)
       @server.run "rm -rf #{@dest_dir} && mkdir #{@dest_dir} && mkdir -p /tmp/chef"
 
       @server.upload(src_files(dna[:path]), @dest_dir, :exclude => '.git/')

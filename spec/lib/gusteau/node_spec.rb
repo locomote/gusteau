@@ -12,39 +12,49 @@ describe Gusteau::Node do
     end
   end
 
+  let(:before_hooks) { ['bundle', 'vagrant up'] }
+
   let(:node) do
     config = {
       'run_list' => [ "recipe[zsh]", "recipe[git]" ],
-      'server' => { 'host' => 'example.com' }
+      'server' => { 'host' => 'example.com' },
+      'before' => before_hooks
     }
     Gusteau::Node.new 'test', config
   end
 
-  describe "#converge" do
-    it "should run chef with the full run_list" do
-      dna = {
-        :path => '/tmp/dna.json',
-        :hash => {
-          :instance_role => 'test',
-          :run_list => ['recipe[zsh]', 'recipe[git]']
-        }
-      }
-      node.server.chef.expects(:run).with({}, dna)
-      node.converge
+  describe "provisioning" do
+    before do
+      node.expects(:hook).once.with 'before'
+      node.expects(:hook).once.with 'after'
     end
-  end
 
-  describe "#apply" do
-    it "should run chef with the specific run_list" do
-      dna = {
-        :path => '/tmp/dna.json',
-        :hash => {
-          :instance_role => 'test',
-          :run_list => ['recipe[nagios]', 'role[base]']
+    describe "#converge" do
+      it "should run chef with the full run_list" do
+        dna = {
+          :path => '/tmp/dna.json',
+          :hash => {
+            :instance_role => 'test',
+            :run_list => ['recipe[zsh]', 'recipe[git]']
+          }
         }
-      }
-      node.server.chef.expects(:run).with({}, dna)
-      node.apply([ "recipe[nagios]", "role[base]" ], {})
+        node.server.chef.expects(:run).with(dna, {})
+        node.converge
+      end
+    end
+
+    describe "#apply" do
+      it "should run chef with the specific run_list" do
+        dna = {
+          :path => '/tmp/dna.json',
+          :hash => {
+            :instance_role => 'test',
+            :run_list => ['recipe[nagios]', 'role[base]']
+          }
+        }
+        node.server.chef.expects(:run).with(dna, {})
+        node.apply([ "recipe[nagios]", "role[base]" ], {})
+      end
     end
   end
 
@@ -52,6 +62,23 @@ describe Gusteau::Node do
     it "should call server.ssh" do
       node.server.expects(:ssh)
       node.ssh
+    end
+  end
+
+  describe "#hook" do
+    it "should execute system commands" do
+      Kernel.expects(:system).with('bundle')
+      Kernel.expects(:system).with('vagrant up')
+      node.server.chef.expects(:run)
+      node.apply([], {})
+    end
+
+    context "command doesn't succeed" do
+      let(:before_hooks) { %w{ohwhatthehellerror} }
+
+      it "should exit with error" do
+        proc { node.apply([], {}) }.must_raise SystemExit
+      end
     end
   end
 end
