@@ -59,6 +59,7 @@ class Gusteau::CLI < Optitron::CLI
   end
 
   def nodes
+    Gusteau::Config.read('.gusteau.yml')
     Gusteau::Config.nodes
   end
 
@@ -68,5 +69,4 @@ class Gusteau::CLI < Optitron::CLI
 
 end
 
-Gusteau::Config.read('.gusteau.yml')
 Gusteau::CLI.dispatch
