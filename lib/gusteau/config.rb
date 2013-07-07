@@ -5,7 +5,17 @@ module Gusteau
   class Config
     include Gusteau::ERB
 
-    attr_reader :nodes, :settings
+    def self.read(config_path)
+      @instance = Gusteau::Config.new(config_path)
+    end
+
+    def self.nodes
+      @instance.send(:nodes)
+    end
+
+    def self.settings
+      @instance.send(:settings)
+    end
 
     def initialize(config_path)
       @config = if File.exists?(config_path)
@@ -14,6 +24,8 @@ module Gusteau
         abort ".gusteau.yml not found"
       end
     end
+
+    private
 
     def nodes
       env_config = @config['environments']
@@ -35,8 +47,6 @@ module Gusteau
         'roles_path'     => @config['roles_path'] || 'roles'
       }
     end
-
-    private
 
     #
     # Node attributes get deep-merged with the environment ones

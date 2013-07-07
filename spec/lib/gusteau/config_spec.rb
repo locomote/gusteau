@@ -2,7 +2,7 @@ require './spec/spec_helper'
 
 describe Gusteau::Config do
   context "config not found" do
-    subject { Gusteau::Config.new("/tmp/nonexistent/nonsence111") }
+    subject { Gusteau::Config.read("/tmp/nonexistent/nonsence111") }
 
     it "should exit with an error" do
       proc { subject }.must_raise SystemExit
@@ -10,10 +10,10 @@ describe Gusteau::Config do
   end
 
   context "config is found" do
-    let(:gusteau_config) { Gusteau::Config.new("./spec/config/remi.yml") }
+    before { Gusteau::Config.read("./spec/config/remi.yml") }
 
     describe "#nodes" do
-      let(:nodes) { gusteau_config.nodes }
+      let(:nodes) { Gusteau::Config.nodes }
 
       it "should name nodes as per environment-node" do
         nodes.keys.sort.must_equal ["production-db", "production-www", "staging-vm"]
@@ -38,7 +38,7 @@ describe Gusteau::Config do
     end
 
     describe "#settings" do
-      let(:settings) { gusteau_config.settings }
+      let(:settings) { Gusteau::Config.settings }
 
       it "should have defaults for cookbooks_path, roles_path" do
         settings['cookbooks_path'].must_equal ['cookbooks', 'site-cookbooks']
@@ -46,7 +46,7 @@ describe Gusteau::Config do
       end
 
       context "settings defined in the config yml" do
-        let(:settings) { Gusteau::Config.new("./spec/config/emile.yml").settings }
+        before { Gusteau::Config.read("./spec/config/emile.yml") }
 
         it "should have defaults for cookbooks_path, roles_path" do
           settings['cookbooks_path'].must_equal ['private-cookbooks', '/home/user/.cookbooks']

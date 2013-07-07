@@ -26,14 +26,12 @@ module Gusteau
     private
 
     def src_files(dna_path)
-      %W(
+      list = %W(
         #{dna_path}
         #{File.expand_path("../../../bootstrap", __FILE__)}
-        ./cookbooks
-        ./site-cookbooks
-        ./roles
-        ./data_bags
-      ).select { |file| File.exists? file }
+        data_bags
+      ) + Gusteau::Config.settings['cookbooks_path'] + [ Gusteau::Config.settings['roles_path']]
+      list.select { |file| File.exists? file }
     end
   end
 end

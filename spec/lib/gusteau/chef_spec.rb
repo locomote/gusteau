@@ -1,6 +1,8 @@
 require './spec/spec_helper.rb'
 
 describe Gusteau::Chef do
+  before { Gusteau::Config.read('./spec/config/emile.yml') }
+
   let(:platform)  { 'centos' }
   let(:server)    { Gusteau::Server.new('host' => 'example.com', 'platform' => platform) }
   let(:chef)      { Gusteau::Chef.new(server, platform) }

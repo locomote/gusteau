@@ -9,12 +9,12 @@ module Gusteau
 
     attr_reader :host, :port, :user, :password, :chef
 
-    def initialize(config, opts={})
+    def initialize(config)
       @host     = config['host']
       @port     = config['port'] || 22
       @user     = config['user'] || 'root'
       @password = config['password']
-      @chef = Gusteau::Chef.new(self, config['platform'])
+      @chef     = Gusteau::Chef.new(self, config['platform'])
     end
 
     def upload(files_and_dirs, dest_dir, opts={})

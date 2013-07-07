@@ -1,9 +1,10 @@
-## 1.0.4.dev / 2013-07-07
-* Bugfix: 'after' hook was not taking effect
-* Add a quick 'show nodename' subcommand for printing out individual node configuration
+## 1.0.4.dev / 2013-07-08
+* Bugfix: `after` hook was not taking effect
+* Add a quick `show nodename` subcommand for printing out individual node configuration
+* Add an ability to configure `cookbooks_path` and `roles_path` from within `.gusteau.yml`
 
 ## 1.0.3.dev / 2013-07-07
-* Implement 'before' and 'after' hooks (global and environment-based)
+* Implement `before` and `after` hooks (global and environment-based)
 
 ## 1.0.2.dev / 2013-07-06
 * Fix Ruby 1.8.7 and Rubinius compatibility

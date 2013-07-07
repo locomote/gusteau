@@ -49,75 +49,76 @@ describe Gusteau::Vagrant do
     end
   end
 
-  describe "#vm_config" do
-    let(:node) { Gusteau::Config.new("./spec/config/gusteau.yml").nodes['development-playground'] }
-    subject { Gusteau::Vagrant.vm_config(node, options) }
+  describe "internal methods" do
+    before { Gusteau::Config.read("./spec/config/gusteau.yml") }
+    let(:node) { Gusteau::Config.nodes['development-playground'] }
 
-    let(:defaults) do
-      {
-        :box_url => 'https://opscode.s3.amazonaws.com/centos-6.4.box',
-        :cpus    => 64,
-        :memory  => 4096,
-      }
-    end
-    let(:prefix)  { 'hyper' }
-    let(:options) { { :defaults => defaults, :prefix => prefix } }
+    describe "#vm_config" do
+      subject { Gusteau::Vagrant.vm_config(node, options) }
 
-    let(:expected_label) { 'hyper-development-playground' }
-    let(:expected_config) do
-      {
-        :name    => 'development-playground',
-        :label   => expected_label,
-        :box_url => 'https://opscode.s3.amazonaws.com/centos-6.4.box',
-        :ip      => '192.168.100.21',
-        :cpus    => 2,
-        :memory  => 4096
-      }
-    end
+      let(:defaults) do
+        {
+          :box_url => 'https://opscode.s3.amazonaws.com/centos-6.4.box',
+          :cpus    => 64,
+          :memory  => 4096,
+        }
+      end
+      let(:prefix)  { 'hyper' }
+      let(:options) { { :defaults => defaults, :prefix => prefix } }
 
-    it "should merge in defaults" do
-      subject.must_equal(expected_config)
-    end
+      let(:expected_label) { 'hyper-development-playground' }
+      let(:expected_config) do
+        {
+          :name    => 'development-playground',
+          :label   => expected_label,
+          :box_url => 'https://opscode.s3.amazonaws.com/centos-6.4.box',
+          :ip      => '192.168.100.21',
+          :cpus    => 2,
+          :memory  => 4096
+        }
+      end
 
-    context "prefix not specified" do
-      let(:prefix) { nil }
-      let(:expected_label) { 'development-playground' }
-
-      it "should omit the prefix" do
+      it "should merge in defaults" do
         subject.must_equal(expected_config)
       end
-    end
 
-    context "box_url not specified" do
-      let(:defaults) { {} }
+      context "prefix not specified" do
+        let(:prefix) { nil }
+        let(:expected_label) { 'development-playground' }
 
-      it "should raise an exception" do
-        proc { subject }.must_raise RuntimeError
+        it "should omit the prefix" do
+          subject.must_equal(expected_config)
+        end
+      end
+
+      context "box_url not specified" do
+        let(:defaults) { {} }
+
+        it "should raise an exception" do
+          proc { subject }.must_raise RuntimeError
+        end
       end
     end
-  end
 
-  describe "#define_provisioner" do
-    let(:gusteau_config) { Gusteau::Config.new("./spec/config/gusteau.yml") }
+    describe "#define_provisioner" do
+      let(:chef) { stub_everything('chef') }
 
-    let(:node) { gusteau_config.nodes['development-playground'] }
-    let(:chef) { stub_everything('chef') }
+      before do
+        def subvm.provision(provider); yield chef; end
+        subvm.expects(:chef).returns(chef)
 
-    before do
-      def subvm.provision(provider); yield chef; end
-      subvm.expects(:chef).returns(chef)
+        instance.expects(:vm).at_least_once.returns(subvm)
+      end
 
-      instance.expects(:vm).at_least_once.returns(subvm)
-    end
+      it "should set the correct Chef JSON" do
+        chef.expects('json='.to_sym).with({"mysql"=>{"server_root_password"=>"guesswhat"}})
+        Gusteau::Vagrant.define_provisioner(instance, node)
+      end
 
-    it "should set the correct Chef JSON" do
-      chef.expects('json='.to_sym).with({"mysql"=>{"server_root_password"=>"guesswhat"}})
-      Gusteau::Vagrant.define_provisioner(instance, gusteau_config.settings, node)
-    end
-
-    it "should set the correct Chef run_list" do
-      chef.expects('run_list='.to_sym).with(["recipe[zsh]", "recipe[mysql::server]"])
-      Gusteau::Vagrant.define_provisioner(instance, gusteau_config.settings, node)
+      it "should set the correct Chef run_list" do
+        chef.expects('run_list='.to_sym).with(["recipe[zsh]", "recipe[mysql::server]"])
+        Gusteau::Vagrant.define_provisioner(instance, node)
+      end
     end
   end
 end
