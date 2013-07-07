@@ -17,7 +17,7 @@ module Gusteau
     end
 
     def define_nodes(config, options, prefix = nil)
-      Gusteau::Config.nodes(options[:config_path] || ".gusteau.yml").each_pair do |name, node|
+      Gusteau::Config.new(options[:config_path] || ".gusteau.yml").nodes.each_pair do |name, node|
         if node.config['server']['vagrant']
           define_vm config, node, options
         end

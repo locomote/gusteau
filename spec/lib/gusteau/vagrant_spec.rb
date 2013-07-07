@@ -50,7 +50,7 @@ describe Gusteau::Vagrant do
   end
 
   describe "#vm_config" do
-    let(:node) { Gusteau::Config.nodes("./spec/config/gusteau.yml")['development-playground'] }
+    let(:node) { Gusteau::Config.new("./spec/config/gusteau.yml").nodes['development-playground'] }
     subject { Gusteau::Vagrant.vm_config(node, options) }
 
     let(:defaults) do
@@ -98,7 +98,7 @@ describe Gusteau::Vagrant do
   end
 
   describe "#define_provisioner" do
-    let(:node) { Gusteau::Config.nodes("./spec/config/gusteau.yml")['development-playground'] }
+    let(:node) { Gusteau::Config.new("./spec/config/gusteau.yml").nodes['development-playground'] }
     let(:chef) { stub_everything('chef') }
 
     before do

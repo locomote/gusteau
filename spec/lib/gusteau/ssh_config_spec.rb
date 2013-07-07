@@ -1,7 +1,7 @@
 require './spec/spec_helper.rb'
 
 describe Gusteau::SSHConfig do
-  let(:nodes) { Gusteau::Config.nodes("./spec/config/gusteau.yml") }
+  let(:nodes) { Gusteau::Config.new("./spec/config/gusteau.yml").nodes }
   subject { Gusteau::SSHConfig.new(nodes) }
 
   let(:config) do

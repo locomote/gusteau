@@ -1,3 +1,7 @@
+## 1.0.4.dev / 2013-07-07
+* Bugfix: 'after' hook was not taking effect
+* Add a quick 'show nodename' subcommand for printing out individual node configuration
+
 ## 1.0.3.dev / 2013-07-07
 * Implement 'before' and 'after' hooks (global and environment-based)
 

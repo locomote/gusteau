@@ -2,7 +2,7 @@ require './spec/spec_helper'
 
 describe Gusteau::Config do
   context "config not found" do
-    subject { Gusteau::Config.nodes("/tmp/nonexistent/nonsence111") }
+    subject { Gusteau::Config.new("/tmp/nonexistent/nonsence111") }
 
     it "should exit with an error" do
       proc { subject }.must_raise SystemExit
@@ -10,7 +10,7 @@ describe Gusteau::Config do
   end
 
   context "config is found" do
-    let(:nodes) { Gusteau::Config.nodes("./spec/config/remi.yml") }
+    let(:nodes) { Gusteau::Config.new("./spec/config/remi.yml").nodes }
 
     it "should name nodes as per environment-node" do
       nodes.keys.sort.must_equal ["production-db", "production-www", "staging-vm"]
