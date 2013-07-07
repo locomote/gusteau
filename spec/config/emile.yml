@@ -1,0 +1,5 @@
+cookbooks_path:
+  - private-cookbooks
+  - /home/user/.cookbooks
+
+roles_path: basic-roles

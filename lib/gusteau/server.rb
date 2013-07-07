@@ -1,5 +1,6 @@
-require 'gusteau/log'
+require 'gusteau/chef'
 require 'gusteau/ssh'
+require 'gusteau/log'
 
 module Gusteau
   class Server

@@ -5,7 +5,7 @@ module Gusteau
   class Config
     include Gusteau::ERB
 
-    attr_reader :nodes, :config
+    attr_reader :nodes, :settings
 
     def initialize(config_path)
       @config = if File.exists?(config_path)
@@ -16,7 +16,7 @@ module Gusteau
     end
 
     def nodes
-      env_config = config['environments']
+      env_config = @config['environments']
 
       @nodes ||= env_config.inject({}) do |nodes, (env_name, env_hash)|
         if env_hash['nodes']
@@ -27,6 +27,13 @@ module Gusteau
         end
         nodes
       end
+    end
+
+    def settings
+      {
+        'cookbooks_path' => @config['cookbooks_path'] || ['cookbooks', 'site-cookbooks'],
+        'roles_path'     => @config['roles_path'] || 'roles'
+      }
     end
 
     private
@@ -40,9 +47,9 @@ module Gusteau
       node_config = {
         'server'     => node_hash,
         'attributes' => (env_hash['attributes'] || {}).deep_merge(node_hash['attributes'] || {}),
-        'run_list'   => node_hash['run_list'] || env_hash['run_list'],
-        'before'     => env_hash['before'] || config['before'],
-        'after'      => env_hash['after'] || config['after']
+        'run_list'   => node_hash['run_list']   || env_hash['run_list'],
+        'before'     => env_hash['before']      || @config['before'],
+        'after'      => env_hash['after']       || @config['after']
       }
       Gusteau::Node.new(node_name, node_config)
     end

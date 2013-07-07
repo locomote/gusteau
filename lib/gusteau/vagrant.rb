@@ -17,9 +17,11 @@ module Gusteau
     end
 
     def define_nodes(config, options, prefix = nil)
-      Gusteau::Config.new(options[:config_path] || ".gusteau.yml").nodes.each_pair do |name, node|
+      gusteau_config = Gusteau::Config.new(options[:config_path] || ".gusteau.yml")
+
+      gusteau_config.nodes.each_pair do |name, node|
         if node.config['server']['vagrant']
-          define_vm config, node, options
+          define_vm config, gusteau_config.settings, node, options
         end
       end
     end
@@ -48,7 +50,7 @@ module Gusteau
       }
     end
 
-    def define_vm(config, node, options)
+    def define_vm(config, gusteau_settings, node, options)
       vm_config = vm_config(node, options)
 
       config.vm.define vm_config[:name] do |instance|
@@ -68,17 +70,17 @@ module Gusteau
           instance.vm.network :private_network, :ip => vm_config[:ip]
         end
 
-        define_provisioner(instance, node) if options[:provision]
+        define_provisioner(instance, gusteau_settings, node) if options[:provision]
       end
     end
 
-    def define_provisioner(instance, node)
+    def define_provisioner(instance, gusteau_settings, node)
       instance.vm.provision 'chef_solo' do |chef|
         chef.data_bags_path = 'data_bags'
-        chef.cookbooks_path = ['cookbooks', 'site-cookbooks']
-        chef.roles_path     = 'roles'
-        chef.json     = node.config['attributes'] || {}
-        chef.run_list = node.config['run_list'] || []
+        chef.cookbooks_path = gusteau_settings['cookbooks_path']
+        chef.roles_path     = gusteau_settings['roles_path']
+        chef.json           = node.config['attributes'] || {}
+        chef.run_list       = node.config['run_list']   || []
       end
     end
   end

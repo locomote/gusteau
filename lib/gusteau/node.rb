@@ -1,5 +1,4 @@
 require 'gusteau/server'
-require 'gusteau/chef'
 
 module Gusteau
   class Node
@@ -7,11 +6,11 @@ module Gusteau
 
     attr_reader :name, :config, :server
 
-    def initialize(name, config)
-      @name   = name
-      @config = config
+    def initialize(node_name, node_config)
+      @name   = node_name
+      @config = node_config
 
-      @server = Server.new(@config['server']) if @config['server']
+      @server = Server.new(@config['server'])
       @dna_path = '/tmp/dna.json'
     end
 

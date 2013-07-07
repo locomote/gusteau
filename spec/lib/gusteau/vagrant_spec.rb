@@ -98,7 +98,9 @@ describe Gusteau::Vagrant do
   end
 
   describe "#define_provisioner" do
-    let(:node) { Gusteau::Config.new("./spec/config/gusteau.yml").nodes['development-playground'] }
+    let(:gusteau_config) { Gusteau::Config.new("./spec/config/gusteau.yml") }
+
+    let(:node) { gusteau_config.nodes['development-playground'] }
     let(:chef) { stub_everything('chef') }
 
     before do
@@ -110,12 +112,12 @@ describe Gusteau::Vagrant do
 
     it "should set the correct Chef JSON" do
       chef.expects('json='.to_sym).with({"mysql"=>{"server_root_password"=>"guesswhat"}})
-      Gusteau::Vagrant.define_provisioner(instance, node)
+      Gusteau::Vagrant.define_provisioner(instance, gusteau_config.settings, node)
     end
 
     it "should set the correct Chef run_list" do
       chef.expects('run_list='.to_sym).with(["recipe[zsh]", "recipe[mysql::server]"])
-      Gusteau::Vagrant.define_provisioner(instance, node)
+      Gusteau::Vagrant.define_provisioner(instance, gusteau_config.settings, node)
     end
   end
 end
