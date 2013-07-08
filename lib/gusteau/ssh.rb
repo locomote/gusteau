@@ -33,9 +33,11 @@ module Gusteau
       exit_code == 0
     end
 
-    def send_files(files, dest_dir)
+    def send_files(files, dest_dir, strip_c = nil)
+      strip_arg = strip_c ? "--strip-components=#{strip_c}" : ''
+
       conn.open_channel { |ch|
-        ch.exec(prepared_cmd "tar zxf - -C #{dest_dir}")
+        ch.exec(prepared_cmd "tar zxf - -C #{dest_dir} #{strip_arg}")
         ch.send_data(compressed_tar_stream(files))
         ch.eof!
       }.wait

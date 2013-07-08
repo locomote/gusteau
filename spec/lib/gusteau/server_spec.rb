@@ -61,7 +61,7 @@ describe Gusteau::Server do
     after  { FileUtils.rm_rf(pr) }
 
     it "skips the excluded files" do
-      server.expects(:send_files).with(["#{pr}/cookbooks"], "/etc/chef")
+      server.expects(:send_files).with(["#{pr}/cookbooks"], "/etc/chef", nil)
       server.upload(["#{pr}/cookbooks", "#{pr}/.git"], "/etc/chef", { :exclude => "#{pr}/.git" })
     end
   end

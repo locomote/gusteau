@@ -97,13 +97,17 @@ describe Gusteau::SSH do
       before do
         connector.user = 'root'
         connector.expects(:compressed_tar_stream).returns(mock())
+        channel.expects(:send_data)
       end
 
       it "should execute the extraction command and send the data" do
-        channel.expects(:exec).with("tar zxf - -C /etc/chef")
-        channel.expects(:send_data)
-
+        channel.expects(:exec).with("tar zxf - -C /etc/chef ")
         connector.send_files(%w{ a b }, '/etc/chef')
+      end
+
+      it "should strip tar components" do
+        channel.expects(:exec).with("tar zxf - -C /etc/chef --strip-components=3")
+        connector.send_files(%w{ c d }, '/etc/chef', 3)
       end
     end
   end

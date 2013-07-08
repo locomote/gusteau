@@ -44,7 +44,8 @@ module Gusteau
     def settings
       {
         'cookbooks_path' => @config['cookbooks_path'] || ['cookbooks', 'site-cookbooks'],
-        'roles_path'     => @config['roles_path'] || 'roles'
+        'roles_path'     => @config['roles_path'] || 'roles',
+        'bootstrap'      => @config['bootstrap']
       }
     end
 

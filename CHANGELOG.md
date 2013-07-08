@@ -1,3 +1,8 @@
+## 1.0.5.dev / 2013-07-09
+* Bugfix: `cookbooks_path` was not working properly
+* Add an ability to specify a custom bootstrap script
+* Streamline file uploading logic in `chef.rb`
+
 ## 1.0.4.dev / 2013-07-08
 * Bugfix: `after` hook was not taking effect
 * Add a quick `show nodename` subcommand for printing out individual node configuration

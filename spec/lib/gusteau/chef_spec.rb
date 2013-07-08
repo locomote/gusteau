@@ -17,7 +17,7 @@ describe Gusteau::Chef do
 
     before do
       server.expects(:upload)
-      server.expects(:run).times(2)
+      server.expects(:run)
     end
 
     context "bootstrap option is not specified" do
@@ -31,7 +31,7 @@ describe Gusteau::Chef do
       let(:bootstrap) { true }
 
       it "should run the bootstrap script and chef solo" do
-        server.expects(:run).with('sh /etc/chef/bootstrap/centos.sh')
+        server.expects(:run).with('sh /etc/chef/bootstrap.sh')
         expects_run_chef_solo
         chef.run({ :path => '/tmp/node.json' }, opts)
       end

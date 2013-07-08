@@ -1,5 +1,6 @@
 module Gusteau
   class Chef
+
     def initialize(server, platform = nil, dest_dir = '/etc/chef')
       @server   = server
       @platform = platform || 'omnibus'
@@ -9,14 +10,13 @@ module Gusteau
     def run(dna, opts)
       @server.run "rm -rf #{@dest_dir} && mkdir #{@dest_dir} && mkdir -p /tmp/chef"
 
-      @server.upload(src_files(dna[:path]), @dest_dir, :exclude => '.git/')
+      with_src_files(dna[:path]) do |list|
+        @server.upload list, @dest_dir, :exclude => '.git/', :strip_c => 2
+      end
 
-      # move bootstrap directory to the top level
-      @server.run "cd #{@dest_dir} && mv `find . -type d -name bootstrap` #{@dest_dir}/"
+      @server.run "sh /etc/chef/bootstrap.sh" if opts['bootstrap']
 
-      @server.run "sh /etc/chef/bootstrap/#{@platform}.sh" if opts['bootstrap']
-
-      cmd  = "chef-solo -c #{@dest_dir}/bootstrap/solo.rb -j #{@dest_dir + dna[:path]} --color"
+      cmd  = "chef-solo -c #{@dest_dir}/solo.rb -j #{@dest_dir}/dna.json --color"
       cmd << " -F #{opts['format']}"    if opts['format']
       cmd << " -l #{opts['log_level']}" if opts['log_level']
       cmd << " -W"                      if opts['why-run']
@@ -25,13 +25,30 @@ module Gusteau
 
     private
 
-    def src_files(dna_path)
-      list = %W(
-        #{dna_path}
-        #{File.expand_path("../../../bootstrap", __FILE__)}
-        data_bags
-      ) + Gusteau::Config.settings['cookbooks_path'] + [ Gusteau::Config.settings['roles_path']]
-      list.select { |file| File.exists? file }
+    def with_src_files(dna_path)
+      tmp_dir       = FileUtils.mkdir_p("/tmp/gusteau-#{Time.now.to_i}")[0]
+      bootstrap_dir = File.expand_path('../../../bootstrap', __FILE__)
+
+      bootstrap = Gusteau::Config.settings['bootstrap'] || "#{bootstrap_dir}/#{@platform}.sh"
+
+      {
+        dna_path                               => "dna.json",
+        bootstrap                              => "bootstrap.sh",
+        "#{bootstrap_dir}/solo.rb"             => "solo.rb",
+        'data_bags'                            => "data_bags",
+        Gusteau::Config.settings['roles_path'] => "roles"
+      }.tap do |f|
+        Gusteau::Config.settings['cookbooks_path'].each_with_index do |path, i|
+          f[path] = "cookbooks-#{i}"
+        end
+
+        f.each_pair do |src, dest|
+          FileUtils.cp_r(src, "#{tmp_dir}/#{dest}") if File.exists?(src)
+        end
+      end
+
+      yield [ tmp_dir ]
+      FileUtils.rm_rf(tmp_dir)
     end
   end
 end

@@ -155,6 +155,7 @@ You can tell Gusteau to execute specific commands before and / or after `converg
 ```
 before:
   - bundle exec librarian-chef install
+
 after:
   - bundle exec rake spec
 

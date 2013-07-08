@@ -40,9 +40,10 @@ describe Gusteau::Config do
     describe "#settings" do
       let(:settings) { Gusteau::Config.settings }
 
-      it "should have defaults for cookbooks_path, roles_path" do
+      it "should have defaults for cookbooks_path, roles_path, bootstrap" do
         settings['cookbooks_path'].must_equal ['cookbooks', 'site-cookbooks']
         settings['roles_path'].must_equal 'roles'
+        settings['bootstrap'].must_equal nil
       end
 
       context "settings defined in the config yml" do
