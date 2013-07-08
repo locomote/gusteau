@@ -31,7 +31,7 @@ Gettings started
 Gusteau is a Ruby gem:
 
 ```
-gem install gusteau --pre
+gem install gusteau
 ```
 
 The following command generates an example Chef-repo:
@@ -144,7 +144,32 @@ vagrant plugin install gusteau
 
 Notes
 -----
+### Bootstrapping
 
-* Feel free to contribute a [bootstrap script](https://github.com/locomote/gusteau/tree/master/bootstrap) for your platform.
+By default, Gusteau installs the [Omnibus Chef](http://www.opscode.com/chef/install/). However if you're targetting an unsupported platform you might want to specify the `platform` value for a node: this invokes a specific [script](https://github.com/locomote/gusteau/tree/master/bootstrap).
 
+### Before and after hooks
 
+You can tell Gusteau to execute specific commands before and / or after `converge` or `apply` take place. They get executed on the host system. Example `.gusteau.yml` snippet:
+
+```
+before:
+  - bundle exec librarian-chef install
+after:
+  - bundle exec rake spec
+
+environments:
+  ...
+```
+
+### Custom cookbooks path
+
+By default, Gusteau uploads and sets Chef Solo up to use cookbooks from `./cookbooks` and `./site-cookbooks` directories. If it doesn't work for you, you can override these values in `.gusteau.yml`:
+
+```
+cookbooks_path: [ './my-cookbooks', '../something-else' ]
+roles_path: './base-roles'
+
+environments:
+  ...
+```
