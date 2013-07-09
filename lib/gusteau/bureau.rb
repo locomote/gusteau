@@ -19,41 +19,28 @@ module Gusteau
 
     def generate!(init = true)
       FileUtils.cp_r(@template_path, @name)
-      yaml_template '.gusteau.yml'
-      text_template 'README.md'
-      text_template 'spec/example-box/platform_spec.rb'
-      json_template "data_bags/users/#{@login}.json", "data_bags/users/user.json.erb"
+      template '.gusteau.yml'
+      template 'README.md'
+      template 'spec/example-box/platform_spec.rb'
+      template "data_bags/users/#{@login}.json", "data_bags/users/user.json.erb"
       Dir.chdir(@name) { exec "bash ./init.sh #{@name} ; rm ./init.sh" } if(init)
     end
 
     private
 
-    def yaml_template(file)
-      replace_template file do |f|
-        read_erb_yaml("#{@template_path}/#{file}.erb").tap { |c| f.write(c.to_yaml) }
+    def template(dest, src = nil)
+      src = "#{dest}.erb" unless src
+
+      replace_template dest, src do |f|
+        read_erb("#{@template_path}/#{src}").tap { |t| f.write(t) }
       end
     end
 
-    def json_template(file, src)
-      replace_template file, src do |f|
-        read_erb_json("#{@template_path}/#{src}").tap { |c| f.write JSON::pretty_generate(c) }
-      end
-    end
-
-    def text_template(file)
-      replace_template file do |f|
-        read_erb("#{@template_path}/#{file}.erb").tap { |t| f.write t }
-      end
-    end
-
-    def replace_template(file, src = nil)
-      dest = "#{@name}/#{file}"
-      src  = "#{@name}/#{src}" if(src)
-
-      File.open(dest, 'w+') do |f|
+    def replace_template(dest, src)
+      File.open("#{@name}/#{dest}", 'w+') do |f|
         yield f
         f.close
-        FileUtils.rm(src || "#{dest}.erb")
+        FileUtils.rm("#{@name}/#{src}")
       end
     end
 
