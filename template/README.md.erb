@@ -16,7 +16,7 @@ A configuration file for Vagrant which includes gusteau as a plugin. It detects 
 
 ### cookbooks
 
-Gusteau uploads `site-cookbooks` and `cookbooks` directories when you converge a node. Between the two, `cookbooks` is a directory for your vendorized cookbooks. This example project uses Berkshelf, so in order to populate the directory run
+By default, Gusteau uploads `site-cookbooks` and `cookbooks` directories when you converge a node. Between the two, `cookbooks` is a directory for your vendorized cookbooks. This example project uses Berkshelf, so in order to populate the directory run
 
 ```
 berks install --path ./cookbooks
@@ -46,24 +46,23 @@ gusteau converge example-box
 
 ## Testing your Chef-Repo
 
-It is a very good practice to have tests for your Chef-driven infrastructure.
-This project includes an example [test-kitchen](https://github.com/opscode/test-kitchen) setup to get you started.
+It is a very good practice to have integration tests for your Chef-powered infrastructure.
+This project includes an example setup to get you started.
 
 The tests are implemented using the excellent [serverspec](http://serverspec.org/) framework.
 
 There are two important bits to have a look at:
 
-### test
+### spec
 
 The directory where integration tests are placed.
 
-### .kitchen.yml
+### `spec/spec_helper.rb`
 
-Test-kitchen configuration file where test platforms and suites are specified.
+Where serverspec is configured against your Gusteau nodes.
 
 To run the tests:
 
 ```
-bundle exec kitchen test
+bundle exec rake spec
 ```
-
