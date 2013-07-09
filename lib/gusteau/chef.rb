@@ -43,7 +43,8 @@ module Gusteau
     end
 
     def with_gusteau_dir(dna_path)
-      tmp_dir = FileUtils.mkdir_p("/tmp/gusteau-#{Time.now.to_i}")[0]
+      tmp_dir = "/tmp/gusteau-#{Time.now.to_i}"
+      FileUtils.mkdir_p(tmp_dir)
 
       files_list(dna_path).each_pair do |src, dest|
         FileUtils.cp_r(src, "#{tmp_dir}/#{dest}") if File.exists?(src)
