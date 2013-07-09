@@ -20,7 +20,6 @@ module Gusteau
     def generate!(init = true)
       FileUtils.cp_r(@template_path, @name)
       yaml_template '.gusteau.yml'
-      text_template 'Vagrantfile'
       text_template 'README.md'
       text_template 'spec/example-box/platform_spec.rb'
       json_template "data_bags/users/#{@login}.json", "data_bags/users/user.json.erb"
