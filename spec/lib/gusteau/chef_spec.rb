@@ -37,4 +37,15 @@ describe Gusteau::Chef do
       end
     end
   end
+
+  describe "#files_list" do
+    subject { chef.send(:files_list, '/some/dna.json') }
+
+    it "should produce a files paths hash" do
+      subject['/some/dna.json'].must_equal     'dna.json'
+      subject['private-cookbooks'].must_equal  'cookbooks-0'
+      subject['basic-roles'].must_equal        'roles'
+      subject['./bootstrap/osx.sh'].must_equal 'bootstrap.sh'
+    end
+  end
 end

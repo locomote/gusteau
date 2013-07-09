@@ -3,3 +3,5 @@ cookbooks_path:
   - /home/user/.cookbooks
 
 roles_path: basic-roles
+
+bootstrap: ./bootstrap/osx.sh

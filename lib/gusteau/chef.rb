@@ -10,8 +10,8 @@ module Gusteau
     def run(dna, opts)
       @server.run "rm -rf #{@dest_dir} && mkdir #{@dest_dir} && mkdir -p /tmp/chef"
 
-      with_src_files(dna[:path]) do |list|
-        @server.upload list, @dest_dir, :exclude => '.git/', :strip_c => 2
+      with_gusteau_dir(dna[:path]) do |dir|
+        @server.upload [dir], @dest_dir, :exclude => '.git/', :strip_c => 2
       end
 
       @server.run "sh /etc/chef/bootstrap.sh" if opts['bootstrap']
@@ -25,10 +25,8 @@ module Gusteau
 
     private
 
-    def with_src_files(dna_path)
-      tmp_dir       = FileUtils.mkdir_p("/tmp/gusteau-#{Time.now.to_i}")[0]
+    def files_list(dna_path)
       bootstrap_dir = File.expand_path('../../../bootstrap', __FILE__)
-
       bootstrap = Gusteau::Config.settings['bootstrap'] || "#{bootstrap_dir}/#{@platform}.sh"
 
       {
@@ -41,13 +39,17 @@ module Gusteau
         Gusteau::Config.settings['cookbooks_path'].each_with_index do |path, i|
           f[path] = "cookbooks-#{i}"
         end
+      end
+    end
 
-        f.each_pair do |src, dest|
-          FileUtils.cp_r(src, "#{tmp_dir}/#{dest}") if File.exists?(src)
-        end
+    def with_gusteau_dir(dna_path)
+      tmp_dir = FileUtils.mkdir_p("/tmp/gusteau-#{Time.now.to_i}")[0]
+
+      files_list(dna_path).each_pair do |src, dest|
+        FileUtils.cp_r(src, "#{tmp_dir}/#{dest}") if File.exists?(src)
       end
 
-      yield [ tmp_dir ]
+      yield tmp_dir
       FileUtils.rm_rf(tmp_dir)
     end
   end
