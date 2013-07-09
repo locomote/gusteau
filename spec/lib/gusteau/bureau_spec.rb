@@ -36,10 +36,34 @@ describe Gusteau::Bureau do
       assert File.read(readme_path).include?("Welcome to your example Chef-Repo, #{login}")
     end
 
-    it "should process the .gusteau.yml template" do
-      config_path = "#{bureau_path}/.gusteau.yml"
-      assert File.exists?(config_path)
-      assert File.read(config_path).include?("Good job, #{login}")
+    describe ".gusteau.yml" do
+      let(:config_path) { "#{bureau_path}/.gusteau.yml" }
+
+      it "should should exist" do
+        assert File.exists?(config_path)
+      end
+
+      describe "template contents" do
+        before     { Gusteau::Config.read(config_path) }
+        let(:node) { Gusteau::Config.nodes['example-box'] }
+
+        let(:server)     { node.config['server'] }
+        let(:attributes) { node.config['attributes'] }
+
+        it "should contain a personalized greeting" do
+          attributes['cowsay']['greeting'].must_equal "Good job, #{login}!"
+        end
+
+        it "should invoke user creation" do
+          attributes['users'].must_equal [ login ]
+        end
+
+        it "should set a randomized ip address" do
+          ip_regexp = /33\.33\.\d{1,3}\.\d{1,3}/
+          server['host'].must_match ip_regexp
+          server['vagrant']['IP'].must_match ip_regexp
+        end
+      end
     end
 
     it "should process the user data_bag template" do

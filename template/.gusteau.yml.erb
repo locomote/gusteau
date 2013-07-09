@@ -14,13 +14,13 @@ environments:
     run_list:
       - recipe[platform]
       - recipe[cowsay]
-
+    <% ip = "33.33.#{rand(0..255)}.#{rand(2..255)}" %>
     nodes:
       box:
-        host: 33.33.33.10
+        host: <%= ip %>
         user: vagrant
         password: vagrant
         vagrant:
-          IP: 33.33.33.10
+          IP: <%= ip %>
           cpu: 1
           memory: 256
