@@ -1,5 +1,4 @@
-Gusteau
-=======
+# Gusteau
 
 *"Anyone can cook."*
 
@@ -7,14 +6,13 @@ Gusteau
 [![Coverage Status](https://coveralls.io/repos/locomote/gusteau/badge.png)](https://coveralls.io/r/locomote/gusteau)
 [![Dependency Status](https://gemnasium.com/locomote/gusteau.png)](https://gemnasium.com/locomote/gusteau)
 
-Introduction
 ------------
 
-Gusteau is an easy to use configuration manager for Chef Solo and Vagrant.
-It aims to:
+Gusteau is an easy to use configuration manager for Chef Solo and Vagrant. It aims to:
 
-1. Provide Chef Solo users with a more efficient workflow
-2. Encourage new users to try and to switch to Chef by avoiding the complexity of Chef Server.
+* Provide existing Chef Solo users with a more efficient workflow
+* Make Chef Solo usable for a small to mid scale multi-node setup
+* Make Chef Solo more accessible for the new users
 
 Some of the features include:
 
@@ -25,8 +23,8 @@ Some of the features include:
   * `-l` for setting a log level and   `-F` for setting an output formatter
 * Bootstrapping target systems with Chef-Omnibus or custom scripts.
 
-Gettings started
-----------------
+
+## Getting started
 
 Gusteau is a Ruby gem:
 
@@ -70,8 +68,7 @@ environments:
 ```
 
 
-Converging a server
-----------
+## Converging a server
 
 The following command will run the whole run_list on the node.
 
@@ -81,16 +78,16 @@ gusteau converge development-playground
 
 Use the `--bootstrap` or `-b` flag to bootstrap chef-solo (e.g. during the first run).
 
-Applying individual recipes
------------
+## Applying individual recipes
+
 You may choose to run a custom run_list instead of the full convergence.
 
 ```
 gusteau apply development-playground "role[base],recipe[oh-my-zsh]"
 ```
 
-SSH
----
+## SSH
+
 Gusteau provides a useful shortcut that you may use to ssh into a node. If you haven't got passwordless authentication set up, Gusteau will use `user` and `password` values from the node configuration.
 
 ```
@@ -105,12 +102,11 @@ If you prefer calling ssh directly, you will find the `gusteau ssh_config` subco
 gusteau ssh_config >> ~/.ssh/config
 ```
 
-Using with Vagrant
-------------------
+## Vagrant
+
 Gusteau can save you from writing some Vagrantfile boilerplate code. It also enables you to move node-specific Vagrant configuration away from the Vagrantfile into node definitions.
 
 ```
-...
 nodes:
   www:
     vagrant:
@@ -127,14 +123,12 @@ Vagrant.configure('2') do |config|
   Gusteau::Vagrant.detect(config) do |setup|
     setup.prefix = 'loco'
     setup.defaults.box_url = 'http://example.com/vm/opscode_centos-6.4.box'
-    setup.provision = false
   end
 end
 ```
 
 * The `prefix` option lets you prepend your VirtualBox VMs names, e.g. `loco-nodename`.
 * The `defaults` one lets you provide default values for `cpus`, `memory`, `box_url`.
-* If you'd like to use Vagrant's own automatic `chef_solo` provisioner, set `provision` to `true`. *Not recommended* unless you really know what you are doing.
 
 Please note that the add-on only works with Vagrant ~> 1.2 and needs gusteau to be installed as a Vagrant plugin:
 
@@ -142,17 +136,7 @@ Please note that the add-on only works with Vagrant ~> 1.2 and needs gusteau to 
 vagrant plugin install gusteau
 ```
 
-Notes
------
-### Bootstrapping
-
-By default, Gusteau installs the [Omnibus Chef](http://www.opscode.com/chef/install/). However if you're targetting an unsupported platform you might want to specify the `platform` value for a node: this invokes a specific [script](https://github.com/locomote/gusteau/tree/master/bootstrap).
-
-Alternatively, you can specify a custom script in `.gusteau.yml`:
-
-```
-bootstrap: ./scripts/freebsd.sh
-```
+## Configuration
 
 ### Before and after hooks
 
@@ -164,6 +148,35 @@ before:
 
 after:
   - bundle exec rake spec
+```
+
+### Attributes
+In addition to specifying `attributes` for environments you can set node-specifc ones. They will be deep-merged with environment ones:
+
+```
+environments:
+  staging:
+    attributes:    
+      hostname: staging
+    nodes:
+      one:
+        attributes: { hostname: staging-one }
+      two:
+        attributes: { hostname: staging-two }
+```
+
+### Run lists
+
+You can also override `run_list` for specific nodes.
+
+### Bootstrap script
+
+By default, Gusteau installs the [Omnibus Chef](http://www.opscode.com/chef/install/). However if you're targetting an unsupported platform you might want to specify the `platform` value for a node: this invokes a specific [script](https://github.com/locomote/gusteau/tree/master/bootstrap).
+
+Alternatively, you can specify a custom script in `.gusteau.yml`:
+
+```
+bootstrap: ./scripts/freebsd.sh
 ```
 
 ### Custom cookbooks path

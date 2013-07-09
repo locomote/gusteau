@@ -1,3 +1,8 @@
+## 1.0.7.dev / 2013-07-10
+* Replace the fully-blown test-kitchen with a simpler serverspec setup
+* Randomise Vagrant IP address in the template
+* Add timestamp to generated vm names in the template to avoid naming conflicts
+
 ## 1.0.6.dev / 2013-07-09
 * Bugfix: Ruby 1.8.7 and Rubinius compatibility
 * Highlight node yaml with Coderay in `gusteau show`.
@@ -11,7 +16,6 @@
 * Bugfix: `after` hook was not taking effect
 * Add a quick `show nodename` subcommand for printing out individual node configuration
 * Add an ability to configure `cookbooks_path` and `roles_path` from within `.gusteau.yml`
-
 ## 1.0.3.dev / 2013-07-07
 * Implement `before` and `after` hooks (global and environment-based)
 
