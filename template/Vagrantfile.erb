@@ -11,6 +11,7 @@ Vagrant.configure('2') do |config|
   config.omnibus.chef_version = '11.4.4'
 
   Gusteau::Vagrant.detect(config) do |setup|
-    setup.defaults.box_url = 'https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-13.04_provisionerless.box'
+    setup.defaults.box_url = 'http://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-amd64-vagrant-disk1.box'
+    setup.prefix = "<%= Time.now.strftime('%Y%m%d%H%M%S') %>"
   end
 end

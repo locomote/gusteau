@@ -1,5 +1,7 @@
 before:
  - bundle exec berks install --path ./cookbooks
+after:
+ - bundle exec rake spec
 
 environments:
   example:

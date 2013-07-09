@@ -1,7 +1,6 @@
 require 'spec_helper'
 
-describe 'platform role' do
-
+describe 'platform' do
   describe 'build-essential' do
     describe package('build-essential') do
       it { should be_installed }
@@ -16,10 +15,10 @@ describe 'platform role' do
     end
   end
 
-  describe user('remi') do
+  describe user("<%= @login %>") do
     it { should exist }
-    it { should belong_to_group 'wheel' }
+    it { should belong_to_group "<%= @login %>" }
     it { should have_login_shell '/bin/bash' }
-    it { should have_authorized_key 'ABC123' }
+    it { should have_authorized_key "<%= @ssh_key %>" }
   end
 end

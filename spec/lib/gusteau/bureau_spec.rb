@@ -21,11 +21,11 @@ describe Gusteau::Bureau do
     it "should create a basic structure" do
       assert File.exists?(bureau_path)
 
-      %w{ Berksfile Vagrantfile .kitchen.yml }.each do |f|
+      %w{ Berksfile Vagrantfile }.each do |f|
         assert File.exists?("#{bureau_path}/#{f}")
       end
 
-      %w{ data_bags site-cookbooks test }.each do |d|
+      %w{ data_bags site-cookbooks spec }.each do |d|
         assert File.exists?("#{bureau_path}/#{d}")
       end
     end
