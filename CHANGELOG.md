@@ -1,3 +1,7 @@
+## 1.0.6.dev / 2013-07-09
+* Bugfix: Ruby 1.8.7 and Rubinius compatibility
+* Highlight node yaml with Coderay in `gusteau show`.
+
 ## 1.0.5.dev / 2013-07-09
 * Bugfix: `cookbooks_path` was not working properly
 * Add an ability to specify a custom bootstrap script

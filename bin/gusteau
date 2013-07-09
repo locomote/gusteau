@@ -2,6 +2,7 @@
 
 require 'rubygems'
 require 'optitron'
+require 'coderay'
 
 $LOAD_PATH << File.expand_path("../..", __FILE__)
 require 'lib/gusteau'
@@ -45,7 +46,8 @@ class Gusteau::CLI < Optitron::CLI
 
   desc 'Show the configuration of a specific node'
   def show(node_name)
-    puts node(node_name).config.to_yaml
+    node_yaml = node(node_name).config.to_yaml
+    puts CodeRay.scan(node_yaml, :yaml).term
   end
 
   private

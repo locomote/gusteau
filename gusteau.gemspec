@@ -19,6 +19,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'optitron'
   gem.add_dependency 'inform'
+  gem.add_dependency 'coderay'
   gem.add_dependency 'json'
   gem.add_dependency 'hashie'
   gem.add_dependency 'hash-deep-merge'

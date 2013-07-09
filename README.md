@@ -18,7 +18,7 @@ It aims to:
 
 Some of the features include:
 
-* YAML for readable infrastructure configuration
+* YAML for readable, flexible infrastructure configuration
 * Usage of a single SSH connection to stream compressed files and commands
 * Support for normal Chef CLI flags:
   * `-W` or `--why-run` (dry run mode)
@@ -31,7 +31,7 @@ Gettings started
 Gusteau is a Ruby gem:
 
 ```
-gem install gusteau
+gem install gusteau --pre
 ```
 
 The following command generates an example Chef-repo:
