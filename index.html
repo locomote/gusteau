@@ -28,7 +28,7 @@
         <span class="ribbon-outer">
           <span class="ribbon-inner">
             <h1>Gusteau</h1>
-            <h2>a fine Chef Solo wrapper</h2>
+            <h2>A tasteful Chef Solo wrapper and configuration manager</h2>
           </span>
           <span class="left-tail"></span>
           <span class="right-tail"></span>
@@ -46,84 +46,84 @@
 
 
       <section id="main_content">
-        <h1>
-<a name="gusteau" class="anchor" href="#gusteau"><span class="octicon octicon-link"></span></a>Gusteau</h1>
-
-<p><em>"Anyone can cook."</em></p>
-
-<h2>
-<a name="introduction" class="anchor" href="#introduction"><span class="octicon octicon-link"></span></a>Introduction</h2>
-
-<p>Gusteau is here to make servers provisioning simple and enjoyable. It's a good choice if you are running a small infrastructure or a VPS and want to use Chef. It provides an efficient interface to Chef Solo as well as some nice features:</p>
+        <p>Gusteau is an easy to use configuration manager for Chef Solo and Vagrant. It aims to:</p>
 
 <ul>
-<li>Uses YAML for readable server configuration definitions</li>
-<li>Uses a single SSH connection to stream compressed files and commands</li>
-<li>Allows you to use normal Chef flags:
+<li>Provide existing Chef Solo users with a more efficient workflow</li>
+<li>Make Chef Solo usable for a small to mid scale multi-node setup</li>
+<li>Make Chef Solo more accessible for the new users</li>
+</ul><p>Some of the features include:</p>
+
+<ul>
+<li>YAML for readable, flexible infrastructure configuration</li>
+<li>Usage of a single SSH connection to stream compressed files and commands</li>
+<li>Support for normal Chef CLI flags:
 
 <ul>
 <li>
 <code>-W</code> or <code>--why-run</code> (dry run mode)</li>
 <li>
-<code>-l</code> for setting a log level and <code>-F</code> for setting an output formatter</li>
+<code>-l</code> for setting a log level and   <code>-F</code> for setting an output formatter</li>
 </ul>
 </li>
-<li>Is able to bootstrap CentOS, RHEL, Ubuntu and Gentoo systems with chef-solo.</li>
+<li>Bootstrapping target systems with Chef-Omnibus or custom scripts.</li>
 </ul><h2>
-<a name="gettings-started" class="anchor" href="#gettings-started"><span class="octicon octicon-link"></span></a>Gettings started</h2>
+<a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>Getting started</h2>
 
 <p>Gusteau is a Ruby gem:</p>
 
 <pre><code>gem install gusteau
 </code></pre>
 
-<p>A typical Gusteau node configuration looks like this:</p>
-
-<pre><code>json:
-  mysql:
-    server_root_password: ASahiweqwqe2
-  rvm:
-    default_ruby: 1.9.3-p362
-  users:
-   - linguini
-
-roles:
-  - base
-
-recipes:
-  - mysql::server
-  - iptables
-
-server:
-  host: 33.33.33.20
-  platform: ubuntu
-  password: omgsecret
-</code></pre>
-
-<p>Gusteau only needs a node definition to run, but you'll need a few cookbooks to actually cook something :)
-The following command generates an example configuration to get you started:</p>
+<p>The following command generates an example Chef-repo:</p>
 
 <pre><code>gusteau init project-name
 </code></pre>
 
-<p>Next, <code>cd project-name</code> and see <code>nodes/example.yml</code>.</p>
+<p>Make sure you read through <code>project-name/README.md</code> first.</p>
 
-<h2>
-<a name="provisioning-a-server" class="anchor" href="#provisioning-a-server"><span class="octicon octicon-link"></span></a>Provisioning a server</h2>
+<p>A typical <code>.gusteau.yml</code> looks like this:</p>
 
-<p>The following command will run all roles and recipes from node's YAML file.</p>
+<pre><code>before:
+  - bundle exec berks install --path ./cookbooks
 
-<pre><code>gusteau example provision
+environments:
+  development:
+    attributes:
+      mysql:
+        server_root_password: ASahiweqwqe2
+      rvm:
+        default_ruby: 1.9.3-p362
+      users:
+       - linguini
+
+    run_list:
+      - role[base]
+      - recipe[mysql::server]
+      - recipe[iptables]
+
+    nodes:
+      playground:
+        host: 33.33.33.20
+        password: omgsecret
 </code></pre>
 
-<p>Use the <code>--bootstrap</code> or <code>-b</code> flag to bootstrap chef-solo (for the first time run).</p>
+<h2>
+<a name="converging-a-server" class="anchor" href="#converging-a-server"><span class="octicon octicon-link"></span></a>Converging a server</h2>
+
+<p>The following command will run the whole run_list on the node.</p>
+
+<pre><code>gusteau converge development-playground
+</code></pre>
+
+<p>Use the <code>--bootstrap</code> or <code>-b</code> flag to bootstrap chef-solo (e.g. during the first run).</p>
 
 <h2>
-<a name="running-recipes" class="anchor" href="#running-recipes"><span class="octicon octicon-link"></span></a>Running recipes</h2>
+<a name="applying-individual-recipes" class="anchor" href="#applying-individual-recipes"><span class="octicon octicon-link"></span></a>Applying individual recipes</h2>
 
-<p>You may choose to run a few recipes instead of full provisioning.</p>
+<p>You may choose to run a custom run_list instead of the full convergence.</p>
 
-<pre><code>gusteau example run redis::server ntp unicorn
+<pre><code>gusteau apply development-playground "role[base],recipe[oh-my-zsh]"
 </code></pre>
 
 <h2>
@@ -131,7 +131,7 @@ The following command generates an example configuration to get you started:</p>
 
 <p>Gusteau provides a useful shortcut that you may use to ssh into a node. If you haven't got passwordless authentication set up, Gusteau will use <code>user</code> and <code>password</code> values from the node configuration.</p>
 
-<pre><code>gusteau ssh example
+<pre><code>gusteau ssh development-playground
 </code></pre>
 
 <p>Please note that <code>expect</code> utility must be installed for <code>gusteau ssh</code> to work.</p>
@@ -142,25 +142,25 @@ The following command generates an example configuration to get you started:</p>
 </code></pre>
 
 <h2>
-<a name="using-with-vagrant" class="anchor" href="#using-with-vagrant"><span class="octicon octicon-link"></span></a>Using with Vagrant</h2>
+<a name="vagrant" class="anchor" href="#vagrant"><span class="octicon octicon-link"></span></a>Vagrant</h2>
 
-<p>Gusteau can save you from writing some Vagrantfile boilerplate code. It also enables you to move node-specific Vagrant configuration away from the Vagrantfile into node yml files.</p>
+<p>Gusteau can save you from writing some Vagrantfile boilerplate code. It also enables you to move node-specific Vagrant configuration away from the Vagrantfile into node definitions.</p>
 
-<pre><code>...
-vagrant:
-  IP: 192.168.100.20
-  cpus: 1
-  memory: 512
-  box_url: 'https://opscode-vm.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box'
+<pre><code>nodes:
+  www:
+    vagrant:
+      IP: 192.168.100.20
+      cpus: 1
+      memory: 512
+      box_url: 'https://opscode-vm.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box'
 </code></pre>
 
-<p>The following bit will configure Vagrant for all Gusteau nodes which have <code>vagrant</code> section defined.</p>
+<p>The following snippet configures Vagrant for all Gusteau nodes which have <code>vagrant</code> sections defined.</p>
 
 <pre><code>Vagrant.configure('2') do |config|
   Gusteau::Vagrant.detect(config) do |setup|
     setup.prefix = 'loco'
     setup.defaults.box_url = 'http://example.com/vm/opscode_centos-6.4.box'
-    setup.provision = false
   end
 end
 </code></pre>
@@ -168,19 +168,65 @@ end
 <ul>
 <li>The <code>prefix</code> option lets you prepend your VirtualBox VMs names, e.g. <code>loco-nodename</code>.</li>
 <li>The <code>defaults</code> one lets you provide default values for <code>cpus</code>, <code>memory</code>, <code>box_url</code>.</li>
-<li>If you'd like to use Vagrant's own automatic <code>chef_solo</code> provisioner, set <code>provision</code> to <code>true</code>. In this scenario, <code>gusteau provision</code> will be just calling <code>vagrant provision</code>.</li>
 </ul><p>Please note that the add-on only works with Vagrant ~&gt; 1.2 and needs gusteau to be installed as a Vagrant plugin:</p>
 
 <pre><code>vagrant plugin install gusteau
 </code></pre>
 
 <h2>
-<a name="notes" class="anchor" href="#notes"><span class="octicon octicon-link"></span></a>Notes</h2>
+<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h2>
 
-<ul>
-<li>Feel free to contribute a <a href="https://github.com/locomote/gusteau/tree/master/bootstrap">bootstrap script</a> for your platform.</li>
-<li>Gusteau uploads  both <code>./cookbooks</code> and <code>./site-cookbooks</code> so that you can use <a href="https://github.com/applicationsonline/librarian">librarian-chef</a> to include third party cookbooks.</li>
-</ul>
+<h3>
+<a name="before-and-after-hooks" class="anchor" href="#before-and-after-hooks"><span class="octicon octicon-link"></span></a>Before and after hooks</h3>
+
+<p>You can tell Gusteau to execute specific commands before and / or after <code>converge</code> or <code>apply</code> take place. They get executed on the host system. Example <code>.gusteau.yml</code> snippet:</p>
+
+<pre><code>before:
+  - bundle exec librarian-chef install
+
+after:
+  - bundle exec rake spec
+</code></pre>
+
+<h3>
+<a name="attributes" class="anchor" href="#attributes"><span class="octicon octicon-link"></span></a>Attributes</h3>
+
+<p>In addition to specifying <code>attributes</code> for environments you can set node-specifc ones. They will be deep-merged with environment ones:</p>
+
+<pre><code>environments:
+  staging:
+    attributes:    
+      hostname: staging
+    nodes:
+      one:
+        attributes: { hostname: staging-one }
+      two:
+        attributes: { hostname: staging-two }
+</code></pre>
+
+<h3>
+<a name="run-lists" class="anchor" href="#run-lists"><span class="octicon octicon-link"></span></a>Run lists</h3>
+
+<p>You can also override <code>run_list</code> for specific nodes.</p>
+
+<h3>
+<a name="bootstrap-script" class="anchor" href="#bootstrap-script"><span class="octicon octicon-link"></span></a>Bootstrap script</h3>
+
+<p>By default, Gusteau installs the <a href="http://www.opscode.com/chef/install/">Omnibus Chef</a>. However if you're targetting an unsupported platform you might want to specify the <code>platform</code> value for a node: this invokes a specific <a href="https://github.com/locomote/gusteau/tree/master/bootstrap">script</a>.</p>
+
+<p>Alternatively, you can specify a custom script in <code>.gusteau.yml</code>:</p>
+
+<pre><code>bootstrap: ./scripts/freebsd.sh
+</code></pre>
+
+<h3>
+<a name="custom-cookbooks-path" class="anchor" href="#custom-cookbooks-path"><span class="octicon octicon-link"></span></a>Custom cookbooks path</h3>
+
+<p>By default, Gusteau uploads and sets Chef Solo up to use cookbooks from <code>./cookbooks</code> and <code>./site-cookbooks</code> directories. If it doesn't work for you, you can override these values in <code>.gusteau.yml</code>:</p>
+
+<pre><code>cookbooks_path: [ './my-cookbooks', '../something-else' ]
+roles_path: './base-roles'
+</code></pre>
       </section>
 
       <footer>
