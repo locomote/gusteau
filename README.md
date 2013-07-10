@@ -6,8 +6,6 @@
 [![Coverage Status](https://coveralls.io/repos/locomote/gusteau/badge.png)](https://coveralls.io/r/locomote/gusteau)
 [![Dependency Status](https://gemnasium.com/locomote/gusteau.png)](https://gemnasium.com/locomote/gusteau)
 
-------------
-
 Gusteau is an easy to use configuration manager for Chef Solo and Vagrant. It aims to:
 
 * Provide existing Chef Solo users with a more efficient workflow
@@ -156,7 +154,7 @@ In addition to specifying `attributes` for environments you can set node-specifc
 ```
 environments:
   staging:
-    attributes:    
+    attributes:
       hostname: staging
     nodes:
       one:
