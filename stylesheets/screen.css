@@ -176,13 +176,11 @@ header span.right-tail {
 
 header h1 {
   background-color: #7c334f;
-  font-size: 2.5em;
-  font-weight: 800;
+  font-size: 2.9em;
   font-style: normal;
-  text-transform: uppercase;
   color: #ece4d8;
   text-align: center;
-  line-height:1;
+  line-height: 1;
   padding: 14px 20px 0;
 }
 
@@ -191,7 +189,6 @@ header h2 {
   font: bold italic .85em/1.5 Georgia, Times, “Times New Roman”, serif;
   color: #e69b95;
   padding-bottom: 14px;
-  margin-top: -3px;
   text-align: center;
 }
 
@@ -224,10 +221,8 @@ section#downloads a {
   background: transparent url(../images/download-sprite.png) 0 0 no-repeat;
   text-align: center;
   line-height: 1;
-  color: #fff;
-  font-family: 'Open Sans', Myriad, Calibri, sans-serif;
-  font-weight: 800;
-  font-size: 1.3em;
+  color: #83B7DA;
+  font: bold italic 13px/1 Georgia, Times, “Times New Roman”, serif;
 }
 
 section#downloads a:hover {
@@ -235,8 +230,7 @@ section#downloads a:hover {
 }
 
 section#downloads a em {
-  font: bold italic 12px/1 Georgia, Times, “Times New Roman”, serif;
-  color: #83b7da;
+  color: #fff;
   display: block;
 }
 
@@ -264,7 +258,7 @@ span.banner-fix {
   height: 19px;
   position: absolute;
   width: 670px;
-  top: 19px;
+  top: 22px;
 }
 
 section#main_content {
@@ -321,9 +315,6 @@ footer span.ribbon-inner a {
   position: relative;
   bottom: -1px;
   color: #7eb0d2;
-  font-family: 'Open Sans', Myriad, Calibri, sans-serif;
-  text-transform: uppercase;
-  font-style: normal;
   font-weight: 800;
   font-size: 1.2em;
 }
@@ -365,9 +356,8 @@ footer span.octocat {
 
 body {
   background: #ece4d8;
-  font: normal normal 15px/1.5 Georgia, Palatino,” Palatino Linotype”, Times, “Times New Roman”, serif;
+  font: normal normal 15px/1.5 Helvetica, sans-serif;
   color: #544943;
-  -webkit-font-smoothing: antialiased;
 }
 
 a, a:hover {
@@ -399,6 +389,46 @@ em {
   font-style: italic;
 }
 
+em.epigraph {
+  font-family: Georgia;
+  top: -12px;
+  position: relative;
+}
+
+.status {
+  float: right;
+  position: relative;
+  top: -46px;
+  border-radius: 10px;
+  background: rgba(0,0,0,0.1);
+  line-height: 6px;
+  text-align: center;
+  padding: 6px;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+}
+
+.status a {
+  width: 6px;
+  height: 6px;
+  background-position: right -1px bottom -1px;
+  background-repeat: no-repeat;
+  border-radius: 6px;
+  box-shadow: 0 0 4px #fff;
+  display: inline-block;
+}
+
+.status .travis {
+  background-image: url(https://secure.travis-ci.org/locomote/gusteau.png);
+}
+
+.status .coveralls {
+  background-image: url(https://coveralls.io/repos/locomote/gusteau/badge.png);
+}
+
+.status .gemnasium {
+  background-image: url(https://gemnasium.com/locomote/gusteau.png);
+}
+
 ol {
   margin: .7em 0;
   list-style-type: decimal;
@@ -411,7 +441,7 @@ ul {
 }
 
 ul li {
-  padding-left: 10px;
+  padding-left: 11px;
   background: transparent url(../images/chevron.png) left 6px no-repeat;
 }
 
@@ -439,9 +469,12 @@ hr {
   margin: 0 0 20px;
 }
 
+code, pre {
+  font: normal normal 12px/1.7 Monaco, "Andale Mono", "Bitstream Vera Sans Mono", monospace;
+}
+
 code {
   background: #fff6e9;
-  font: normal normal .8em/1.7 "Lucida Sans Typewriter", "Lucida Console", Monaco, "Bitstream Vera Sans Mono", monospace;
   padding: 0 5px 1px;
 }
 
@@ -449,8 +482,9 @@ pre {
   margin: 10px 0 20px;
   padding: .7em;
   background: #fff6e9;
-  border-bottom: 2px solid #bdb6ad;
-  font: normal normal .9em/1.7 "Lucida Sans Typewriter", "Lucida Console", Monaco, "Bitstream Vera Sans Mono", monospace;
+  border: 1px solid #D0CAC1;
+  border-radius: 2px;
+  box-shadow: inset 0px 0px 1px #BDB6AD;
   overflow: auto;
 }
 
@@ -527,9 +561,8 @@ dd p:first-child {
 
 .header-level-1 {
   font-size: 1.85em;
-  border-bottom: .2em double #d3ccc1;
+  border-bottom: 2px dashed #d3ccc1;
   color: #7c334f;
-  text-align: center;
   font-style: italic;
   margin: 1.1em 0 .38em;
   line-height: 1.2;
@@ -540,9 +573,8 @@ dd p:first-child {
   font-size: 1.58em;
   color: #7c334f;
   margin: .95em 0 .5em;
-  border-bottom: .1em solid #D3CCC1;
   line-height: 1.2;
-  padding-bottom: 10px
+  padding-bottom: 4px
 }
 
 .header-level-3 {
