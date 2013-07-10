@@ -27,7 +27,7 @@ Some of the features include:
 Gusteau is a Ruby gem:
 
 ```
-gem install gusteau --pre
+gem install gusteau
 ```
 
 The following command generates an example Chef-repo:
