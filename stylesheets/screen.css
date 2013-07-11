@@ -184,6 +184,15 @@ header h1 {
   padding: 14px 20px 0;
 }
 
+header h1 a {
+  color: #ECE4D8;
+}
+
+header h1 a:hover {
+  color: #ECE4D8;
+  text-decoration: none;
+}
+
 header h2 {
   background-color: #7c334f;
   font: bold italic .85em/1.5 Georgia, Times, “Times New Roman”, serif;
