@@ -16,7 +16,7 @@ module Gusteau
 
       @server.run "sh /etc/chef/bootstrap.sh" if opts['bootstrap']
 
-      cmd  = "chef-solo -c #{@dest_dir}/solo.rb -j #{@dest_dir}/dna.json --color"
+      cmd  = "unset GEM_HOME; unset GEM_PATH; chef-solo -c #{@dest_dir}/solo.rb -j #{@dest_dir}/dna.json --color"
       cmd << " -F #{opts['format']}"    if opts['format']
       cmd << " -l #{opts['log_level']}" if opts['log_level']
       cmd << " -W"                      if opts['why-run']
