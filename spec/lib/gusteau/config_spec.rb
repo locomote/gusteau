@@ -26,6 +26,7 @@ describe Gusteau::Config do
 
       it "should deeply merge the attributes" do
         nodes['production-db'].config['attributes'].must_equal({
+          'net'   => {'hostname' => 'prod-db'},
           'users' => ['alex', 'simon'],
           'mysql' => {'server_port' => 3307, 'server_root_password' => 'prodsecret' }
         })

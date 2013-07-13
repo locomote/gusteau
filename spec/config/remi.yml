@@ -10,6 +10,7 @@ environments:
 
   production:
     attributes:
+      net: { hostname: prod }
       users:
         - alex
         - simon
@@ -23,12 +24,14 @@ environments:
         <<: *default_node
         host: db.myapp.com
         attributes:
+          net: { hostname: prod-db }
           mysql:
             server_root_password: prodsecret
       www:
         <<: *default_node
         host: www.myapp.com
         attributes:
+          net: { hostname: prod-www }
           nginx:
             workers: 4
         run_list: [ 'recipe[varnish]', 'recipe[nginx]' ]

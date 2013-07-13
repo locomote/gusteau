@@ -22,7 +22,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'coderay'
   gem.add_dependency 'json'
   gem.add_dependency 'hashie'
-  gem.add_dependency 'hash-deep-merge'
+  gem.add_dependency 'deep_merge'
   gem.add_dependency 'net-ssh', '>= 2.2.2'
   gem.add_dependency 'archive-tar-minitar', '>= 0.5.2'
 

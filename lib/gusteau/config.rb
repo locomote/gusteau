@@ -1,5 +1,5 @@
 require 'gusteau/erb'
-require 'hash_deep_merge'
+require 'gusteau/helpers'
 
 module Gusteau
   class Config
@@ -56,12 +56,13 @@ module Gusteau
     #
     def build_node(node_name, env_hash, node_hash)
       node_config = {
-        'server'     => node_hash,
-        'attributes' => (env_hash['attributes'] || {}).deep_merge(node_hash['attributes'] || {}),
+        'server'     => node_hash.slice('host', 'port', 'user', 'password', 'platform', 'vagrant'),
+        'attributes' => (node_hash['attributes'] || {}).deep_merge(env_hash['attributes'] || {}),
         'run_list'   => node_hash['run_list']   || env_hash['run_list'],
         'before'     => env_hash['before']      || @config['before'],
         'after'      => env_hash['after']       || @config['after']
       }
+      node_config['server'].delete 'attributes'
       Gusteau::Node.new(node_name, node_config)
     end
   end
