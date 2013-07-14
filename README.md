@@ -116,7 +116,7 @@ nodes:
 
 The following snippet configures Vagrant for all Gusteau nodes which have `vagrant` sections defined.
 
-```
+```ruby
 Vagrant.configure('2') do |config|
   Gusteau::Vagrant.detect(config) do |setup|
     setup.prefix = 'loco'
