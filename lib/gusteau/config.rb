@@ -3,6 +3,7 @@ require 'gusteau/helpers'
 
 module Gusteau
   class Config
+    DEFAULT_CHEF_VERSION = '11.4.4'
     include Gusteau::ERB
 
     def self.read(config_path)
@@ -45,7 +46,8 @@ module Gusteau
       {
         'cookbooks_path' => @config['cookbooks_path'] || ['cookbooks', 'site-cookbooks'],
         'roles_path'     => @config['roles_path'] || 'roles',
-        'bootstrap'      => @config['bootstrap']
+        'bootstrap'      => @config['bootstrap'],
+        'chef_version'   => @config['chef_version'] || DEFAULT_CHEF_VERSION
       }
     end
 

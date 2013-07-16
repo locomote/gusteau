@@ -169,12 +169,18 @@ You can also override `run_list` for specific nodes.
 
 ### Bootstrap script
 
-By default, Gusteau installs the [Omnibus Chef](http://www.opscode.com/chef/install/). However if you're targetting an unsupported platform you might want to specify the `platform` value for a node: this invokes a specific [script](https://github.com/locomote/gusteau/tree/master/bootstrap).
+By default, Gusteau installs the [Omnibus Chef](http://www.opscode.com/chef/install/). However if you're targeting an unsupported platform you might want to specify the `platform` value for a node: this invokes a specific [script](https://github.com/locomote/gusteau/tree/master/bootstrap).
 
 Alternatively, you can specify a custom script in `.gusteau.yml`:
 
 ```
 bootstrap: ./scripts/freebsd.sh
+```
+
+Note that the Chef version number will be passed as the first argument to the bootstrap script. You can set this version explicitly by specifying it in `.gusteau.yml`:
+
+```
+chef_version: 10.26.0
 ```
 
 ### Custom cookbooks path
