@@ -1,3 +1,6 @@
+## Unreleased
+* Bugfix: run chef-solo without `GEM_HOME` `GEM_PATH`
+
 ## 1.1.1 / 2013-07-14
 * Bugfix: environment attributes got altered by node ones
 
