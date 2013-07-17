@@ -5,3 +5,5 @@ cookbooks_path:
 roles_path: basic-roles
 
 bootstrap: ./bootstrap/osx.sh
+
+chef_version: 10.26.0
