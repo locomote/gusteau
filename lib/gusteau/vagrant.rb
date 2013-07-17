@@ -40,9 +40,14 @@ module Gusteau
         defaults[:box_url]
       end
 
+      # If no one set the VirtualBox box name explicitly, use the end of the box_url
+      # as the box name
+      box_name = config.fetch('box', defaults[:box] || box_url.sub(/.*\/([^\/]+).box$/,'\1'))
+
       {
         :name    => node.name,
         :label   => label,
+        :box     => box_name,
         :box_url => box_url,
         :ip      => config['IP']     || defaults[:ip],
         :cpus    => config['cpus']   || defaults[:cpus]   || 1,
@@ -54,7 +59,7 @@ module Gusteau
       vm_config = vm_config(node, options)
 
       config.vm.define vm_config[:name] do |instance|
-        instance.vm.box     = vm_config[:name]
+        instance.vm.box     = vm_config[:box]
         instance.vm.box_url = vm_config[:box_url]
 
         instance.vm.provider :virtualbox do |vb|
