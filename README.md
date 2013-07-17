@@ -126,7 +126,7 @@ end
 ```
 
 * The `prefix` option lets you prepend your VirtualBox VMs names, e.g. `loco-nodename`.
-* The `defaults` one lets you provide default values for `cpus`, `memory`, `box_url`.
+* The `defaults` one lets you provide default values for `cpus`, `memory`, `box_url`, `box`.
 
 Please note that the add-on only works with Vagrant ~> 1.2 and needs gusteau to be installed as a Vagrant plugin:
 

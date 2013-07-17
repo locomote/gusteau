@@ -21,7 +21,7 @@ describe Gusteau::Vagrant do
     end
 
     it "should define vm instances with correct settings" do
-      subvm.expects('box='.to_sym).with('development-playground')
+      subvm.expects('box='.to_sym).with('b')
       subvm.expects('box_url='.to_sym).with("http://a.com/b.box")
       subvm.expects(:network).with(:private_network, { :ip => '192.168.100.21' })
       subvm.expects(:provision).never
@@ -71,6 +71,7 @@ describe Gusteau::Vagrant do
         {
           :name    => 'development-playground',
           :label   => expected_label,
+          :box     => 'centos-6.4',
           :box_url => 'https://opscode.s3.amazonaws.com/centos-6.4.box',
           :ip      => '192.168.100.21',
           :cpus    => 2,
@@ -96,6 +97,31 @@ describe Gusteau::Vagrant do
 
         it "should raise an exception" do
           proc { subject }.must_raise RuntimeError
+        end
+      end
+
+      context "box specified" do
+        let(:defaults) do
+          {
+            :box     => 'custom_box_name',
+            :box_url => 'https://opscode.s3.amazonaws.com/centos-6.4.box'
+          }
+        end
+
+        it "should use default attribute" do
+          subject[:box].must_equal "custom_box_name"
+        end
+
+        context "as node attribute" do
+          let(:node) do
+            Gusteau::Config.nodes['development-playground'].tap do |node|
+              node.config['server']['vagrant']['box'] = 'another_box_name'
+            end
+          end
+
+          it "should use node attribute" do
+            subject[:box].must_equal 'another_box_name'
+          end
         end
       end
     end
