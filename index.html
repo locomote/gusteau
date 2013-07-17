@@ -36,7 +36,7 @@
 
       <section id="downloads">
         <span class="inner">
-          <a href="https://github.com/locomote/gusteau" class="zip"><em>GitHub</em> locomote/gusteau</a><a href="http://rubygems.org/gems/gusteau" class="tgz"><em>Rubygems</em> v1.1</a>
+          <a href="https://github.com/locomote/gusteau" class="zip"><em>GitHub</em> locomote/gusteau</a><a href="http://rubygems.org/gems/gusteau" class="tgz"><em>Rubygems</em> v1.2</a>
         </span>
       </section>
 
@@ -174,7 +174,7 @@ end
 
 <ul>
 <li>The <code>prefix</code> option lets you prepend your VirtualBox VMs names, e.g. <code>loco-nodename</code>.</li>
-<li>The <code>defaults</code> one lets you provide default values for <code>cpus</code>, <code>memory</code>, <code>box_url</code>.</li>
+<li>The <code>defaults</code> one lets you provide default values for <code>cpus</code>, <code>memory</code>, <code>box_url</code>, <code>box</code>.</li>
 </ul><p>Please note that the add-on only works with Vagrant ~&gt; 1.2 and needs gusteau to be installed as a Vagrant plugin:</p>
 
 <pre><code>vagrant plugin install gusteau
@@ -219,10 +219,11 @@ after:
 <h3>
 <a name="bootstrap-script" class="anchor" href="#bootstrap-script"><span class="octicon octicon-link"></span></a>Bootstrap script</h3>
 
-<p>By default, Gusteau installs the <a href="http://www.opscode.com/chef/install/">Omnibus Chef</a>. However if you're targetting an unsupported platform you might want to specify the <code>platform</code> value for a node: this invokes a specific <a href="https://github.com/locomote/gusteau/tree/master/bootstrap">script</a>.</p>
-
+<p>By default, Gusteau installs the <a href="http://www.opscode.com/chef/install/">Omnibus Chef</a> 11.4.4. You can also set the Omnibus Chef version explicitly by specifying it in <code>.gusteau.yml</code>:</p>
+<pre><code>chef_version: 10.26.0
+</code></pre>
+<p>If you're targeting a non Omnibus-supported platform you might want to specify the <code>platform</code> value for a node: this invokes a specific <a href="https://github.com/locomote/gusteau/tree/master/bootstrap">script</a>.</p>
 <p>Alternatively, you can specify a custom script in <code>.gusteau.yml</code>:</p>
-
 <pre><code>bootstrap: ./scripts/freebsd.sh
 </code></pre>
 
