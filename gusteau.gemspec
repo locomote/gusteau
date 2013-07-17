@@ -11,6 +11,7 @@ Gem::Specification.new do |gem|
   gem.description   = %q{Chef Solo wrapper and configuration manager}
   gem.summary       = %q{Making servers provisioning enjoyable since 2013.}
   gem.homepage      = "http://gusteau.gs"
+  gem.licenses      = %w{ BSD MIT }
 
   gem.files         = `git ls-files | grep -vE '(jenkins|.gitmodules|.ruby-version)'`.split("\n")
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
