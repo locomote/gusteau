@@ -1,4 +1,4 @@
-## 1.1.2 / 2013-07-17
+## 1.2.0 / 2013-07-17
 * Add ability to configure the version of Chef which will be bootstrapped - [@ctaintor][], [#30][]
 * Add 'box' configuration option for vagrant VMs - [@ctaintor][], [#29][]
 * RVM related issue ([CHEF-3581](http://tickets.opscode.com/browse/CHEF-3581)) work around: run chef-solo without `GEM_HOME` `GEM_PATH` - [@locochris][], [#26][]
