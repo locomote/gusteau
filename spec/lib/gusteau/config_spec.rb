@@ -36,6 +36,10 @@ describe Gusteau::Config do
         nodes['production-www'].config['before'].must_equal(['bundle exec berks install'])
         nodes['staging-vm'].config['before'].must_equal(['echo "Hello World!"'])
       end
+
+      it "should have environment" do
+        nodes['production-www'].config['environment'].must_equal 'production'
+      end
     end
 
     describe "#settings" do

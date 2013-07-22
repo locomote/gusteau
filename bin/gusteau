@@ -16,12 +16,12 @@ class Gusteau::CLI < Optitron::CLI
 
   desc 'Fully converge a node'
   def converge(node_name)
-    node(node_name).converge(params)
+    node(node_name).converge(params_with_node(node_name))
   end
 
   desc 'Apply a run_list'
   def apply(node_name, run_list)
-    node(node_name).apply(run_list.split(","), params)
+    node(node_name).apply(run_list.split(","), params_with_node(node_name))
   end
 
   desc 'SSH into a node'
@@ -67,6 +67,10 @@ class Gusteau::CLI < Optitron::CLI
 
   def nodes_list
     "Known nodes are:\n - #{nodes.keys.join("\n - ")}"
+  end
+
+  def params_with_node(node_name)
+    params.merge('node' => node(node_name))
   end
 
 end

@@ -183,6 +183,11 @@ Alternatively, you can specify a custom script in `.gusteau.yml`:
 bootstrap: ./scripts/freebsd.sh
 ```
 
+### Data Bags
+
+Gusteau supports environment-specific data bags. To have `data_bags` for a specific environment, simply create a directory at `environment_data_bags/#{environment}` for it to be used as the `data_bags` directory
+
+For example, if you ran `gusteau converge development-web` then Gusteau would first look for a directory named `environment_data_bags/development` and use that directory as the data_bags directory. In the absence of that directory, the `data_bags` directory is used as the source.
 
 ### Custom cookbooks path
 
