@@ -10,7 +10,7 @@ module Gusteau
     def run(dna, opts)
       @server.run "rm -rf #{@dest_dir} && mkdir #{@dest_dir} && mkdir -p /tmp/chef"
 
-      with_gusteau_dir(dna[:path]) do |dir|
+      with_gusteau_dir(dna[:path], opts['node'].config['environment']) do |dir|
         @server.upload [dir], @dest_dir, :exclude => '.git/', :strip_c => 2
       end
 
@@ -25,7 +25,9 @@ module Gusteau
 
     private
 
-    def files_list(dna_path)
+    def files_list(dna_path, environment)
+      env_data_bags_path = "environment_data_bags/#{environment}"
+      data_bags_dir = File.exists?(env_data_bags_path) ? env_data_bags_path : 'data_bags'
       bootstrap_dir = File.expand_path('../../../bootstrap', __FILE__)
       bootstrap = Gusteau::Config.settings['bootstrap'] || "#{bootstrap_dir}/#{@platform}.sh"
 
@@ -33,7 +35,7 @@ module Gusteau
         dna_path                               => "dna.json",
         bootstrap                              => "bootstrap.sh",
         "#{bootstrap_dir}/solo.rb"             => "solo.rb",
-        'data_bags'                            => "data_bags",
+        data_bags_dir                          => "data_bags",
         Gusteau::Config.settings['roles_path'] => "roles"
       }.tap do |f|
         Gusteau::Config.settings['cookbooks_path'].each_with_index do |path, i|
@@ -42,11 +44,11 @@ module Gusteau
       end
     end
 
-    def with_gusteau_dir(dna_path)
+    def with_gusteau_dir(dna_path, environment)
       tmp_dir = "/tmp/gusteau-#{Time.now.to_i}"
       FileUtils.mkdir_p(tmp_dir)
 
-      files_list(dna_path).each_pair do |src, dest|
+      files_list(dna_path, environment).each_pair do |src, dest|
         FileUtils.cp_r(src, "#{tmp_dir}/#{dest}") if File.exists?(src)
       end
 

@@ -36,7 +36,7 @@ module Gusteau
         if env_hash['nodes']
           env_hash['nodes'].each_pair do |node_name, node_hash|
             node_name = "#{env_name}-#{node_name}"
-            nodes[node_name] = build_node(node_name, env_hash, node_hash)
+            nodes[node_name] = build_node(node_name, env_name, env_hash, node_hash)
           end
         end
         nodes
@@ -57,13 +57,14 @@ module Gusteau
     # Node run_list overrides the environment one
     # Environment before hooks override global ones
     #
-    def build_node(node_name, env_hash, node_hash)
+    def build_node(node_name, env_name, env_hash, node_hash)
       node_config = {
-        'server'     => node_hash.slice('host', 'port', 'user', 'password', 'platform', 'vagrant'),
-        'attributes' => (node_hash['attributes'] || {}).deep_merge(env_hash['attributes'] || {}),
-        'run_list'   => node_hash['run_list']   || env_hash['run_list'],
-        'before'     => env_hash['before']      || @config['before'],
-        'after'      => env_hash['after']       || @config['after']
+        'server'      => node_hash.slice('host', 'port', 'user', 'password', 'platform', 'vagrant'),
+        'attributes'  => (node_hash['attributes'] || {}).deep_merge(env_hash['attributes'] || {}),
+        'run_list'    => node_hash['run_list']   || env_hash['run_list'],
+        'before'      => env_hash['before']      || @config['before'],
+        'after'       => env_hash['after']       || @config['after'],
+        'environment' => env_name
       }
       node_config['server'].delete 'attributes'
       Gusteau::Node.new(node_name, node_config)
