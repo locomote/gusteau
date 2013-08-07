@@ -4,8 +4,11 @@
 install_sh="https://www.opscode.com/chef/install.sh"
 requested_version=$1
 
-if type -p chef-solo > /dev/null && gem list -i chef -v $requested_version > /dev/null; then
-  echo "Using chef-solo $requested_version at $(which chef-solo)"
+if type -p chef-solo > /dev/null; then
+  installed_version=$(unset GEM_HOME; unset GEM_PATH; chef-solo --v | awk '{print $2}')
+fi
+if [ $installed_version == $requested_version ]; then
+  echo "Using chef-solo $installed_version at $(which chef-solo)"
 else
   if command -v curl &>/dev/null; then
     curl -L "$install_sh" | sudo bash -s -- -v "$requested_version"
