@@ -5,7 +5,7 @@ install_sh="https://www.opscode.com/chef/install.sh"
 requested_version=$1
 
 if type -p chef-solo > /dev/null; then
-  installed_version=$(chef-solo --v | awk '{print $2}')
+  installed_version=$(unset GEM_HOME; unset GEM_PATH; chef-solo --v | awk '{print $2}')
 fi
 if [ $installed_version == $requested_version ]; then
   echo "Using chef-solo $installed_version at $(which chef-solo)"
