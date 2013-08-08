@@ -4,7 +4,6 @@
 
 [![Build Status](https://www.travis-ci.org/locomote/gusteau.png?branch=master)](https://www.travis-ci.org/locomote/gusteau)
 [![Coverage Status](https://coveralls.io/repos/locomote/gusteau/badge.png)](https://coveralls.io/r/locomote/gusteau)
-[![Dependency Status](https://gemnasium.com/locomote/gusteau.png)](https://gemnasium.com/locomote/gusteau)
 [![Gem Version](https://badge.fury.io/rb/gusteau.png)](http://badge.fury.io/rb/gusteau)
 
 Gusteau is an easy to use configuration manager for Chef Solo and Vagrant. It aims to:
