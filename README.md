@@ -105,13 +105,14 @@ gusteau ssh_config >> ~/.ssh/config
 Gusteau can save you from writing some Vagrantfile boilerplate code. It also enables you to move node-specific Vagrant configuration away from the Vagrantfile into node definitions.
 
 ```
-nodes:
-  www:
-    vagrant:
-      IP: 192.168.100.20
-      cpus: 1
-      memory: 512
-      box_url: 'https://opscode-vm.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box'
+development:
+  nodes:
+    www:
+      vagrant:
+        IP: 192.168.100.20
+        cpus: 1
+        memory: 512
+        box_url: 'https://opscode-vm.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box'
 ```
 
 The following snippet configures Vagrant for all Gusteau nodes which have `vagrant` sections defined.
@@ -132,6 +133,12 @@ Please note that the add-on only works with Vagrant ~> 1.2 and needs gusteau to 
 
 ```
 vagrant plugin install gusteau
+```
+
+Once the Gusteau plugin for Vagrant is installed you can start up VirtualBox using the environment and node data for vagrant in gusteau.yml:
+
+```
+vagrant up development:www
 ```
 
 ## Configuration
