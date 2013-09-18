@@ -138,7 +138,7 @@ vagrant plugin install gusteau
 Once the Gusteau plugin for Vagrant is installed you can start up VirtualBox using the environment and node data for vagrant in .gusteau.yml:
 
 ```
-vagrant up development:www
+vagrant up development-www
 ```
 
 ## Configuration
