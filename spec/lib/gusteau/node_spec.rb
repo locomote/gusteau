@@ -67,8 +67,8 @@ describe Gusteau::Node do
 
   describe "#hook" do
     it "should execute system commands" do
-      Kernel.expects(:system).with('bundle')
-      Kernel.expects(:system).with('vagrant up')
+      Kernel.expects(:system).with({'GUSTEAU_NODE' => 'test'}, 'bundle')
+      Kernel.expects(:system).with({'GUSTEAU_NODE' => 'test'}, 'vagrant up')
       node.server.chef.expects(:run)
       node.apply([], {})
     end
