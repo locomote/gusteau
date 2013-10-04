@@ -40,7 +40,7 @@ module Gusteau
 
     def hook(hook_type)
       (@config[hook_type] || []).each do |cmd|
-        Kernel.system cmd
+        Kernel.system({ 'GUSTEAU_NODE' => name }, cmd)
         unless $?.exitstatus == 0
           log_error "Error executing a #{hook_type} hook: '#{cmd}'"
           exit 1
