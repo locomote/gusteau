@@ -22,6 +22,7 @@ module Gusteau
       cmd  = "unset GEM_HOME; unset GEM_PATH; chef-solo -c #{dest_dir}/solo.rb -j #{dest_dir}/dna.json --color"
       cmd << " -F #{opts['format']}"    if opts['format']
       cmd << " -l #{opts['log_level']}" if opts['log_level']
+      cmd << " -L #{opts['logfile']}"   if opts['logfile']
       cmd << " -W"                      if opts['why-run']
       @server.run cmd
     end

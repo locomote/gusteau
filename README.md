@@ -18,7 +18,9 @@ Some of the features include:
 * Usage of a single SSH connection to stream compressed files and commands
 * Support for normal Chef CLI flags:
   * `-W` or `--why-run` (dry run mode)
-  * `-l` for setting a log level and   `-F` for setting an output formatter
+  * `-l` for setting a log level
+  * `-L` for setting a logfile
+  * `-F` for setting an output formatter
 * Bootstrapping target systems with Chef-Omnibus or custom scripts.
 
 
