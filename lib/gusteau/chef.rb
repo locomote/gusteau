@@ -23,7 +23,12 @@ module Gusteau
       cmd << " -F #{opts['format']}"    if opts['format']
       cmd << " -l #{opts['log_level']}" if opts['log_level']
       cmd << " -W"                      if opts['why-run']
-      cmd << " | tee -a #{opts['logfile']}" if opts['logfile']
+      if opts['logfile']
+        cmd << " -L #{opts['logfile']}"
+      else
+        # just log here by default
+        cmd << " | tee #{@dest_dir}/chef.#{Time.now.to_i}.log"
+      end
       @server.run cmd
     end
 
