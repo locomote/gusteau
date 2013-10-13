@@ -12,6 +12,7 @@ class Gusteau::CLI < Optitron::CLI
   class_opt 'bootstrap', 'Install chef-solo'
   class_opt 'format',    'Output format to use', :short_name => 'F', :type => :string
   class_opt 'log_level', 'Set the log level',    :in => %w{debug info warn error fatal}
+  class_opt 'logfile',   'Set the logfile',      :short_name => 'L', :type => :string
   class_opt 'why-run',   'Enable whyrun mode',   :short_name => 'W'
 
   desc 'Fully converge a node'
