@@ -1,3 +1,6 @@
+## 1.2.1 / Unreleased
+* Add logfile option to chef-solo run
+
 ## 1.2.0 / 2013-07-17
 * Add ability to configure the version of Chef which will be bootstrapped - [@ctaintor][], [#30][]
 * Add 'box' configuration option for vagrant VMs - [@ctaintor][], [#29][]
