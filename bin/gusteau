@@ -66,7 +66,7 @@ class Gusteau::CLI < Optitron::CLI
   end
 
   def nodes_list
-    "Known nodes are:\n - #{nodes.keys.join("\n - ")}"
+    "Known nodes are:\n - #{nodes.values.join("\n - ")}"
   end
 
 end

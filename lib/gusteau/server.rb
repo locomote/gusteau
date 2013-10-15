@@ -17,6 +17,10 @@ module Gusteau
       @chef     = Gusteau::Chef.new(self, config['platform'])
     end
 
+    def to_s
+      "#{user}@#{host}#{" -p #{port}" unless port == 22}"
+    end
+
     def upload(files_and_dirs, dest_dir, opts={})
       log "#uploading #{files_and_dirs.join(' ')} to #{@host}:#{dest_dir}" do
         files = []
