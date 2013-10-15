@@ -14,6 +14,10 @@ module Gusteau
       @dna_path = '/tmp/dna.json'
     end
 
+    def to_s
+      "#{name} (#{@server})"
+    end
+
     def converge(opts = {})
       with_hooks do
         server.chef.run dna, opts
