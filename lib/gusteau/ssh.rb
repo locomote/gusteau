@@ -46,7 +46,10 @@ module Gusteau
     private
 
     def prepared_cmd(cmd)
-      user == 'root' ? cmd : "sudo -- sh -c '#{cmd}'"
+      # wrap all invocations in a login shell
+      cmd = "sh -l -c '#{cmd}'"
+      # use sudo if necessary
+      output = user == 'root' ? cmd : "sudo -- #{cmd}"
     end
   end
 end
