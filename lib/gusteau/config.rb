@@ -4,6 +4,7 @@ require 'gusteau/helpers'
 module Gusteau
   class Config
     DEFAULT_CHEF_VERSION = '11.4.4'
+    DEFAULT_CHEF_CONFIG_DIRECTORY = '/etc/chef'
 
     include Gusteau::ERB
 
@@ -45,10 +46,11 @@ module Gusteau
 
     def settings
       {
-        'cookbooks_path' => @config['cookbooks_path'] || ['cookbooks', 'site-cookbooks'],
-        'roles_path'     => @config['roles_path'] || 'roles',
-        'bootstrap'      => @config['bootstrap'],
-        'chef_version'   => @config['chef_version'] || DEFAULT_CHEF_VERSION
+        'cookbooks_path'  => @config['cookbooks_path'] || ['cookbooks', 'site-cookbooks'],
+        'roles_path'      => @config['roles_path'] || 'roles',
+        'bootstrap'       => @config['bootstrap'],
+        'chef_version'    => @config['chef_version'] || DEFAULT_CHEF_VERSION,
+        'chef_config_dir' => @config['chef_config_dir'] || DEFAULT_CHEF_CONFIG_DIRECTORY
       }
     end
 

@@ -1,0 +1,7 @@
+<% dest_dir = Gusteau::Config.settings['chef_config_dir'] %>
+file_cache_path "/tmp/chef"
+cookbook_path  *Dir.glob("<%= dest_dir %>/cookbooks-*")
+role_path       "<%= dest_dir %>/roles"
+data_bag_path   "<%= dest_dir %>/data_bags"
+
+log_level :info
