@@ -81,4 +81,10 @@ describe Gusteau::Node do
       end
     end
   end
+
+  describe "#to_s" do
+    it "returns a node name and an SSH connection string" do
+      node.to_s.must_equal 'test (root@example.com)'
+    end
+  end
 end

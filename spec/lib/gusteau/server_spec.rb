@@ -85,4 +85,10 @@ describe Gusteau::Server do
       server.ssh
     end
   end
+
+  describe "#to_s" do
+    it "returns an SSH connection string" do
+      server.to_s.must_equal 'root@demo.com -p 2222'
+    end
+  end
 end
