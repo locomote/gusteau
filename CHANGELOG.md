@@ -1,3 +1,9 @@
+## 1.3.0 / 2013-12-05
+* Add ability to configure Chef destination directory (`/etc/chef`) - [@omerisimo][], [#43][]
+* More verbose list from `gusteau list` - [@locochris][], [#39][]
+* Pass active node name into ENV for hook commands - [@anicholson][], [#36][]
+* Unset GEM_HOME & GEM_PATH in omnibus script - [@ctaintor][], [#34][]
+
 ## 1.2.0 / 2013-07-17
 * Add ability to configure the version of Chef which will be bootstrapped - [@ctaintor][], [#30][]
 * Add 'box' configuration option for vagrant VMs - [@ctaintor][], [#29][]
@@ -46,5 +52,12 @@
 [#26]: https://github.com/locomote/gusteau/issues/26
 [#29]: https://github.com/locomote/gusteau/issues/29
 [#30]: https://github.com/locomote/gusteau/issues/30
+[#34]: https://github.com/locomote/gusteau/issues/34
+[#36]: https://github.com/locomote/gusteau/issues/36
+[#39]: https://github.com/locomote/gusteau/issues/39
+[#43]: https://github.com/locomote/gusteau/issues/43
+
 [@ctaintor]: https://github.com/ctaintor
 [@locochris]: https://github.com/locochris
+[@anicholson]: https://github.com/anicholson
+[@omerisimo]: https://github.com/omerisimo

@@ -2,8 +2,8 @@
 
 *"Anyone can cook."*
 
-[![Build Status](https://www.travis-ci.org/locomote/gusteau.png?branch=master)](https://www.travis-ci.org/locomote/gusteau)
-[![Coverage Status](https://coveralls.io/repos/locomote/gusteau/badge.png)](https://coveralls.io/r/locomote/gusteau)
+[![Build Status](https://travis-ci.org/locomote/gusteau.png?branch=master)](https://travis-ci.org/locomote/gusteau)
+[![Coverage Status](https://coveralls.io/repos/locomote/gusteau/badge.png?branch=master)](https://coveralls.io/r/locomote/gusteau?branch=master)
 [![Gem Version](https://badge.fury.io/rb/gusteau.png)](http://badge.fury.io/rb/gusteau)
 
 Gusteau is an easy to use configuration manager for Chef Solo and Vagrant. It aims to:
