@@ -1,22 +1,25 @@
+require 'gusteau/erb'
+
 module Gusteau
   class Chef
+    include Gusteau::ERB
 
-    def initialize(server, platform = nil, dest_dir = '/etc/chef')
+    def initialize(server, platform = nil)
       @server   = server
       @platform = platform || 'omnibus'
-      @dest_dir = dest_dir
     end
 
     def run(dna, opts)
-      @server.run "rm -rf #{@dest_dir} && mkdir #{@dest_dir} && mkdir -p /tmp/chef"
+      dest_dir = Gusteau::Config.settings['chef_config_dir']
+      @server.run "rm -rf #{dest_dir} && mkdir #{dest_dir} && mkdir -p /tmp/chef"
 
       with_gusteau_dir(dna[:path]) do |dir|
-        @server.upload [dir], @dest_dir, :exclude => '.git/', :strip_c => 2
+        @server.upload [dir], dest_dir, :exclude => '.git/', :strip_c => 2
       end
 
       @server.run "sh /etc/chef/bootstrap.sh #{Gusteau::Config.settings['chef_version']}" if opts['bootstrap']
 
-      cmd  = "unset GEM_HOME; unset GEM_PATH; chef-solo -c #{@dest_dir}/solo.rb -j #{@dest_dir}/dna.json --color"
+      cmd  = "unset GEM_HOME; unset GEM_PATH; chef-solo -c #{dest_dir}/solo.rb -j #{dest_dir}/dna.json --color"
       cmd << " -F #{opts['format']}"    if opts['format']
       cmd << " -l #{opts['log_level']}" if opts['log_level']
       cmd << " -W"                      if opts['why-run']
@@ -32,7 +35,7 @@ module Gusteau
       {
         dna_path                               => "dna.json",
         bootstrap                              => "bootstrap.sh",
-        "#{bootstrap_dir}/solo.rb"             => "solo.rb",
+        "#{bootstrap_dir}/solo.rb.erb"         => "solo.rb",
         'data_bags'                            => "data_bags",
         Gusteau::Config.settings['roles_path'] => "roles"
       }.tap do |f|
@@ -47,7 +50,15 @@ module Gusteau
       FileUtils.mkdir_p(tmp_dir)
 
       files_list(dna_path).each_pair do |src, dest|
-        FileUtils.cp_r(src, "#{tmp_dir}/#{dest}") if File.exists?(src)
+        if File.exists?(src)
+          if File.extname(src) == '.erb'
+            File.open("#{tmp_dir}/#{dest}", "w" ) do |f|
+              f.write read_erb(src)
+            end
+          else
+            FileUtils.cp_r(src, "#{tmp_dir}/#{dest}")
+          end
+        end
       end
 
       yield tmp_dir

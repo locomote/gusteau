@@ -199,3 +199,13 @@ By default, Gusteau uploads and sets Chef Solo up to use cookbooks from `./cookb
 cookbooks_path: [ './my-cookbooks', '../something-else' ]
 roles_path: './base-roles'
 ```
+
+### Custom Chef run configuration directory (e.g. `/etc/chef`)
+
+By default, Gusteau uploads the necessary files and folders (i.e. cookbooks and roles directories) to `/etc/chef/`.
+
+You can specify a custom target directory in `.gusteau.yml`:
+
+```
+chef_config_dir: /etc/custom_chef_dir
+```

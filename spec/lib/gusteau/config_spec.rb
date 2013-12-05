@@ -41,11 +41,12 @@ describe Gusteau::Config do
     describe "#settings" do
       let(:settings) { Gusteau::Config.settings }
 
-      it "should have defaults for cookbooks_path, roles_path, bootstrap, chef_version" do
+      it "should have defaults for cookbooks_path, roles_path, bootstrap, chef_version, chef_config_dir" do
         settings['cookbooks_path'].must_equal ['cookbooks', 'site-cookbooks']
         settings['roles_path'].must_equal 'roles'
         settings['bootstrap'].must_equal nil
         settings['chef_version'].must_equal Gusteau::Config::DEFAULT_CHEF_VERSION
+        settings['chef_config_dir'].must_equal Gusteau::Config::DEFAULT_CHEF_CONFIG_DIRECTORY
       end
 
       context "settings defined in the config yml" do
@@ -55,6 +56,7 @@ describe Gusteau::Config do
           settings['cookbooks_path'].must_equal ['private-cookbooks', '/home/user/.cookbooks']
           settings['roles_path'].must_equal 'basic-roles'
           settings['chef_version'].must_equal '10.26.0'
+          settings['chef_config_dir'].must_equal '/etc/custom_chef_dir'
         end
       end
     end
