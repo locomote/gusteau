@@ -1,4 +1,5 @@
 require 'gusteau/server'
+require 'tmpdir'
 
 module Gusteau
   class Node
@@ -11,7 +12,7 @@ module Gusteau
       @config = node_config
 
       @server = Server.new(@config['server'])
-      @dna_path = '/tmp/dna.json'
+      @dna_path = "#{Dir::tmpdir}/dna.json"
     end
 
     def to_s
