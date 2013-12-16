@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Usage: omnibus.sh VERSION - installs the requested version of Chef, skipping if it's already installed
 
 install_sh="https://www.opscode.com/chef/install.sh"
