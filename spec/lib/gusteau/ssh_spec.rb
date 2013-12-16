@@ -53,8 +53,8 @@ describe Gusteau::SSH do
       context "user is root" do
         before { connector.user = 'root' }
 
-        it "should execute the command as is" do
-          channel.expects(:exec).with('cowsay')
+        it "should execute the command without sudo" do
+          channel.expects(:exec).with("sh -l -c 'cowsay'")
           connector.send_command 'cowsay'
         end
       end
@@ -63,7 +63,7 @@ describe Gusteau::SSH do
         before { connector.user = 'vaskas' }
 
         it "should execute the command with sudo" do
-          channel.expects(:exec).with("sudo -- sh -c 'cowsay'")
+          channel.expects(:exec).with("sudo -- sh -l -c 'cowsay'")
           connector.send_command 'cowsay'
         end
       end
@@ -101,12 +101,12 @@ describe Gusteau::SSH do
       end
 
       it "should execute the extraction command and send the data" do
-        channel.expects(:exec).with("tar zxf - -C /etc/chef ")
+        channel.expects(:exec).with("sh -l -c 'tar zxf - -C /etc/chef '")
         connector.send_files(%w{ a b }, '/etc/chef')
       end
 
       it "should strip tar components" do
-        channel.expects(:exec).with("tar zxf - -C /etc/chef --strip-components=3")
+        channel.expects(:exec).with("sh -l -c 'tar zxf - -C /etc/chef --strip-components=3'")
         connector.send_files(%w{ c d }, '/etc/chef', 3)
       end
     end

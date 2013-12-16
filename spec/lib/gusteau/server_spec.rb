@@ -70,12 +70,12 @@ describe Gusteau::Server do
     subject { server.send(:prepared_cmd, 'cd /etc/chef && touch test') }
 
     context "user is root" do
-      it { subject.must_equal 'cd /etc/chef && touch test' }
+      it { subject.must_equal "sh -l -c 'cd /etc/chef && touch test'" }
     end
 
     context "user is not root" do
       before { server.stubs(:user).returns('vaskas') }
-      it     { subject.must_equal "sudo -- sh -c 'cd /etc/chef && touch test'" }
+      it     { subject.must_equal "sudo -- sh -l -c 'cd /etc/chef && touch test'" }
     end
   end
 
