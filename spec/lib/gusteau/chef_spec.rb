@@ -31,7 +31,7 @@ describe Gusteau::Chef do
       let(:bootstrap) { true }
 
       it "should run the bootstrap script and chef solo" do
-        server.expects(:run).with('sh /etc/chef/bootstrap.sh 10.26.0')
+        server.expects(:run).with('sh /etc/custom_chef_dir/bootstrap.sh 10.26.0')
         expects_run_chef_solo
         chef.run({ :path => '/tmp/node.json' }, opts)
       end
