@@ -5,8 +5,8 @@
 <%= "export https_proxy=#{Config.settings['https_proxy']}" if Config.settings['https_proxy'] %>
 
 function append_proxy_settings() {
-  sed -i '1s/^/export http_proxy="<%= Config.settings['http_proxy']%>}}"\/\n/'   $1
-  sed -i '1s/^/export https_proxy="<%= Config.settings['https_proxy']%>}}"\/\n/' $1
+  sed -i '2s/^/export http_proxy="<%= Config.settings['http_proxy']%>}}"\/\n/'   $1
+  sed -i '2s/^/export https_proxy="<%= Config.settings['https_proxy']%>}}"\/\n/' $1
 }
 
 install_sh="https://www.opscode.com/chef/install.sh"
