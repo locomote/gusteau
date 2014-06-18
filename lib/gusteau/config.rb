@@ -50,7 +50,9 @@ module Gusteau
         'roles_path'      => @config['roles_path'] || 'roles',
         'bootstrap'       => @config['bootstrap'],
         'chef_version'    => @config['chef_version'] || DEFAULT_CHEF_VERSION,
-        'chef_config_dir' => @config['chef_config_dir'] || DEFAULT_CHEF_CONFIG_DIRECTORY
+        'chef_config_dir' => @config['chef_config_dir'] || DEFAULT_CHEF_CONFIG_DIRECTORY,
+        'http_proxy'      => @config['http_proxy'],
+        'https_proxy'     => @config['https_proxy']
       }
     end
 
