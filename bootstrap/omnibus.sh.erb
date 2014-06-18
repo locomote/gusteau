@@ -1,0 +1,36 @@
+#!/bin/bash
+# Usage: omnibus.sh VERSION - installs the requested version of Chef, skipping if it's already installed
+
+<%= "export http_proxy=#{Config.settings['http_proxy']}" if Config.settings['http_proxy'] %>
+<%= "export https_proxy=#{Config.settings['https_proxy']}" if Config.settings['https_proxy'] %>
+
+function append_proxy_settings() {
+  sed -i '1s/^/export http_proxy="<%= Config.settings['http_proxy']%>}}"\/\n/'   $1
+  sed -i '1s/^/export https_proxy="<%= Config.settings['https_proxy']%>}}"\/\n/' $1
+}
+
+install_sh="https://www.opscode.com/chef/install.sh"
+requested_version=$1
+
+if type -p chef-solo > /dev/null; then
+  installed_version=$(unset GEM_HOME; unset GEM_PATH; chef-solo --v | awk '{print $2}')
+fi
+if [ $installed_version == $requested_version ]; then
+  echo "Using chef-solo $installed_version at $(which chef-solo)"
+else
+  if command -v curl &>/dev/null; then
+    echo "appending proxy settings"
+    curl -L -o install.sh "$install_sh"  
+    append_proxy_settings "install.sh" 
+    cat install.sh | sudo bash -s -- -v "$requested_version"
+ elif command -v wget &>/dev/null; then
+    wget -qO "install" "$install_sh"
+    append_proxy_settings "install.sh"
+    cat omnibus.sh | sudo bash -s -- -v "$requested_version"
+  else
+    echo "Neither wget nor curl found. Please install one." >&2
+    exit 1
+  fi
+fi
+
+

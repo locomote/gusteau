@@ -1,4 +1,8 @@
 <% dest_dir = Gusteau::Config.settings['chef_config_dir'] %>
+
+<%= "http_proxy  '#{Gusteau::Config.settings['http_proxy']}'"  if Gusteau::Config.settings['http_proxy']  %>
+<%= "https_proxy '#{Gusteau::Config.settings['https_proxy']}'" if Gusteau::Config.settings['https_proxy'] %>
+
 file_cache_path "/tmp/chef"
 cookbook_path  *Dir.glob("<%= dest_dir %>/cookbooks-*")
 role_path       "<%= dest_dir %>/roles"
