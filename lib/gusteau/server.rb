@@ -7,18 +7,22 @@ module Gusteau
     include Gusteau::Log
     include Gusteau::SSH
 
-    attr_reader :host, :port, :user, :password, :chef
+    attr_reader :host, :port, :jump, :user, :password, :chef
 
     def initialize(config)
       @host     = config['host']
       @port     = config['port'] || 22
+      @jump     = config['jump']
       @user     = config['user'] || 'root'
       @password = config['password']
       @chef     = Gusteau::Chef.new(self, config['platform'])
     end
 
     def to_s
-      "#{user}@#{host}#{" -p #{port}" unless port == 22}"
+      port_str = port == 22 ? "" : "-p #{port}"
+      jump_str = jump ? "-o ProxyCommand='ssh -W %h:%p #{jump}'" : ""
+
+      "#{jump_str} #{user}@#{host} #{port_str}".strip
     end
 
     def upload(files_and_dirs, dest_dir, opts={})
