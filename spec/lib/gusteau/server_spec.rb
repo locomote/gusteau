@@ -90,5 +90,34 @@ describe Gusteau::Server do
     it "returns an SSH connection string" do
       server.to_s.must_equal 'root@demo.com -p 2222'
     end
+
+    describe "with port 22" do
+      let(:config) do
+        {
+          'host'     => 'demo.com',
+          'port'     => 22,
+          'platform' => 'ubuntu'
+        }
+      end
+
+      it "skips -p" do
+        server.to_s.must_equal "root@demo.com"
+      end
+    end
+
+    describe "with jump setting" do
+      let(:config) do
+        {
+          'host'     => 'demo.com',
+          'port'     => 2222,
+          'platform' => 'ubuntu',
+          'jump'     => 'hoop'
+        }
+      end
+
+      it "returns proxy command" do
+        server.to_s.must_equal "-o ProxyCommand='ssh -W %h:%p hoop' root@demo.com -p 2222"
+      end
+    end
   end
 end
