@@ -17,7 +17,7 @@ module Gusteau
         @server.upload [dir], dest_dir, :exclude => '.git/', :strip_c => 2
       end
 
-      @server.run "sh /etc/chef/bootstrap.sh #{Gusteau::Config.settings['chef_version']}" if opts['bootstrap']
+      @server.run "sh #{dest_dir}/bootstrap.sh #{Gusteau::Config.settings['chef_version']}" if opts['bootstrap']
 
       cmd  = "unset GEM_HOME; unset GEM_PATH; chef-solo -c #{dest_dir}/solo.rb -j #{dest_dir}/dna.json --color"
       cmd << " -F #{opts['format']}"    if opts['format']
