@@ -1,6 +1,7 @@
 require 'gusteau/chef'
 require 'gusteau/ssh'
 require 'gusteau/log'
+require 'find'
 
 module Gusteau
   class Server
