@@ -4,6 +4,9 @@
 * Pass active node name into ENV for hook commands - [@anicholson][], [#36][]
 * Unset GEM_HOME & GEM_PATH in omnibus script - [@ctaintor][], [#34][]
 
+## 1.2.1 / Unreleased
+* Add logfile option to chef-solo run
+
 ## 1.2.0 / 2013-07-17
 * Add ability to configure the version of Chef which will be bootstrapped - [@ctaintor][], [#30][]
 * Add 'box' configuration option for vagrant VMs - [@ctaintor][], [#29][]
