@@ -47,7 +47,7 @@ module Gusteau
 
     def prepared_cmd(cmd)
       # wrap all invocations in a login shell
-      cmd = "sh -l -c '#{cmd}'"
+      cmd = "sh -o pipefail -l -c '#{cmd}'"
       # use sudo if necessary
       output = user == 'root' ? cmd : "sudo -- #{cmd}"
     end
